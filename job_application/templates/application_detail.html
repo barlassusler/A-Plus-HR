@@ -1,0 +1,16 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Başvuru Detayı</title>
+</head>
+<body>
+    <h1>Başvuru Detayı</h1>
+    <p><strong>Ad:</strong> {{ application.name }}</p>
+    <p><strong>E-posta:</strong> {{ application.email }}</p>
+    <p><strong>Telefon:</strong> {{ application.phone }}</p>
+    <p><strong>Başvuru Tarihi:</strong> {{ application.created_at }}</p>
+    <a href="{% url 'job_application_list' %}">
+        <button>Geri Dön</button>
+    </a>
+</body>
+</html>

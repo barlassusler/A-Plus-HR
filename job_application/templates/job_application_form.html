@@ -1,0 +1,153 @@
+<!DOCTYPE html>
+<html lang="tr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Yeni Başvuru</title>
+    <style>
+        /* Genel vücut ve sayfa düzeni */
+        body {
+            font-family: 'Arial', sans-serif;
+            margin: 0;
+            padding: 0;
+            background-color: #f4f4f9;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            min-height: 100vh;
+            box-sizing: border-box;
+        }
+
+        /* Sayfanın içerik alanı kaydırılabilir */
+        .container {
+            background-color: white;
+            width: 100%;
+            max-width: 700px;
+            padding: 30px;
+            border-radius: 8px;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+            overflow-y: auto;
+            max-height: 90vh;
+        }
+
+        /* Başlık stili */
+        h1 {
+            text-align: center;
+            color: #333;
+            font-size: 2em;
+            margin-bottom: 20px;
+        }
+
+        /* Form öğeleri */
+        label {
+            font-size: 16px;
+            margin-bottom: 8px;
+            font-weight: bold;
+            color: #555;
+        }
+
+        input, select, button {
+            width: 100%;
+            padding: 12px;
+            margin: 8px 0 16px 0;
+            border-radius: 5px;
+            border: 1px solid #ddd;
+            font-size: 16px;
+        }
+
+        input:focus, select:focus, button:focus {
+            outline: none;
+            border-color: #4CAF50;
+        }
+
+        /* Kaydet butonu */
+        button[type="submit"] {
+            background-color: #4CAF50;
+            color: white;
+            cursor: pointer;
+            border: none;
+            font-size: 16px;
+        }
+
+        button[type="submit"]:hover {
+            background-color: #45a049;
+        }
+
+        /* İptal butonu */
+        .cancel-button {
+            display: inline-block;
+            background-color: #f44336;
+            color: white;
+            text-decoration: none;
+            padding: 12px 20px;
+            border-radius: 5px;
+            text-align: center;
+            width: auto;
+            margin-top: 10px;
+        }
+
+        .cancel-button:hover {
+            background-color: #e53935;
+        }
+
+        /* Formun içindeki alan düzeni */
+        .form-group {
+            margin-bottom: 20px;
+        }
+
+        .form-group input,
+        .form-group select {
+            width: 100%;
+            max-width: 100%;
+        }
+
+        /* Mobil uyumluluk */
+        @media (max-width: 768px) {
+            .container {
+                padding: 20px;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>Yeni Başvuru</h1>
+
+        <!-- Başvuru Formu -->
+        <form method="post" enctype="multipart/form-data">
+            {% csrf_token %}
+            {{ form.as_p }}  <!-- Formu görüntüle -->
+
+            <!-- Başvurduğunuz Pozisyonlar (çoklu seçim) -->
+            <div class="form-group">
+                <label for="id_applied_positions">Başvurduğunuz Pozisyonlar:</label>
+                <select name="applied_positions" id="id_applied_positions" multiple>
+                    {% for position in positions %}
+                        <option value="{{ position.id }}" {% if position in form.applied_positions.value %} selected {% endif %}>
+                            {{ position.name }}
+                        </option>
+                    {% endfor %}
+                </select>
+            </div>
+
+            <!-- Çalışmak İstediğiniz Lokasyonlar (çoklu seçim) -->
+            <div class="form-group">
+                <label for="id_desired_locations">Çalışmak İstediğiniz Lokasyonlar:</label>
+                <select name="desired_locations" id="id_desired_locations" multiple>
+                    {% for location in locations %}
+                        <option value="{{ location.id }}" {% if location in form.desired_locations.value %} selected {% endif %}>
+                            {{ location.name }}
+                        </option>
+                    {% endfor %}
+                </select>
+            </div>
+
+            <!-- Kaydet ve İptal Butonları -->
+            <div style="text-align: center;">
+                <button type="submit">Kaydet</button>
+                <a href="{% url 'job_application_list' %}" class="cancel-button">İptal</a> <!-- İptal butonu -->
+            </div>
+        </form>
+    </div>
+</body>
+</html>

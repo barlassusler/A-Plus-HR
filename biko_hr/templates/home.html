@@ -1,0 +1,28 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Ana Sayfa</title>
+    <style>
+        .btn {
+            padding: 10px 20px;
+            background-color: #007BFF;
+            color: white;
+            border: none;
+            border-radius: 5px;
+            font-size: 16px;
+            cursor: pointer;
+            margin: 5px;
+        }
+        .btn:hover {
+            background-color: #0056b3;
+        }
+    </style>
+</head>
+<body>
+    <h1>Hoş Geldiniz</h1>
+    <p>Başvuru sistemine erişim için aşağıdaki butonları kullanabilirsiniz.</p>
+    <a href="{% url 'job_application_list' %}">
+        <button class="btn">Başvuruları Listele</button>
+    </a>
+</body>
+</html>
