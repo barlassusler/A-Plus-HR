@@ -1,0 +1,36 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <title>Talep Detayları</title>
+    <style>
+        body { font-family: Arial, sans-serif; margin: 40px; }
+        h1 { text-align: center; }
+        table { width: 50%; margin: auto; border-collapse: collapse; }
+        th, td { padding: 10px; border: 1px solid #ddd; text-align: left; }
+        th { background-color: #4CAF50; color: white; }
+        a { display: block; text-align: center; margin-top: 20px; color: #4CAF50; text-decoration: none; }
+        a:hover { text-decoration: underline; }
+    </style>
+</head>
+<body>
+    <h1>Talep Detayları</h1>
+    <table>
+        <tr><th>Lokasyon:</th><td>{{ task.location }}</td></tr>
+        <tr><th>Organizasyon:</th><td>{{ task.organization }}</td></tr>
+        <tr><th>Görev Adı:</th><td>{{ task.task_name }}</td></tr>
+        <tr><th>Yeni Görev Adı:</th><td>{{ task.new_task_name }}</td></tr>
+        <tr><th>Çalışma Türü:</th><td>{{ task.work_type }}</td></tr>
+        <tr><th>Talep Türü:</th><td>{{ task.task_type }}</td></tr>
+        <tr><th>Kimin Yerine:</th><td>{{ task.replacement_for }}</td></tr>
+        <tr><th>Talep Nedeni:</th><td>{{ task.request_reason }}</td></tr>
+        <tr><th>Açıklama:</th><td>{{ task.description }}</td></tr>
+        <tr><th>Göreve Başlama Tarihi:</th><td>{{ task.start_date }}</td></tr>
+        <tr><th>Alınacak Kişi Sayısı:</th><td>{{ task.personnel_count }}</td></tr>
+        <tr><th>Deneyim Yılı:</th><td>{{ task.experience_years }}</td></tr>
+        <tr><th>Eğitim:</th><td>{{ task.education }}</td></tr>
+        <tr><th>Varsa Özel Nitelikler:</th><td>{{ task.special_requirements }}</td></tr>
+        <tr><th>Oluşturulma Tarihi:</th><td>{{ task.created_at }}</td></tr>
+    </table>
+    <a href="{% url 'task_request_list' %}">← Geri Dön</a>
+</body>
+</html>
