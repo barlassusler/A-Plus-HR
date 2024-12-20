@@ -1,0 +1,46 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <title>Personel Talep Listesi</title>
+    <style>
+        body { font-family: Arial, sans-serif; margin: 40px; }
+        table { width: 100%; border-collapse: collapse; margin-top: 20px; }
+        th, td { border: 1px solid #ddd; padding: 8px; text-align: left; }
+        th { background-color: #4CAF50; color: white; }
+        tr:nth-child(even) { background-color: #f2f2f2; }
+        h1 { text-align: center; }
+    </style>
+</head>
+<body>
+    <li><a href="{% url 'create_task_request' %}">Create Job Request</a></li>
+    <h1>Personel Talep Listesi</h1>
+    <table>
+        <tr>
+            <th>Lokasyon</th>
+            <th>Organizasyon</th>
+            <th>Görev Adı</th>
+            <th>Talep Nedeni</th>
+            <th>Çalışma Türü</th>
+            <th>Alınacak Kişi Sayısı</th>
+            <th>Oluşturulma Tarihi</th>
+            <th>Detay</th>
+        </tr>
+        {% for task in tasks %}
+        <tr>
+            <td>{{ task.location }}</td>
+            <td>{{ task.organization }}</td>
+            <td>{{ task.task_name }}</td>
+            <td>{{ task.task_type }}</td>
+            <td>{{ task.work_type }}</td>
+            <td>{{ task.personnel_count }}</td>
+            <td>{{ task.created_at }}</td>
+            <td><a href="{% url 'task_request_detail' task.pk %}">Detay</a></td>
+        </tr>
+        {% empty %}
+        <tr>
+            <td colspan="11">Henüz bir talep eklenmemiş.</td>
+        </tr>
+        {% endfor %}
+    </table>
+</body>
+</html>
