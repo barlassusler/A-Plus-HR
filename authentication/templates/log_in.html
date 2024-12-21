@@ -1,0 +1,30 @@
+{% extends 'home.html' %}
+{% load bootstrap4 %}
+{% load static %}
+
+{% block content %}
+<head>
+{#        <link rel="stylesheet" type="text/css" href="log_in.css">#}
+    <title>Log In</title>
+    <style>
+        .login-form {
+            background-color: rgba(255, 255, 255, 0.8); /* Adjust the alpha value for transparency */
+            padding: 20px;
+            border-radius: 10px;
+            margin-top: 50px;
+        }
+    </style>
+</head>
+
+<body>
+    <form method="post" action="{% url 'log-in' %}" class="login-form">
+        <label>Log in to your account:</label>
+        {% csrf_token %}
+        {{ form.as_p }}
+        <button type="submit">Log in</button>
+    </form>
+    {{ message }}
+</body>
+
+{% endblock %}
+

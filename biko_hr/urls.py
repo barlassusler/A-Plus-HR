@@ -23,14 +23,18 @@ from django.urls import path, include
 from . import views
 from django.conf.urls.static import static
 from django.views.generic import TemplateView
-from jobrequest.views import create_task_request
 
 urlpatterns = [
     path('admin/', admin.site.urls),
-    path('', views.home, name='home'),  # Ana sayfa
-    path('applications/', include('job_application.urls')),  # job_application app yönlendirmesi
-    path('', TemplateView.as_view(template_name='home.html'), name='home'),
+    path('', views.get_welcome, name='welcome'),
+    path('home/', views.home, name='home'),  # Ana sayfa
+    # path('', TemplateView.as_view(template_name='home.html'), name='home'),
+    path('applications/', include('job_application.urls')),
     path('jobrequest/', include('jobrequest.urls')),
+    path('auth/', include('authentication.urls')),
+    path('hr/', include('hr.urls')),
+    path('organization/', include('organization.urls')),
+    path('candidate/', include('candidate.urls')),
 ]
 
 

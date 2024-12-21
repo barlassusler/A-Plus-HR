@@ -4,7 +4,7 @@ from django.shortcuts import render
 from django.core.paginator import Paginator
 from django.db.models import F, ExpressionWrapper, fields
 from datetime import date
-from .models import JobApplication
+from biko_hr.models import Application
 from biko_hr.models import Location, Position
 
 def job_application_list(request):

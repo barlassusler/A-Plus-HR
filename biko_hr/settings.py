@@ -39,9 +39,13 @@ INSTALLED_APPS = [
     'django.contrib.messages',
     'django.contrib.staticfiles',
     "biko_hr",
-    "jobrequest"
+    "jobrequest",
     'job_application',
-    'biko_hr',
+    "authentication",
+    "hr",
+    "organization",
+    "bootstrap4",
+    "candidate"
 ]
 
 MIDDLEWARE = [
@@ -59,8 +63,14 @@ ROOT_URLCONF = 'biko_hr.urls'
 TEMPLATES = [
     {
         'BACKEND': 'django.template.backends.django.DjangoTemplates',
-        'DIRS': [
-            os.path.join(BASE_DIR, 'applicant_pool', 'templates'),  # Correct path
+        'DIRS': [BASE_DIR / 'applicant_pool/templates', ## TODO: Whats applicant pool? create app or integrate to an existing one.
+                 BASE_DIR / 'authentication/templates',
+                 BASE_DIR / 'biko_hr/templates',
+                 BASE_DIR / 'hr/templates',
+                 BASE_DIR / 'job_application/templates',
+                 BASE_DIR / 'jobrequest/templates',
+                 BASE_DIR / 'organization/templates',
+                 BASE_DIR / 'candidate/templates',
         ],
         'APP_DIRS': True,
         'OPTIONS': {
@@ -119,11 +129,6 @@ USE_I18N = True
 USE_TZ = True
 
 
-# Static files (CSS, JavaScript, Images)
-# https://docs.djangoproject.com/en/5.1/howto/static-files/
-
-STATIC_URL = 'static/'
-
 # Default primary key field type
 # https://docs.djangoproject.com/en/5.1/ref/settings/#default-auto-field
 
@@ -132,3 +137,19 @@ DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
 
 MEDIA_URL = '/media/'
 MEDIA_ROOT = os.path.join(BASE_DIR, 'media')  # Directory to store media files
+
+# Static files (CSS, JavaScript, Images)
+# https://docs.djangoproject.com/en/5.1/howto/static-files/
+
+
+STATIC_URL = '/static/'
+STATIC_ROOT = os.path.join(BASE_DIR, 'staticfiles')
+
+STATICFILES_DIRS = [
+    os.path.join(BASE_DIR, 'static'),  # App-level static files
+]
+
+
+AUTH_USER_MODEL = 'auth.User'
+
+LOGIN_URL = '/auth/log-in/'

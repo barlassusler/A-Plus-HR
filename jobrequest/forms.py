@@ -1,13 +1,13 @@
 from django import forms
-from .models import TaskRequest
-from biko_hr.models import Location, Organization, Task
+from .models import JobRequest
+from biko_hr.models import Location, Organization, Job
 
 class TaskRequestForm(forms.ModelForm):
     class Meta:
-        model = TaskRequest
+        model = JobRequest
         fields = [
             'location', 'organization', 'task_name', 'new_task_name', 'work_type',
-            'task_type', 'replacement_for',
+            'work_type', 'replacement_for',
             'request_reason', 'description', 'start_date', 'personnel_count',
             'experience_years', 'education', 'special_requirements'
         ]

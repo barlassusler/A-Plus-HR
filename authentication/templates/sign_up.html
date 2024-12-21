@@ -1,0 +1,43 @@
+{% extends 'home.html' %}
+{% load bootstrap4 %}
+{% load static %}
+{% block content %}
+
+<head>
+    <title>Sign Up</title>
+    <style>
+        .signup-form {
+            background-color: rgba(255, 255, 255, 0.8); /* Adjust the alpha value for transparency */
+            padding: 20px;
+            border-radius: 10px;
+            margin-top: 50px;
+        }
+    </style>
+</head>
+
+<body>
+    <form method="post" action="{% url 'sign-up' %}" class="signup-form">
+        {% csrf_token %}
+        {{ form.as_p }}
+
+        <button type="submit">Sign Up</button>
+    </form>
+    {{ message }}
+</body>
+
+{% endblock %}
+
+{% comment %}
+    <h4>Register Us</h4>
+    <form method="post" action="/business/saved">
+        {% csrf_token %}
+        <label> Write a Valid Email:
+            <input type="text" name="email">
+        </label>
+        <label> Set Password:
+            <input type="text" name="password">
+        </label>
+        <button>Save</button>
+    </form>
+{% endcomment %}
+

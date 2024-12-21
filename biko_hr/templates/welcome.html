@@ -1,0 +1,28 @@
+{% extends 'home.html' %}
+{% load bootstrap4 %}
+{% load static %}
+{% block navigation %}{% endblock %}
+{% block topbar %}{% endblock %}
+
+{% block content %}
+<head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, shrink-to-fit=no" />
+    <title>{% block title %}Welcome - Aplus HR{% endblock %}</title>
+</head>
+
+<div class="container-fluid d-flex align-items-center justify-content-center"
+     style="height: 100vh; background-color: #003366;">
+    <div class="text-center">
+        <img src="{% static 'aplus-acibadem-logo-beyaz-HD-transformed.png' %}"
+             alt="Company Logo"
+             class="img-fluid mb-4"
+             style="max-width: 70%; height: auto;" />
+        <div>
+            <a href="{% url 'log-in' %}" class="btn btn-primary mr-2">Login</a>
+            <a href="{% url 'sign-up' %}" class="btn btn-outline-primary">Register</a>
+        </div>
+    </div>
+</div>
+
+{% endblock %}
