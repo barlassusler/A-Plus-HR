@@ -22,8 +22,14 @@ class Organization(models.Model):
     def __str__(self):
         return self.organization
 
+class JobCategory(models.Model):
+    category_name = models.CharField(max_length=100)
+    def __str__(self):
+        return self.category_name
+    
 class Position(models.Model):
     position = models.CharField(max_length=100)
+    category = models.ForeignKey(JobCategory, on_delete=models.CASCADE, default=None)
 
     def __str__(self):
         return self.position
