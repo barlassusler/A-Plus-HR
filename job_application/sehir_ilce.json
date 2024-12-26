@@ -1,0 +1,8 @@
+{
+    "Adana": ["Seyhan", "Yüreğir", "Çukurova", "Sarıçam", "Ceyhan"],
+    "Ankara": ["Çankaya", "Keçiören", "Yenimahalle", "Mamak", "Etimesgut"],
+    "İstanbul": ["Kadıköy", "Beşiktaş", "Üsküdar", "Fatih", "Şişli"],
+    "İzmir": ["Konak", "Karşıyaka", "Bornova", "Buca", "Gaziemir"],
+    "Antalya": ["Muratpaşa", "Kepez", "Alanya", "Manavgat", "Kemer"]
+
+}

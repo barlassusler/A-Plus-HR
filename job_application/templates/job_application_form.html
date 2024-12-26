@@ -5,149 +5,355 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Yeni Başvuru</title>
     <style>
-        /* Genel vücut ve sayfa düzeni */
-        body {
-            font-family: 'Arial', sans-serif;
-            margin: 0;
-            padding: 0;
-            background-color: #f4f4f9;
-            display: flex;
-            justify-content: center;
-            align-items: center;
-            min-height: 100vh;
-            box-sizing: border-box;
-        }
+body {
+    font-family: 'Arial', sans-serif;
+    margin: 0;
+    padding: 0;
+    background-color: #f4f4f9;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    min-height: 100vh;
+    box-sizing: border-box;
+}
 
-        /* Sayfanın içerik alanı kaydırılabilir */
-        .container {
-            background-color: white;
-            width: 100%;
-            max-width: 700px;
-            padding: 30px;
-            border-radius: 8px;
-            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
-            overflow-y: auto;
-            max-height: 90vh;
-        }
+.container {
+    background-color: white;
+    width: 100%;
+    max-width: 700px;
+    padding: 30px;
+    border-radius: 8px;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+    overflow-y: auto;
+    max-height: 90vh;
+}
 
-        /* Başlık stili */
-        h1 {
-            text-align: center;
-            color: #333;
-            font-size: 2em;
-            margin-bottom: 20px;
-        }
+h1 {
+    text-align: center;
+    color: #333;
+    font-size: 2em;
+    margin-bottom: 20px;
+}
 
-        /* Form öğeleri */
-        label {
-            font-size: 16px;
-            margin-bottom: 8px;
-            font-weight: bold;
-            color: #555;
-        }
+label {
+    font-size: 16px;
+    margin-bottom: 8px;
+    font-weight: bold;
+    color: #555;
+}
 
-        input, select, button {
-            width: 100%;
-            padding: 12px;
-            margin: 8px 0 16px 0;
-            border-radius: 5px;
-            border: 1px solid #ddd;
-            font-size: 16px;
-        }
+input, select, textarea, button {
+    width: 100%;
+    padding: 12px;
+    margin: 8px 0 16px 0;
+    border-radius: 5px;
+    border: 1px solid #ddd;
+    font-size: 16px;
+}
 
-        input:focus, select:focus, button:focus {
-            outline: none;
-            border-color: #4CAF50;
-        }
+input:focus, select:focus, textarea:focus, button:focus {
+    outline: none;
+    border-color: #4CAF50;
+}
 
-        /* Kaydet butonu */
-        button[type="submit"] {
-            background-color: #4CAF50;
-            color: white;
-            cursor: pointer;
-            border: none;
-            font-size: 16px;
-        }
+button[type="submit"] {
+    background-color: #4CAF50;
+    color: white;
+    cursor: pointer;
+    border: none;
+    font-size: 16px;
+}
 
-        button[type="submit"]:hover {
-            background-color: #45a049;
-        }
+button[type="submit"]:hover {
+    background-color: #45a049;
+}
 
-        /* İptal butonu */
-        .cancel-button {
-            display: inline-block;
-            background-color: #f44336;
-            color: white;
-            text-decoration: none;
-            padding: 12px 20px;
-            border-radius: 5px;
-            text-align: center;
-            width: auto;
-            margin-top: 10px;
-        }
+.cancel-button {
+    display: flex;  /* Flex container */
+    justify-content: center;  /* Yatayda ortalar */
+    align-items: center;  /* Dikeyde ortalar */
+    background-color: #f44336;
+    color: white;
+    text-decoration: none;
+    padding: 12px 20px;
+    border-radius: 5px;
+    text-align: center;
+    width: auto;
+    height: 45px;  /* Butonun yüksekliğini ayarladık */
+    box-sizing: border-box;
+}
 
-        .cancel-button:hover {
-            background-color: #e53935;
-        }
+.cancel-button:hover {
+    background-color: #e53935;
+}
 
-        /* Formun içindeki alan düzeni */
-        .form-group {
-            margin-bottom: 20px;
-        }
+.form-group {
+    margin-bottom: 20px;
+}
 
-        .form-group input,
-        .form-group select {
-            width: 100%;
-            max-width: 100%;
-        }
+.form-group input,
+.form-group select,
+.form-group textarea {
+    width: 100%;
+    padding: 10px;
+    border-radius: 4px;
+    border: 1px solid #ccc;
+}
 
-        /* Mobil uyumluluk */
-        @media (max-width: 768px) {
-            .container {
-                padding: 20px;
+/* Butonlar için düzenlemeler */
+.form-buttons {
+    display: flex;
+    justify-content: space-between;
+    align-items: stretch;  /* Butonlar aynı hizaya gelsin */
+    width: 100%;
+    margin-top: 20px;
+}
+
+.form-buttons button,
+.form-buttons .btn-cancel {
+    flex: 1;  /* Her iki buton eşit genişlikte olacak */
+    height: 45px;  /* Aynı yükseklikte olacaklar */
+    font-size: 16px;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+    text-align: center;
+    box-sizing: border-box;
+    margin: 0 5px;  /* Butonlar arasına küçük boşluk */
+}
+
+.form-buttons .btn-save {
+    background-color: #4CAF50;
+    color: white;
+}
+
+.form-buttons .btn-cancel {
+    background-color: #f44336;
+    color: white;
+    text-decoration: none;
+}
+
+.form-buttons .btn-save:hover {
+    background-color: #45a049;
+}
+
+.form-buttons .btn-cancel:hover {
+    background-color: #e53935;
+}
+
+.hidden {
+    display: none;
+}
+
+.location-position-list {
+    margin-top: 30px;
+}
+
+.location-position-list h2 {
+    font-size: 1.5em;
+    margin-bottom: 15px;
+}
+
+.location-position-list table {
+    width: 100%;
+    border-collapse: collapse;
+}
+
+.location-position-list table, th, td {
+    border: 1px solid #ddd;
+}
+
+.location-position-list th, td {
+    padding: 12px;
+    text-align: left;
+}
+
+@media (max-width: 768px) {
+    .container {
+        padding: 20px;
+    }
+
+    .form-buttons {
+        flex-direction: column;
+    }
+
+    .form-buttons button,
+    .form-buttons .btn-cancel {
+        width: 100%;  /* Butonlar mobilde tüm genişliği alır */
+        margin-bottom: 10px;
+    }
+}
+
+
+
+</style>
+
+    <script>
+        const ilceler = {
+            "İstanbul": ["Kadıköy", "Beşiktaş", "Üsküdar"],
+            "Ankara": ["Çankaya", "Keçiören", "Etimesgut"],
+            "İzmir": ["Konak", "Bornova", "Karşıyaka"]
+        };
+        function toggleSchoolFields() {
+            const educationLevel = document.getElementById('id_education_level').value;
+            const schoolFields = document.getElementById('school-fields');
+
+            if (educationLevel === 'Lise' || educationLevel === 'Üniversite' || educationLevel === 'Yüksek Lisans ve Üzeri') {
+                schoolFields.classList.remove('hidden');
+            } else {
+                schoolFields.classList.add('hidden');
             }
         }
-    </style>
+
+        function updateDistricts() {
+            const selectedCity = document.getElementById('residence_city').value;
+            const districtSelect = document.getElementById('residence_district');
+
+            districtSelect.innerHTML = '<option value="">Seçiniz</option>'; // İlçeleri temizle ve varsayılan seçeneği ekle
+
+            if (ilceler[selectedCity]) {
+                ilceler[selectedCity].forEach(district => {
+                    const option = document.createElement('option');
+                    option.value = district;
+                    option.textContent = district;
+                    districtSelect.appendChild(option);
+                });
+            }
+        }
+
+        function validateForm() {
+            const positionSelect = document.getElementById('Position');
+            const locationSelect = document.getElementById('Location');
+
+            if (positionSelect.selectedIndex === 0) {
+                alert('Başvurduğunuz pozisyonu seçmeniz gerekmektedir.');
+                return false;
+            }
+
+            if (locationSelect.selectedOptions.length === 0) {
+                alert('Çalışmak istediğiniz lokasyonu seçmeniz gerekmektedir.');
+                return false;
+            }
+
+            return true;
+        }
+
+        function validateCV() {
+            const cvInput = document.getElementById('cv_file');
+            const file = cvInput.files[0];
+
+            if (file) {
+                const allowedExtensions = ['pdf', 'doc', 'docx'];
+                const fileExtension = file.name.split('.').pop().toLowerCase();
+
+                if (!allowedExtensions.includes(fileExtension)) {
+                    alert('Sadece PDF ve Word dosyaları yükleyebilirsiniz.');
+                    return false;
+                }
+            }
+
+            return true;
+        }
+    </script>
 </head>
 <body>
     <div class="container">
-        <h1>Yeni Başvuru</h1>
+        <h1>İş Başvuru Formu</h1>
 
-        <!-- Başvuru Formu -->
-        <form method="post" enctype="multipart/form-data">
+        <form method="post" enctype="multipart/form-data" onsubmit="return validateForm() && validateCV()">
             {% csrf_token %}
-            {{ form.as_p }}  <!-- Formu görüntüle -->
 
-            <!-- Başvurduğunuz Pozisyonlar (çoklu seçim) -->
+            <!-- Ad Soyad -->
             <div class="form-group">
-                <label for="id_applied_positions">Başvurduğunuz Pozisyonlar:</label>
-                <select name="applied_positions" id="id_applied_positions" multiple>
-                    {% for position in positions %}
-                        <option value="{{ position.id }}" {% if position in form.applied_positions.value %} selected {% endif %}>
-                            {{ position.name }}
-                        </option>
-                    {% endfor %}
+                <label for="id_full_name">Ad Soyad:</label>
+                <input type="text" id="id_full_name" name="full_name" required>
+            </div>
+
+            <!-- Telefon Numarası -->
+            <div class="form-group">
+                <label for="id_phone_number">Telefon Numarası:</label>
+                <input type="text" id="id_phone_number" name="phone_number" required>
+            </div>
+
+            <!-- Doğum Tarihi -->
+            <div class="form-group">
+                <label for="birth_date">Doğum Tarihi:</label>
+                <input type="date" id="birth_date" name="birth_date" required>
+            </div>
+
+            <!-- İkamet (İl ve İlçe) -->
+            <div class="form-group">
+                <label for="residence_city">İkamet - İl:</label>
+                <select id="residence_city" name="residence_city" onchange="updateDistricts()" required>
+                    <option value="">Seçiniz</option>
+                    <option value="İstanbul">İstanbul</option>
+                    <option value="Ankara">Ankara</option>
+                    <option value="İzmir">İzmir</option>
+                </select>
+            </div>
+            <div class="form-group">
+                <label for="residence_district">İkamet - İlçe:</label>
+                <select id="residence_district" name="residence_district" required>
+                    <option value="">Seçiniz</option>
                 </select>
             </div>
 
-            <!-- Çalışmak İstediğiniz Lokasyonlar (çoklu seçim) -->
+            <!-- Eğitim Durumu -->
             <div class="form-group">
-                <label for="id_desired_locations">Çalışmak İstediğiniz Lokasyonlar:</label>
-                <select name="desired_locations" id="id_desired_locations" multiple>
-                    {% for location in locations %}
-                        <option value="{{ location.id }}" {% if location in form.desired_locations.value %} selected {% endif %}>
-                            {{ location.name }}
-                        </option>
-                    {% endfor %}
+                <label for="id_education_level">Eğitim Durumu:</label>
+                <select name="education_level" id="id_education_level" onchange="toggleSchoolFields()" required>
+                    <option value="">Seçiniz</option>
+                    <option value="read_write">Okuma Yazma Belgesi</option>
+                    <option value="primary">İlkokul</option>
+                    <option value="middle">Ortaokul</option>
+                    <option value="high">Lise</option>
+                    <option value="university">Üniversite</option>
+                    <option value="postgraduate">Yüksek Lisans ve Üzeri</option>
                 </select>
+            </div>
+
+            <!-- Okul ve Bölüm Adı -->
+            <div id="school-fields" class="form-group hidden">
+                <label for="school_name">Okul Adı:</label>
+                <input type="text" name="school_name" id="school_name" placeholder="Okul Adını Giriniz">
+
+                <label for="department_name">Bölüm Adı:</label>
+                <input type="text" name="department_name" id="department_name" placeholder="Bölüm Adını Giriniz">
+            </div>
+
+            <div class="form-group">
+                <label for="position">Başvurduğu Pozisyon:</label>
+                <select id="position" name="applied_positions" multiple required>
+                    {%for position in positions%}
+                         <option value="{{ position.id }}">{{ position.name }}</option>
+                    {%endfor%}
+                </select>
+            </div>
+
+            <!-- Lokasyon Seçimi (Birden fazla seçim yapılabilir) -->
+            <div class="form-group">
+                <label for="locations">Çalışmak İstediğiniz Lokasyonlar:</label>
+                <select id="locations" name="desired_locations" multiple required>
+                    {%for location in locations%}
+                        <option value="{{ location.id }}">{{ location.name }}</option>
+                    {%endfor%}
+                </select>
+                <small>Ctrl (veya Cmd) tuşuna basarak birden fazla lokasyon seçebilirsiniz.</small>
+            </div>
+
+            <!-- CV Yükleme (Opsiyonel, sadece PDF ve Word) -->
+            <div class="form-group">
+                <label for="cv_file">CV Yükleyin (PDF veya Word):</label>
+                <input type="file" id="cv_file" name="cv_file" accept=".pdf,.doc,.docx">
+                <small>Opsiyonel. Sadece PDF veya Word dosyası yükleyebilirsiniz.</small>
             </div>
 
             <!-- Kaydet ve İptal Butonları -->
-            <div style="text-align: center;">
-                <button type="submit">Kaydet</button>
-                <a href="{% url 'job_application_list' %}" class="cancel-button">İptal</a> <!-- İptal butonu -->
+            <div class="form-buttons">
+                <button type="submit" class="btn-save">Kaydet</button>
+                <a href="{% url 'job_application_list' %}" class="btn-cancel">İptal</a>
             </div>
+
         </form>
-    </div>
-</body>
-</html>
+
+        </div>

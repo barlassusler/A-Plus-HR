@@ -5,19 +5,18 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Başvuru Listesi</title>
     <style>
-        /* Genel Vücut Stili */
+        /* Genel Stiller */
         body {
-            font-family: 'Arial', sans-serif;
+            font-family: Arial, sans-serif;
             margin: 0;
             padding: 0;
-            background-color: #f9f9f9;
+            background-color: #f4f4f4;
             display: flex;
             justify-content: center;
             align-items: flex-start;
             min-height: 100vh;
         }
 
-        /* Sayfa İçeriği */
         .container {
             background-color: white;
             width: 90%;
@@ -34,28 +33,21 @@
             margin-bottom: 20px;
         }
 
-        /* Form Elemanları */
+        /* Form Stilleri */
         form {
             display: flex;
-            flex-direction: column;
-            gap: 12px;
+            flex-wrap: wrap;
+            gap: 15px;
             margin-bottom: 20px;
         }
 
         input, select, button {
-            padding: 12px;
+            padding: 10px;
             font-size: 16px;
             border-radius: 5px;
             border: 1px solid #ddd;
-            margin-bottom: 10px;
-        }
-
-        input[type="text"] {
-            width: 100%;
-        }
-
-        select {
-            width: 100%;
+            flex: 1;
+            min-width: 200px;
         }
 
         button {
@@ -63,14 +55,13 @@
             color: white;
             cursor: pointer;
             border: none;
-            font-size: 16px;
         }
 
         button:hover {
             background-color: #45a049;
         }
 
-        /* Tablo Stili */
+        /* Tablo Stilleri */
         table {
             width: 100%;
             border-collapse: collapse;
@@ -84,8 +75,7 @@
         }
 
         th {
-            background-color: #f4f4f4;
-            font-weight: bold;
+            background-color: #f8f8f8;
         }
 
         tr:nth-child(even) {
@@ -128,19 +118,14 @@
             pointer-events: none;
         }
 
-        /* Mobil Uyumlu Tasarım */
+        /* Mobil Uyumluluk */
         @media (max-width: 768px) {
             .container {
-                width: 100%;
                 padding: 15px;
             }
 
             h1 {
-                font-size: 1.5em;
-            }
-
-            table {
-                font-size: 14px;
+                font-size: 1.5rem;
             }
 
             input, select, button {
@@ -150,15 +135,14 @@
     </style>
 </head>
 <body>
-
     <div class="container">
-        <h1>Başvuranlar</h1>
+        <h1>Başvuru Listesi</h1>
 
         <!-- Arama ve Filtreleme Formu -->
         <form method="get" action="{% url 'job_application_list' %}">
-            <input type="text" name="q" placeholder="İsimle ara (büyük/küçük harf duyarsız)" value="{{ search_query }}">
-            <input type="text" name="city" placeholder="Şehire göre filtrele" value="{{ city_filter }}">
-            <input type="text" name="district" placeholder="İlçeye göre filtrele" value="{{ district_filter }}">
+            <input type="text" name="q" placeholder="İsimle Ara" value="{{ search_query }}">
+            <input type="text" name="city" placeholder="Şehir Filtrele" value="{{ city_filter }}">
+            <input type="text" name="district" placeholder="İlçe Filtrele" value="{{ district_filter }}">
 
             <select name="sort_option">
                 <option value="name_asc" {% if sort_option == "name_asc" %}selected{% endif %}>Ad (A-Z)</option>
@@ -169,63 +153,64 @@
                 <option value="experience_desc" {% if sort_option == "experience_desc" %}selected{% endif %}>Deneyim (Azalan)</option>
             </select>
 
-            <button type="submit">Filtreleri Uygula</button>
+            <button type="submit">Filtrele</button>
         </form>
 
-        <!-- Yeni Başvuru Ekle Butonu -->
+        <!-- Başvuru Ekle Butonu -->
         <div style="text-align: center; margin-bottom: 20px;">
             <a href="{% url 'job_application_form' %}">
-                <button type="button" style="background-color: #4CAF50; color: white; padding: 12px 20px; border-radius: 5px; border: none; font-size: 16px;">
-                    Yeni Başvuru Ekle
-                </button>
+                <button type="button">Yeni Başvuru Ekle</button>
             </a>
         </div>
 
-        <!-- Başvuranlar Tablosu -->
-        <table>
-            <thead>
-                <tr>
-                    <th>Ad Soyad</th>
-                    <th>Şehir</th>
-                    <th>İlçe</th>
-                    <th>Yaş</th>
-                    <th>Deneyim</th>
-                    <th>Detay</th>
-                </tr>
-            </thead>
-            <tbody>
-                {% for applicant in candidates %}
-                    <tr>
-                        <td>{{ applicant.full_name }}</td>
-                        <td>{{ applicant.residence_city }}</td>
-                        <td>{{ applicant.residence_district }}</td>
-                        <td>{{ applicant.age }}</td>
-                        <td>{{ applicant.experience }} yıl</td>
-                        <td><a href="{% url 'application_detail' applicant.pk %}">Detayları Görüntüle</a></td>
-                    </tr>
-                {% empty %}
-                    <tr>
-                        <td colspan="6">Hiç başvuran bulunamadı.</td>
-                    </tr>
-                {% endfor %}
-            </tbody>
-        </table>
+        <!-- Başvuru Tablosu -->
+        <!-- Başvuru Tablosu -->
+<table>
+    <thead>
+        <tr>
+            <th>Ad Soyad</th>
+            <th>Şehir</th>
+            <th>İlçe</th>
+            <th>Yaş</th>
+            <th>Başvuru Tarihi</th>
+            <th>Detay</th>
+        </tr>
+    </thead>
+    <tbody>
+        {% for application in applications %}
+        <tr>
+            <td>{{ application.candidate.full_name }}</td>
+            <td>{{ application.candidate.residence_city }}</td>
+            <td>{{ application.candidate.residence_district }}</td>
+            <td>{{ application.age }}</td>
+            <td>{{ application.application_date }}</td>
+            <td>
+                <a href="{% url 'application_detail' application.id %}">Detay</a>
+            </td>
+        </tr>
+        {% empty %}
+        <tr>
+            <td colspan="6">Hiç başvuru bulunamadı.</td>
+        </tr>
+        {% endfor %}
+    </tbody>
+</table>
+
 
         <!-- Sayfalama -->
         <div class="pagination">
             {% if candidates.has_previous %}
-                <a href="?page=1{{ request.GET.urlencode|slice:'&page=' }}">İlk</a>
-                <a href="?page={{ candidates.previous_page_number }}{{ request.GET.urlencode|slice:'&page=' }}">Önceki</a>
+            <a href="?page=1{{ request.GET.urlencode|slice:'&page=' }}">İlk</a>
+            <a href="?page={{ candidates.previous_page_number }}{{ request.GET.urlencode|slice:'&page=' }}">Önceki</a>
             {% endif %}
 
             <span>Sayfa {{ candidates.number }} / {{ candidates.paginator.num_pages }}</span>
 
             {% if candidates.has_next %}
-                <a href="?page={{ candidates.next_page_number }}{{ request.GET.urlencode|slice:'&page=' }}">Sonraki</a>
-                <a href="?page={{ candidates.paginator.num_pages }}{{ request.GET.urlencode|slice:'&page=' }}">Son</a>
+            <a href="?page={{ candidates.next_page_number }}{{ request.GET.urlencode|slice:'&page=' }}">Sonraki</a>
+            <a href="?page={{ candidates.paginator.num_pages }}{{ request.GET.urlencode|slice:'&page=' }}">Son</a>
             {% endif %}
         </div>
     </div>
-
 </body>
 </html>
