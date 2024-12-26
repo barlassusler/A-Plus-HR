@@ -7,7 +7,7 @@ class TaskRequestForm(forms.ModelForm):
         model = JobRequest
         fields = [
             'location', 'organization', 'task_name', 'new_task_name', 'work_type',
-            'work_type', 'replacement_for',
+            'position_type', 'replacement_for',"position_type_2",
             'request_reason', 'description', 'start_date', 'personnel_count',
             'experience_years', 'education', 'special_requirements'
         ]

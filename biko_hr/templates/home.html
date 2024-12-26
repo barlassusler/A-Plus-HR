@@ -52,7 +52,6 @@
                     </span>
                     <a href="{% url 'log-out' %}" class="btn btn-primary mr-2">Log out</a>
                         {% if user.is_staff %}
-                        <a href="{% url 'staff-panel' %}" class="btn btn-primary mr-2">Staff Panel</a>
                         {% endif %}
                     {% else %}
                         <a href="{% url 'log-in' %}" class="btn btn-primary mr-2">Login</a>
