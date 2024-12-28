@@ -20,6 +20,7 @@
             <th>Organizasyon</th>
             <th>Görev Adı</th>
             <th>Talep Nedeni</th>
+            <th>Kadro Durumu</th>
             <th>Çalışma Türü</th>
             <th>Alınacak Kişi Sayısı</th>
             <th>Oluşturulma Tarihi</th>
@@ -29,10 +30,20 @@
         <tr>
             <td>{{ task.location }}</td>
             <td>{{ task.organization }}</td>
-            <td>{{ task.task_name }}</td>
-            <td>{{ task.task_type }}</td>
+            <td>
+                {% if task.position_name %}
+                    {{ task.position_name.position }}
+                {% elif task.new_position_name %}
+                    {{ task.new_position_name }}
+                {% else %}
+                    <!-- Optionally handle the case where both are blank -->
+                    No position specified
+                {% endif %}
+            </td>
+            <td>{{ task.request_reason }}</td>
+            <td>{{ task.position_type }}</td>
             <td>{{ task.work_type }}</td>
-            <td>{{ task.personnel_count }}</td>
+            <td>{{ task.desired_personnel_count }}</td>
             <td>{{ task.created_at }}</td>
             <td><a href="{% url 'task_request_detail' task.pk %}">Detay</a></td>
         </tr>

@@ -62,13 +62,13 @@
         <h1>Başvuru Detayı</h1>
 
         <div class="detail">
-            <strong>Ad Soyad:</strong> {{ application.candidate.full_name }}
+            <strong>Ad Soyad:</strong> {{ application.candidate.name}} {{application.candidate.surname }}
         </div>
         <div class="detail">
             <strong>Doğum Tarihi:</strong> {{ application.candidate.birth_date }}
         </div>
         <div class="detail">
-            <strong>Telefon Numarası:</strong> {{ application.candidate.phone_number }}
+            <strong>Telefon Numarası:</strong> {{ application.candidate.phone }}
         </div>
         <div class="detail">
             <strong>İkamet Şehri:</strong> {{ application.candidate.residence_city }}
@@ -77,33 +77,35 @@
             <strong>İkamet İlçesi:</strong> {{ application.candidate.residence_district }}
         </div>
         <div class="detail">
-            <strong>Eğitim Seviyesi:</strong> {{ application.candidate.get_education_level_display }}
+            <strong>Eğitim Seviyesi:</strong> {{ application.candidate.education_level }}
         </div>
         <div class="detail">
             <strong>Okul Adı:</strong> {{ application.candidate.school_name }}
         </div>
         <div class="detail">
-            <strong>Bölüm Adı:</strong> {{ application.candidate.department_name }}
+            <strong>Bölüm Adı:</strong> {{ application.candidate.department }}
         </div>
         <div class="detail">
             <strong>Başvuru Tarihi:</strong> {{ application.application_date }}
         </div>
         <div class="detail">
             <strong>Başvurulan Pozisyonlar:</strong>
-            {% for position in application.applied_positions.all %}
-                {{ position.name }}{% if not forloop.last %}, {% endif %}
-            {% endfor %}
+            {{ application.job.title }}
+{#            {% for position in application.applied_positions.all %}#}
+{#                {{ position.name }}{% if not forloop.last %}, {% endif %}#}
+{#            {% endfor %}#}
         </div>
         <div class="detail">
             <strong>Tercih Edilen Lokasyonlar:</strong>
-            {% for location in application.desired_locations.all %}
-                {{ location.name }}{% if not forloop.last %}, {% endif %}
-            {% endfor %}
+            {{ application.candidate.desired_locations }}
+{#            {% for location in application.desired_locations.all %}#}
+{#                {{ location.name }}{% if not forloop.last %}, {% endif %}#}
+{#            {% endfor %}#}
         </div>
         <div class="detail">
             <strong>Özgeçmiş:</strong>
             {% if application.resume %}
-                <a href="{{ application.resume.url }}" target="_blank">İndir</a>
+                <a href="{{ application.uploaded_resume.url }}" target="_blank">İndir</a>
             {% else %}
                 Özgeçmiş Yüklenmemiş
             {% endif %}

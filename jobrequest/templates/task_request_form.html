@@ -12,16 +12,15 @@
     </style>
     <script>
         function toggleFields() {
-            // Görev Dropdown kontrolü
-            var taskName = document.getElementById('id_task_name').value;
-            document.getElementById('new_task_name_field').style.display = (taskName === 'Yeni Görev') ? 'block' : 'none';
-
             // Talep Türü kontrolü
-            var taskType = document.getElementById('id_task_type').value;
+            var taskType = document.getElementById('id_position_type').value;
             document.getElementById('replacement_for_field').style.display = (taskType === 'Mevcut Kadro') ? 'block' : 'none';
             document.getElementById('request_reason_field').style.display = (taskType === 'İlave Kadro') ? 'block' : 'none';
-        }
 
+            // Yeni Görev kontrolü
+            var NewTask = document.getElementById('id_task_name').value;
+            document.getElementById('new_position_name_field').style.display = (NewTask === 'Yeni Görev') ? 'block' : 'none';
+        }
         window.onload = toggleFields;
     </script>
 </head>
@@ -37,46 +36,44 @@
         <label for="id_organization">Organizasyon:</label>
         {{ form.organization }}
 
-        <label for="id_position_type">Pozisyon:</label>
-        {{ form.position_type }}
-
-
-        <label for="id_position_type_2">Pozisyon:</label>
-        {{ form.position_type_2 }}
-
-        <!-- Görev Dropdown -->
-        <label for="id_task_name">Görev:</label>
-        <select id="id_task_name" name="task_name" onchange="toggleFields()">
-            <option value="">Görev Seçin</option>
-            <option value="Yeni Görev">Yeni Görev</option> <!-- Statik Seçenek -->
-            {% for task in tasks %}
-                <option value="{{ task.id }}">{{ task.task }}</option>
-            {% endfor %}
-        </select>
-
-
-        <!-- Yeni Görev Adı -->
-        <div id="new_task_name_field" style="display:none;">
-            <label for="id_new_task_name">Yeni Görev Adı:</label>
-            {{ form.new_task_name }}
-        </div>
-
         <!-- Talep Türü Dropdown -->
-        <label for="id_task_type">Talep Türü:</label>
-        <select id="id_task_type" name="task_type" onchange="toggleFields()">
+        <label for="id_position_type">Talep Türü:</label>
+{#        {{ form.position_type }}#}
+        <select id="id_position_type" name="id_position_type" onchange="toggleFields()">
             <option value="">Talep Türü Seçin</option>
             <option value="Mevcut Kadro">Mevcut Kadro</option>
             <option value="İlave Kadro">İlave Kadro</option>
         </select>
 
+        <!-- Görev Dropdown -->
+        <label for="id_position_name">Görev:</label>
+            <select id="id_task_name" name="task_name" onchange="toggleFields()">
+                <option value="">Görev Seçin</option>
+                <option value="Yeni Görev">Yeni Görev</option> <!-- Statik Seçenek -->
+                {% for position in positions %}
+                    <option value="{{ position.id }}">{{ position.position }}</option>
+                {% endfor %}
+            </select>
+
+{#        <!-- Yeni Görev Adı -->#}
+{#        <label for="id_new_position_name">Yeni Görev Adı:</label>#}
+{#        {{ form.new_position_name }}#}
+
+        <!-- Yeni Görev Adı -->
+        <div id="new_position_name_field" style="display:none;">
+            <label for="id_new_position_name">Yeni Görev Adı:</label>
+            {{ form.new_position_name }}
+        </div>
         <!-- Dinamik Alanlar -->
         <div id="replacement_for_field" style="display:none;">
             <label for="id_replacement_for">Kimin Yerine:</label>
+{#            {{ form.replacement_for }}#}
             <input type="text" name="replacement_for" id="id_replacement_for">
         </div>
 
         <div id="request_reason_field" style="display:none;">
             <label for="id_request_reason">Talep Nedeni:</label>
+{#            {{ form.request_reason }}#}
             <textarea name="request_reason" id="id_request_reason"></textarea>
         </div>
 
@@ -88,16 +85,16 @@
         {{ form.description }}
 
         <label for="id_start_date">Göreve Başlayacağı Tarih:</label>
-        {{ form.start_date }}
+        {{ form.desired_start_date }}
 
         <label for="id_personnel_count">Alınacak Kişi Sayısı:</label>
-        {{ form.personnel_count }}
+        {{ form.desired_personnel_count }}
 
         <label for="id_experience_years">Deneyim Yılı:</label>
-        {{ form.experience_years }}
+        {{ form.desired_experience_years }}
 
         <label for="id_education">Eğitim:</label>
-        {{ form.education }}
+        {{ form.required_education_level }}
 
         <label for="id_special_requirements">Varsa Özel Nitelikler:</label>
         {{ form.special_requirements }}

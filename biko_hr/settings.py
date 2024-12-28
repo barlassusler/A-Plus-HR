@@ -45,7 +45,8 @@ INSTALLED_APPS = [
     "hr",
     "organization",
     "bootstrap4",
-    "candidate"
+    "candidate",
+
 ]
 
 MIDDLEWARE = [

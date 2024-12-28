@@ -1,6 +1,6 @@
 from django.contrib.auth.models import User
 from biko_hr.models import (
-    Profile, Location, Organization, JobCategory, Position, Job, Candidate,
+    Profile, Location, Organization, JobCategory, Position, Candidate,
     IncubationJob, Application, Interview, Notification, Evaluation,
     InterviewAttributes, IncubationEvaluation, IncubationAttributes, Reference
 )
@@ -30,9 +30,6 @@ from datetime import date
 # position1 = Position.objects.create(position="Software Engineer", category=category1)
 # position2 = Position.objects.create(position="Data Scientist", category=category2)
 #
-# # Create Jobs
-# job1 = Job.objects.create(task="Develop scalable applications")
-# job2 = Job.objects.create(task="Analyze large datasets")
 #
 # # Create Candidates
 # candidate1 = Candidate.objects.create(
@@ -49,27 +46,27 @@ from datetime import date
 #     education_level="Master's", school_name="Stanford", department="Data Science"
 # )
 #
-# # Create Incubation Jobs
-# incubation_job1 = IncubationJob.objects.create(
-#     title="AI Engineer", description="Build AI models", required_skills="Python, TensorFlow",
-#     status="Open", preferred_locations="New York", department="AI Research"
-# )
+# Create Incubation Jobs
+incubation_job1 = IncubationJob.objects.create(
+    organization=Organization.objects.get(id=1), position=Position.objects.get(id=1), category= JobCategory.objects.get(id=1),title="AI Engineer", description="Build AI models", required_skills="Python, TensorFlow",
+    status="Open", preferred_locations="New York", department="AI Research"
+)
+
+incubation_job2 = IncubationJob.objects.create(
+    organization=Organization.objects.get(id=2), position=Position.objects.get(id=2), category= JobCategory.objects.get(id=2),title="Backend Developer", description="Develop backend APIs", required_skills="Django, Flask",
+    status="Open", preferred_locations="San Francisco", department="Software Engineering"
+)
 #
-# incubation_job2 = IncubationJob.objects.create(
-#     title="Backend Developer", description="Develop backend APIs", required_skills="Django, Flask",
-#     status="Open", preferred_locations="San Francisco", department="Software Engineering"
-# )
-#
-# # Create Applications
-# application1 = Application.objects.create(
-#     candidate=candidate1, job=incubation_job1, application_date=date.today(),
-#     status="Pending", uploaded_resume="resumes/johnsmith.pdf"
-# )
-#
-# application2 = Application.objects.create(
-#     candidate=candidate2, job=incubation_job2, application_date=date.today(),
-#     status="Pending", uploaded_resume="resumes/janedoe.pdf"
-# )
+# Create Applications
+application1 = Application.objects.create(
+    candidate=Candidate.objects.get(id=1), job=incubation_job1, application_date=date.today(),
+    status="Pending", uploaded_resume="resumes/johnsmith.pdf"
+)
+
+application2 = Application.objects.create(
+    candidate=Candidate.objects.get(id=2), job=incubation_job2, application_date=date.today(),
+    status="Pending", uploaded_resume="resumes/janedoe.pdf"
+)
 #
 # # Create Notifications
 # Notification.objects.create(user=user1, message="Your application has been received", status="Unread")
@@ -225,150 +222,151 @@ from datetime import date
 #         school_name="School name",
 #         department="Department data"
 #     )
-# Locations to be added
-locations = [
-    "ADANA", "ACIBADEM ÜNİVERSİTESİ", "ALTUNİZADE", "ANKARA", "ATAKENT", "ATAŞEHİR", "BAKIRKÖY", "BODRUM", "BURSA",
-    "ESKİŞEHİR", "FULYA", "INTERNATIONAL HOSPITAL", "KADIKÖY", "KARTAL", "KAYSERİ", "KENT", "KOZYATAĞI", "MASLAK",
-    "ORTAPEDİA", "TAKSİM", "ATAŞEHİR TIP", "BAĞDAT", "BAHÇEŞEHİR", "BAYRAKLI", "BEYLİKDÜZÜ", "BODRUM TIP", "ETİLER",
-    "GEBZE FABRİKA", "GENEL MÜDÜRLÜK", "GÖKTÜRK", "SAMANDIRA", "ZEKERİYAKÖY", "DIŞ PROJE", "YONCA TEKNİK", "TED",
-    "TÜRKİYE SİNAİ VE KALKINMA BANKASI", "SZA OMICS", "Özel NPİ Nöropsikiyatri", "PATALOJİ", "POLAT TOWERS",
-    "ROMAN GİYİM", "NİŞANTAŞI PATALOJİ", "LABMED", "HAVELSAN", "ESTELİT", "ELMAS ÇAMAŞIR", "ERSE KABLO",
-    "ACIBADEM PROJE YÖNETİMİ", "ACIBADEM SPORTS", "ACIBADEM SİGORTA", "KOŞUYOLU ÖZELİM", "ALİFE"
-]
-
-# Add Locations to DB
-for location in locations:
-    Location.objects.get_or_create(location=location)
-
-# Organizations to be added
-organizations = [
-    ("Entegre Kalite Yönetim Sistemleri Müdürlüğü", "ADANA"),
-    ("Temizlik Hizmetleri Operasyon Direktörlüğü", "KADIKÖY"),
-    ("Kafe Hizmetleri Direktörlüğü", "MASLAK"),
-    ("Bordro ve Özlük İşleri Müdürlüğü", "ATAŞEHİR"),
-    ("Gider Yönetimi Müdürlüğü", "ANKARA"),
-    ("İç Denetim Koordinatörlüğü", "BODRUM"),
-    ("İdari İşler ve Güvenlik Müdürlüğü", "BURSA"),
-    ("İnsan Kaynakları Müdürlüğü", "ESKİŞEHİR"),
-    ("İşyeri Hekimliği Müdürlüğü", "FULYA"),
-    ("Lojistik Müdürlüğü", "GENEL MÜDÜRLÜK"),
-    ("Mali İşler Müdürlüğü", "GÖKTÜRK"),
-    ("Pazarlama ve Kurumsal İletişim Müdürlüğü", "SAMANDIRA"),
-    ("Planlama ve Maliyet Yönetimi Direktör Yardımcılığı", "ZEKERİYAKÖY"),
-    ("Tesis Yönetimi", "KOZYATAĞI"),
-    ("Satınalma Direktörlüğü", "BODRUM TIP"),
-    ("Teknik Hizmetler Müdürlüğü", "ETİLER"),
-    ("Bilgi Teknolojileri Müdürlüğü", "INTERNATIONAL HOSPITAL"),
-    ("Diyet ve Toplu Yemek Hizmetleri Direktörlüğü", "KAYSERİ"),
-    ("Depo Hizmetleri Müdürlüğü", "KARTAL"),
-    ("Fabrika Hizmetleri Müdürlüğü", "SAMANDIRA"),
-    ("İş Güvenliği Müdürlüğü", "TAKSİM"),
-    ("Kafe Hizmetleri Direktörlüğü", "BAYRAKLI"),
-    ("Teknik Tekstil ve Çamaşırhane Direktörlüğü", "GEBZE FABRİKA"),
-    ("Temizlik Hizmetleri Operasyon Direktörlüğü", "BODRUM"),
-]
-
-# Add Organizations to DB and associate with Locations
-for org_name, location_name in organizations:
-    location = Location.objects.get(location=location_name)
-    Organization.objects.get_or_create(organization=org_name, location=location)
-
-# Fetch Categories for data generation
-category1 = JobCategory.objects.filter(category_name="Operasyon ve Destek").first()
-if not category1:
-    category1 = JobCategory.objects.create(category_name="Operasyon ve Destek")
-
-category2 = JobCategory.objects.filter(category_name="Gıda ve Yemek Hizmetleri").first()
-if not category2:
-    category2 = JobCategory.objects.create(category_name="Gıda ve Yemek Hizmetleri")
-
-category3 = JobCategory.objects.filter(category_name="Lojistik ve Depo").first()
-if not category3:
-    category3 = JobCategory.objects.create(category_name="Lojistik ve Depo")
-
-# Add Positions for categories (using fetched categories)
-position1 = Position.objects.create(position="Backend Developer", category=category1)
-position2 = Position.objects.create(position="Frontend Developer", category=category1)
-position3 = Position.objects.create(position="Full-Stack Developer", category=category1)
-position4 = Position.objects.create(position="DevOps Engineer", category=category1)
-
-position5 = Position.objects.create(position="Data Scientist", category=category2)
-position6 = Position.objects.create(position="Machine Learning Engineer", category=category2)
-position7 = Position.objects.create(position="AI Researcher", category=category2)
-
-position8 = Position.objects.create(position="HR Specialist", category=category3)
-position9 = Position.objects.create(position="Recruiter", category=category3)
-position10 = Position.objects.create(position="HR Manager", category=category3)
-
-# Generate Candidates for each category with assigned locations and organizations
-
-# Operasyon ve Destek (Category 1)
-person_data_category1 = [
-    {"name": "Alice Smith", "position": position1, "office": Location.objects.get(location="ADANA")},
-    {"name": "Bob Johnson", "position": position2, "office": Location.objects.get(location="ANKARA")},
-    {"name": "Charlie Davis", "position": position3, "office": Location.objects.get(location="ATAKENT")},
-]
-
-for person in person_data_category1:
-    Candidate.objects.create(
-        name=person["name"],
-        surname=person["name"].split()[1],  # Assuming surname is the second part of the name
-        email=person["name"].lower().replace(" ", "") + "@example.com",
-        phone="1234567890",
-        experience="Experience data",
-        skills="Skills data",
-        birth_date="1990-01-01",
-        residence_city=person["office"].location,
-        residence_district="District data",
-        education_level="Education data",
-        school_name="School name",
-        department="Department data"
-    )
-
-# Gıda ve Yemek Hizmetleri (Category 2)
-person_data_category2 = [
-    {"name": "Hannah Green", "position": position5, "office": Location.objects.get(location="BODRUM")},
-    {"name": "Ian Black", "position": position6, "office": Location.objects.get(location="KADIKÖY")},
-    {"name": "Jack Brown", "position": position7, "office": Location.objects.get(location="MASLAK")},
-]
-
-for person in person_data_category2:
-    Candidate.objects.create(
-        name=person["name"],
-        surname=person["name"].split()[1],  # Assuming surname is the second part of the name
-        email=person["name"].lower().replace(" ", "") + "@example.com",
-        phone="1234567890",
-        experience="Experience data",
-        skills="Skills data",
-        birth_date="1990-01-01",
-        residence_city=person["office"].location,
-        residence_district="District data",
-        education_level="Education data",
-        school_name="School name",
-        department="Department data"
-    )
-
-# Lojistik ve Depo (Category 3)
-person_data_category3 = [
-    {"name": "Olivia Morgan", "position": position8, "office": Location.objects.get(location="BAKIRKÖY")},
-    {"name": "Paul Parker", "position": position9, "office": Location.objects.get(location="BURSA")},
-    {"name": "Quinn Walker", "position": position10, "office": Location.objects.get(location="ESKİŞEHİR")},
-]
-
-for person in person_data_category3:
-    Candidate.objects.create(
-        name=person["name"],
-        surname=person["name"].split()[1],  # Assuming surname is the second part of the name
-        email=person["name"].lower().replace(" ", "") + "@example.com",
-        phone="1234567890",
-        experience="Experience data",
-        skills="Skills data",
-        birth_date="1990-01-01",
-        residence_city=person["office"].location,
-        residence_district="District data",
-        education_level="Education data",
-        school_name="School name",
-        department="Department data"
-    )
-
+########
+# # Locations to be added
+# locations = [
+#     "ADANA", "ACIBADEM ÜNİVERSİTESİ", "ALTUNİZADE", "ANKARA", "ATAKENT", "ATAŞEHİR", "BAKIRKÖY", "BODRUM", "BURSA",
+#     "ESKİŞEHİR", "FULYA", "INTERNATIONAL HOSPITAL", "KADIKÖY", "KARTAL", "KAYSERİ", "KENT", "KOZYATAĞI", "MASLAK",
+#     "ORTAPEDİA", "TAKSİM", "ATAŞEHİR TIP", "BAĞDAT", "BAHÇEŞEHİR", "BAYRAKLI", "BEYLİKDÜZÜ", "BODRUM TIP", "ETİLER",
+#     "GEBZE FABRİKA", "GENEL MÜDÜRLÜK", "GÖKTÜRK", "SAMANDIRA", "ZEKERİYAKÖY", "DIŞ PROJE", "YONCA TEKNİK", "TED",
+#     "TÜRKİYE SİNAİ VE KALKINMA BANKASI", "SZA OMICS", "Özel NPİ Nöropsikiyatri", "PATALOJİ", "POLAT TOWERS",
+#     "ROMAN GİYİM", "NİŞANTAŞI PATALOJİ", "LABMED", "HAVELSAN", "ESTELİT", "ELMAS ÇAMAŞIR", "ERSE KABLO",
+#     "ACIBADEM PROJE YÖNETİMİ", "ACIBADEM SPORTS", "ACIBADEM SİGORTA", "KOŞUYOLU ÖZELİM", "ALİFE"
+# ]
+#
+# # Add Locations to DB
+# for location in locations:
+#     Location.objects.get_or_create(location=location)
+#
+# # Organizations to be added
+# organizations = [
+#     ("Entegre Kalite Yönetim Sistemleri Müdürlüğü", "ADANA"),
+#     ("Temizlik Hizmetleri Operasyon Direktörlüğü", "KADIKÖY"),
+#     ("Kafe Hizmetleri Direktörlüğü", "MASLAK"),
+#     ("Bordro ve Özlük İşleri Müdürlüğü", "ATAŞEHİR"),
+#     ("Gider Yönetimi Müdürlüğü", "ANKARA"),
+#     ("İç Denetim Koordinatörlüğü", "BODRUM"),
+#     ("İdari İşler ve Güvenlik Müdürlüğü", "BURSA"),
+#     ("İnsan Kaynakları Müdürlüğü", "ESKİŞEHİR"),
+#     ("İşyeri Hekimliği Müdürlüğü", "FULYA"),
+#     ("Lojistik Müdürlüğü", "GENEL MÜDÜRLÜK"),
+#     ("Mali İşler Müdürlüğü", "GÖKTÜRK"),
+#     ("Pazarlama ve Kurumsal İletişim Müdürlüğü", "SAMANDIRA"),
+#     ("Planlama ve Maliyet Yönetimi Direktör Yardımcılığı", "ZEKERİYAKÖY"),
+#     ("Tesis Yönetimi", "KOZYATAĞI"),
+#     ("Satınalma Direktörlüğü", "BODRUM TIP"),
+#     ("Teknik Hizmetler Müdürlüğü", "ETİLER"),
+#     ("Bilgi Teknolojileri Müdürlüğü", "INTERNATIONAL HOSPITAL"),
+#     ("Diyet ve Toplu Yemek Hizmetleri Direktörlüğü", "KAYSERİ"),
+#     ("Depo Hizmetleri Müdürlüğü", "KARTAL"),
+#     ("Fabrika Hizmetleri Müdürlüğü", "SAMANDIRA"),
+#     ("İş Güvenliği Müdürlüğü", "TAKSİM"),
+#     ("Kafe Hizmetleri Direktörlüğü", "BAYRAKLI"),
+#     ("Teknik Tekstil ve Çamaşırhane Direktörlüğü", "GEBZE FABRİKA"),
+#     ("Temizlik Hizmetleri Operasyon Direktörlüğü", "BODRUM"),
+# ]
+#
+# # Add Organizations to DB and associate with Locations
+# for org_name, location_name in organizations:
+#     location = Location.objects.get(location=location_name)
+#     Organization.objects.get_or_create(organization=org_name, location=location)
+#
+# # Fetch Categories for data generation
+# category1 = JobCategory.objects.filter(category_name="Operasyon ve Destek").first()
+# if not category1:
+#     category1 = JobCategory.objects.create(category_name="Operasyon ve Destek")
+#
+# category2 = JobCategory.objects.filter(category_name="Gıda ve Yemek Hizmetleri").first()
+# if not category2:
+#     category2 = JobCategory.objects.create(category_name="Gıda ve Yemek Hizmetleri")
+#
+# category3 = JobCategory.objects.filter(category_name="Lojistik ve Depo").first()
+# if not category3:
+#     category3 = JobCategory.objects.create(category_name="Lojistik ve Depo")
+#
+# # Add Positions for categories (using fetched categories)
+# position1 = Position.objects.create(position="Backend Developer", category=category1)
+# position2 = Position.objects.create(position="Frontend Developer", category=category1)
+# position3 = Position.objects.create(position="Full-Stack Developer", category=category1)
+# position4 = Position.objects.create(position="DevOps Engineer", category=category1)
+#
+# position5 = Position.objects.create(position="Data Scientist", category=category2)
+# position6 = Position.objects.create(position="Machine Learning Engineer", category=category2)
+# position7 = Position.objects.create(position="AI Researcher", category=category2)
+#
+# position8 = Position.objects.create(position="HR Specialist", category=category3)
+# position9 = Position.objects.create(position="Recruiter", category=category3)
+# position10 = Position.objects.create(position="HR Manager", category=category3)
+#
+# # Generate Candidates for each category with assigned locations and organizations
+#
+# # Operasyon ve Destek (Category 1)
+# person_data_category1 = [
+#     {"name": "Alice Smith", "position": position1, "office": Location.objects.get(location="ADANA")},
+#     {"name": "Bob Johnson", "position": position2, "office": Location.objects.get(location="ANKARA")},
+#     {"name": "Charlie Davis", "position": position3, "office": Location.objects.get(location="ATAKENT")},
+# ]
+#
+# for person in person_data_category1:
+#     Candidate.objects.create(
+#         name=person["name"],
+#         surname=person["name"].split()[1],  # Assuming surname is the second part of the name
+#         email=person["name"].lower().replace(" ", "") + "@example.com",
+#         phone="1234567890",
+#         experience="Experience data",
+#         skills="Skills data",
+#         birth_date="1990-01-01",
+#         residence_city=person["office"].location,
+#         residence_district="District data",
+#         education_level="Education data",
+#         school_name="School name",
+#         department="Department data"
+#     )
+#
+# # Gıda ve Yemek Hizmetleri (Category 2)
+# person_data_category2 = [
+#     {"name": "Hannah Green", "position": position5, "office": Location.objects.get(location="BODRUM")},
+#     {"name": "Ian Black", "position": position6, "office": Location.objects.get(location="KADIKÖY")},
+#     {"name": "Jack Brown", "position": position7, "office": Location.objects.get(location="MASLAK")},
+# ]
+#
+# for person in person_data_category2:
+#     Candidate.objects.create(
+#         name=person["name"],
+#         surname=person["name"].split()[1],  # Assuming surname is the second part of the name
+#         email=person["name"].lower().replace(" ", "") + "@example.com",
+#         phone="1234567890",
+#         experience="Experience data",
+#         skills="Skills data",
+#         birth_date="1990-01-01",
+#         residence_city=person["office"].location,
+#         residence_district="District data",
+#         education_level="Education data",
+#         school_name="School name",
+#         department="Department data"
+#     )
+#
+# # Lojistik ve Depo (Category 3)
+# person_data_category3 = [
+#     {"name": "Olivia Morgan", "position": position8, "office": Location.objects.get(location="BAKIRKÖY")},
+#     {"name": "Paul Parker", "position": position9, "office": Location.objects.get(location="BURSA")},
+#     {"name": "Quinn Walker", "position": position10, "office": Location.objects.get(location="ESKİŞEHİR")},
+# ]
+#
+# for person in person_data_category3:
+#     Candidate.objects.create(
+#         name=person["name"],
+#         surname=person["name"].split()[1],  # Assuming surname is the second part of the name
+#         email=person["name"].lower().replace(" ", "") + "@example.com",
+#         phone="1234567890",
+#         experience="Experience data",
+#         skills="Skills data",
+#         birth_date="1990-01-01",
+#         residence_city=person["office"].location,
+#         residence_district="District data",
+#         education_level="Education data",
+#         school_name="School name",
+#         department="Department data"
+#     )
+#
 print("Sample data added successfully.")

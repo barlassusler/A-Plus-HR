@@ -1,159 +1,127 @@
+from django.core.paginator import Paginator
 from django.shortcuts import render, get_object_or_404, redirect
-# from .forms import ApplicationForm, CandidateForm
+from django import forms
+from jobrequest.models import JobRequest
+from .forms import ApplicationForm, CandidateForm
 from django.db.models import F, ExpressionWrapper, fields
 from datetime import date
-from biko_hr.models import Application, Location, Position, Candidate
+from biko_hr.models import Application, Location, Position, Candidate, IncubationJob
+from datetime import date
+from django.db.models import F, ExpressionWrapper, IntegerField
+from django.shortcuts import render
+from biko_hr.models import Application
+
 def job_application_list(request):
-    search_query = request.GET.get('q', '')
-    city_filter = request.GET.get('city', '')
-    district_filter = request.GET.get('district', '')
+    # Fetch filters from GET request
+    search_query = request.GET.get('q', '').strip()
+    city_filter = request.GET.get('city', '').strip()
+    district_filter = request.GET.get('district', '').strip()
     sort_option = request.GET.get('sort_option', 'name_asc')
 
-    # Başvuruları al
-    applications = Application.objects.all()
+    # Fetch applications with related candidate data
+    applications = Application.objects.select_related('candidate')
 
-    # Filtreleme
+    # Apply filters
     if search_query:
-        applications = applications.filter(full_name__icontains=search_query)
+        # Combine name and surname for filtering (full_name is not a database field)
+        applications = applications.filter(
+            candidate__name__icontains=search_query
+        ) | applications.filter(
+            candidate__surname__icontains=search_query
+        )
     if city_filter:
-        applications = applications.filter(residence_city__icontains=city_filter)
+        applications = applications.filter(candidate__residence_city__icontains=city_filter)
     if district_filter:
-        applications = applications.filter(residence_district__icontains=district_filter)
+        applications = applications.filter(candidate__residence_district__icontains=district_filter)
 
-    # Yaş hesapla
+    # Annotate age (calculate based on birth_date)
     applications = applications.annotate(
-        age=ExpressionWrapper(date.today().year - F('birth_date__year'), output_field=fields.IntegerField())
+        age=ExpressionWrapper(
+            date.today().year - F('candidate__birth_date__year'),
+            output_field=IntegerField()
+        )
     )
 
-    # Sıralama
+    # Apply sorting
     if sort_option == "name_asc":
-        applications = applications.order_by('full_name')
+        applications = applications.order_by('candidate__name', 'candidate__surname')
     elif sort_option == "name_desc":
-        applications = applications.order_by('-full_name')
+        applications = applications.order_by('-candidate__name', '-candidate__surname')
     elif sort_option == "age_asc":
         applications = applications.order_by('age')
     elif sort_option == "age_desc":
         applications = applications.order_by('-age')
-    elif sort_option == "experience_asc":
-        applications = applications.order_by('experience')
-    elif sort_option == "experience_desc":
-        applications = applications.order_by('-experience')
 
-    # Sayfalama
-    paginator = Paginator(applications, 10)  # Sayfa başına 10 başvuru
-    page_number = request.GET.get('page')
-    page_obj = paginator.get_page(page_number)
-
-    # Render fonksiyonu ile şablonu ve veriyi döndür
+    # Render template with context
     return render(request, 'job_application_list.html', {
-        'candidates': page_obj,
+        'applications': applications,
         'search_query': search_query,
         'city_filter': city_filter,
         'district_filter': district_filter,
         'sort_option': sort_option,
     })
 
+
 def application_detail(request, pk):
-    application = get_object_or_404(JobApplication, pk=pk)
+    application = get_object_or_404(Application, pk=pk)
     return render(request, 'application_detail.html', {'application': application})
 
+
 def job_application_form(request):
+
     if request.method == 'POST':
-        form = JobApplicationForm(request.POST, request.FILES)
-        if form.is_valid():
-            form.save()
-# def job_application_list(request):
-#     search_query = request.GET.get('q', '')
-#     city_filter = request.GET.get('city', '')
-#     district_filter = request.GET.get('district', '')
-#     sort_option = request.GET.get('sort_option', 'name_asc')
-#
-#     # Başvuruları getir
-#     applications = Application.objects.select_related('candidate')
-#
-#     # Filtreleme
-#     if search_query:
-#         applications = applications.filter(candidate__full_name__icontains=search_query)
-#     if city_filter:
-#         applications = applications.filter(candidate__residence_city__icontains=city_filter)
-#     if district_filter:
-#         applications = applications.filter(candidate__residence_district__icontains=district_filter)
-#
-#     # Yaş hesapla
-#     applications = applications.annotate(
-#         age=ExpressionWrapper(
-#             date.today().year - F('candidate__birth_date__year'),
-#             output_field=fields.IntegerField()
-#         )
-#     )
-#
-#     # Sıralama
-#     if sort_option == "name_asc":
-#         applications = applications.order_by('candidate__full_name')
-#     elif sort_option == "name_desc":
-#         applications = applications.order_by('-candidate__full_name')
-#     elif sort_option == "age_asc":
-#         applications = applications.order_by('age')
-#     elif sort_option == "age_desc":
-#         applications = applications.order_by('-age')
-#     elif sort_option == "experience_asc":
-#         applications = applications.order_by('experience')
-#     elif sort_option == "experience_desc":
-#         applications = applications.order_by('-experience')
-#
-#     # Template'e gönderilecek veriler
-#     return render(request, 'job_application_list.html', {
-#         'applications': applications,
-#         'search_query': search_query,
-#         'city_filter': city_filter,
-#         'district_filter': district_filter,
-#         'sort_option': sort_option,
-#     })
-#
-#
-# def application_detail(request, pk):
-#     application = get_object_or_404(Application, pk=pk)
-#     return render(request, 'application_detail.html', {'application': application})
-#
-# def job_application_form(request):
-#     if request.method == 'POST':
-#         # Formları oluşturuyoruz
-#         candidate_form = CandidateForm(request.POST)
-#         application_form = ApplicationForm(request.POST, request.FILES)
-#
-#         # Formlar geçerliyse işlemi yapıyoruz
-#         if candidate_form.is_valid() and application_form.is_valid():
-#             # Candidate modelini kaydediyoruz
-#             candidate = candidate_form.save()
-#
-#             # Application modelini kaydediyoruz (commit=False çünkü ilişkilendirme yapmamız gerekiyor)
-#             application = application_form.save(commit=False)
-#             application.candidate = candidate  # Candidate ile ilişkilendiriyoruz
-#             application.save()  # Application kaydını yapıyoruz
-#             application_form.save_m2m()  # Many-to-many ilişkilerini kaydediyoruz
-#
-#             # Başvuru başarılı, listeye yönlendiriyoruz
-#             return redirect('job_application_list')
-#
-#         # Eğer formda hata varsa, formu tekrar render ediyoruz
-#         return render(request, 'job_application_form.html', {
-#             'candidate_form': candidate_form,
-#             'application_form': application_form,
-#             'positions': Position.objects.all(),
-#             'locations': Location.objects.all(),
-#         })
-#
-#     # GET isteği için boş formlar döndür
-#     candidate_form = CandidateForm()
-#     application_form = ApplicationForm()
-#
-#     return render(request, 'job_application_form.html', {
-#         'candidate_form': candidate_form,
-#         'application_form': application_form,
-#         'positions': Position.objects.all(),
-#         'locations': Location.objects.all(),
-#     })
-#
-#
-# def success_page(request):
-#     return render(request, 'success_page.html')  # Başarı sayfasını render et
+        # Formları oluşturuyoruz
+        candidate_form = CandidateForm(request.POST)
+        application_form = ApplicationForm(request.POST, request.FILES)
+        print("POST Data:", request.POST)  # Debugging
+        print("FILES Data:", request.FILES)  # Debugging
+        if candidate_form.is_valid():
+            candidate = candidate_form.save()  # Save the candidate
+        else:
+            print("Candidate Form Errors:", candidate_form.errors)  # Print errors here
+            raise forms.ValidationError("Aday bilgileri geçersiz.")
+        # Formlar geçerliyse işlemi yapıyoruz
+        if candidate_form.is_valid() and application_form.is_valid():
+            # Candidate modelini kaydediyoruz
+            candidate = candidate_form.save()
+            print("candidate",candidate)
+            job_id = request.POST.get('application_job')
+            print(f"Selected job ID: {job_id}")
+
+            position = get_object_or_404(JobRequest, id=job_id)  # Ensure the JobRequest exists
+            incubation_job, created = IncubationJob.objects.get_or_create(position=position.position_name)
+
+            # Application modelini kaydediyoruz (commit=False çünkü ilişkilendirme yapmamız gerekiyor)
+            application = application_form.save(commit=False)
+            application.candidate = candidate  # Candidate ile ilişkilendiriyoruz
+            application.job = incubation_job  # Associate the job with the application
+            application.save()  # Application kaydını yapıyoruz
+            application_form.save_m2m()  # Many-to-many ilişkilerini kaydediyoruz
+
+            # Başvuru başarılı, listeye yönlendiriyoruz
+            return redirect('job_application_list')
+        else:
+            print(candidate_form.errors)  # To debug form validation errors
+            print(application_form.errors)  # To debug form validation errors
+        # Eğer formda hata varsa, formu tekrar render ediyoruz
+        return render(request, 'job_application_form.html', {
+            'candidate_form': candidate_form,
+            'application_form': application_form,
+            'positions': JobRequest.objects.all(),
+            'locations': Location.objects.all(),
+        })
+
+    # GET isteği için boş formlar döndür
+    candidate_form = CandidateForm()
+    application_form = ApplicationForm()
+
+    return render(request, 'job_application_form.html', {
+        'candidate_form': candidate_form,
+        'application_form': application_form,
+        'positions': JobRequest.objects.all(),
+        'locations': Location.objects.all(),
+    })
+
+
+def success_page(request):
+    return render(request, 'success_page.html')  # Başarı sayfasını render et

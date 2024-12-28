@@ -22,16 +22,16 @@ class JobCategory(models.Model):
     
 class Position(models.Model):
     position = models.CharField(max_length=100)
-    category = models.ForeignKey(JobCategory, on_delete=models.CASCADE, default=None)
+    category = models.ForeignKey(JobCategory, on_delete=models.CASCADE, null=True,blank=True, default=None)
 
     def __str__(self):
         return self.position
 
-class Job(models.Model):
-    task = models.CharField(max_length=100)
-
-    def __str__(self):
-        return self.task
+# class Job(models.Model):
+#     task = models.CharField(max_length=100)
+#
+#     def __str__(self):
+#         return self.task
 
 
 class Candidate(models.Model):
@@ -44,11 +44,24 @@ class Candidate(models.Model):
     birth_date = models.DateField()
     residence_city = models.CharField(max_length=100)
     residence_district = models.CharField(max_length=100)
-    education_level = models.CharField(max_length=50)
+    education_level = models.CharField(max_length=50)        #choices=[
+    #         ('read_write', 'Okuma Yazma Belgesi'),
+    #         ('primary', 'İlkokul'),
+    #         ('middle', 'Ortaokul'),
+    #         ('high', 'Lise'),
+    #         ('university', 'Üniversite'),
+    #         ('postgraduate', 'Yüksek Lisans ve Üzeri'),
+    #     ]
+    # )
     school_name = models.CharField(max_length=150)
     department = models.CharField(max_length=100)
+    desired_locations = models.ManyToManyField('Location')
 
 class IncubationJob(models.Model):
+    position = models.ForeignKey(Position, on_delete=models.CASCADE, default=None,blank=True, null=True)
+    category = models.OneToOneField(JobCategory, on_delete=models.CASCADE,  null=True, blank=True)
+    organization = models.ForeignKey(Organization, on_delete=models.CASCADE, default=None,blank=True, null=True)
+
     title = models.CharField(max_length=200)
     description = models.TextField()
     required_skills = models.TextField()
@@ -57,10 +70,10 @@ class IncubationJob(models.Model):
     department = models.CharField(max_length=100)
 
 class Application(models.Model):
-    candidate = models.ForeignKey(Candidate, on_delete=models.CASCADE)
-    job = models.ForeignKey(IncubationJob, on_delete=models.CASCADE)
+    candidate = models.ForeignKey(Candidate, on_delete=models.CASCADE, null=True, blank=True)
+    job = models.ForeignKey(IncubationJob, on_delete=models.CASCADE) # in order to terminate or success the application after incubation period. Also shows the applied job.
     application_date = models.DateField()
-    status = models.CharField(max_length=50)
+    status = models.CharField(max_length=50, default="Pending")
     uploaded_resume = models.FileField(upload_to='resumes/')
 
 class Interview(models.Model):

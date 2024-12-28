@@ -179,7 +179,7 @@
     <tbody>
         {% for application in applications %}
         <tr>
-            <td>{{ application.candidate.full_name }}</td>
+            <td>{{ application.candidate.name}} {{application.candidate.surname }}</td>
             <td>{{ application.candidate.residence_city }}</td>
             <td>{{ application.candidate.residence_district }}</td>
             <td>{{ application.age }}</td>
