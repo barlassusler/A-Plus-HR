@@ -12,12 +12,9 @@
     </style>
     <script>
         function toggleFields() {
-            // Görev Dropdown kontrolü
-            var taskName = document.getElementById('id_task_name').value;
-            document.getElementById('new_task_name_field').style.display = (taskName === 'Yeni Görev') ? 'block' : 'none';
 
             // Talep Türü kontrolü
-            var taskType = document.getElementById('id_task_type').value;
+            var taskType = document.getElementById('id_position_type_2').value;
             document.getElementById('replacement_for_field').style.display = (taskType === 'Mevcut Kadro') ? 'block' : 'none';
             document.getElementById('request_reason_field').style.display = (taskType === 'İlave Kadro') ? 'block' : 'none';
         }
@@ -40,21 +37,6 @@
         <label for="id_position_type">Pozisyon:</label>
         {{ form.position_type }}
 
-
-        <label for="id_position_type_2">Pozisyon:</label>
-        {{ form.position_type_2 }}
-
-        <!-- Görev Dropdown -->
-        <label for="id_task_name">Görev:</label>
-        <select id="id_task_name" name="task_name" onchange="toggleFields()">
-            <option value="">Görev Seçin</option>
-            <option value="Yeni Görev">Yeni Görev</option> <!-- Statik Seçenek -->
-            {% for task in tasks %}
-                <option value="{{ task.id }}">{{ task.task }}</option>
-            {% endfor %}
-        </select>
-
-
         <!-- Yeni Görev Adı -->
         <div id="new_task_name_field" style="display:none;">
             <label for="id_new_task_name">Yeni Görev Adı:</label>
@@ -62,8 +44,8 @@
         </div>
 
         <!-- Talep Türü Dropdown -->
-        <label for="id_task_type">Talep Türü:</label>
-        <select id="id_task_type" name="task_type" onchange="toggleFields()">
+        <label for="id_position_type_2">Talep Türü:</label>
+        <select id="id_position_type_2" name="position_type_2" onchange="toggleFields()">
             <option value="">Talep Türü Seçin</option>
             <option value="Mevcut Kadro">Mevcut Kadro</option>
             <option value="İlave Kadro">İlave Kadro</option>
