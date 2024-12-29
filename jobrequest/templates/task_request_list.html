@@ -24,6 +24,7 @@
             <th>Çalışma Türü</th>
             <th>Alınacak Kişi Sayısı</th>
             <th>Oluşturulma Tarihi</th>
+            <th>Aday Atama</th>
             <th>Detay</th>
         </tr>
         {% for task in tasks %}
@@ -45,6 +46,7 @@
             <td>{{ task.work_type }}</td>
             <td>{{ task.desired_personnel_count }}</td>
             <td>{{ task.created_at }}</td>
+            <td><a href="{% url 'assign_candidates' job_request_id=task.pk %}">Aday Ata</a></td>
             <td><a href="{% url 'task_request_detail' task.pk %}">Detay</a></td>
         </tr>
         {% empty %}

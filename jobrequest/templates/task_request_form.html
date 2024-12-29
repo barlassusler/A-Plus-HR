@@ -36,18 +36,9 @@
         <label for="id_organization">Organizasyon:</label>
         {{ form.organization }}
 
-        <!-- Talep Türü Dropdown -->
-        <label for="id_position_type">Talep Türü:</label>
-{#        {{ form.position_type }}#}
-        <select id="id_position_type" name="id_position_type" onchange="toggleFields()">
-            <option value="">Talep Türü Seçin</option>
-            <option value="Mevcut Kadro">Mevcut Kadro</option>
-            <option value="İlave Kadro">İlave Kadro</option>
-        </select>
-
         <!-- Görev Dropdown -->
         <label for="id_position_name">Görev:</label>
-            <select id="id_task_name" name="task_name" onchange="toggleFields()">
+            <select id="id_position_name" name="position_name" onchange="toggleFields()">
                 <option value="">Görev Seçin</option>
                 <option value="Yeni Görev">Yeni Görev</option> <!-- Statik Seçenek -->
                 {% for position in positions %}
@@ -55,27 +46,32 @@
                 {% endfor %}
             </select>
 
-{#        <!-- Yeni Görev Adı -->#}
-{#        <label for="id_new_position_name">Yeni Görev Adı:</label>#}
-{#        {{ form.new_position_name }}#}
-
         <!-- Yeni Görev Adı -->
         <div id="new_position_name_field" style="display:none;">
             <label for="id_new_position_name">Yeni Görev Adı:</label>
             {{ form.new_position_name }}
         </div>
+
+
+        <!-- Talep Türü Dropdown -->
+        <label for="id_position_type">Talep Türü:</label>
+        <select id="id_position_type" name="position_type" onchange="toggleFields()">
+            <option value="">Talep Türü Seçin</option>
+            <option value="Mevcut Kadro">Mevcut Kadro</option>
+            <option value="İlave Kadro">İlave Kadro</option>
+        </select>
+
         <!-- Dinamik Alanlar -->
         <div id="replacement_for_field" style="display:none;">
             <label for="id_replacement_for">Kimin Yerine:</label>
-{#            {{ form.replacement_for }}#}
             <input type="text" name="replacement_for" id="id_replacement_for">
         </div>
 
         <div id="request_reason_field" style="display:none;">
             <label for="id_request_reason">Talep Nedeni:</label>
-{#            {{ form.request_reason }}#}
             <textarea name="request_reason" id="id_request_reason"></textarea>
         </div>
+
 
         <!-- Statik Sorular -->
         <label for="id_work_type">Çalışma Türü:</label>

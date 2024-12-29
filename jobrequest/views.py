@@ -1,7 +1,7 @@
 from django.shortcuts import render, redirect, get_object_or_404
 from .forms import TaskRequestForm
 from .models import JobRequest
-from biko_hr.models import IncubationJob, Profile, Position
+from biko_hr.models import IncubationJob, Profile, Position, Candidate
 from django.contrib.auth.models import Group
 from django.contrib.auth.decorators import login_required
 
@@ -87,9 +87,30 @@ def create_task_request(request):
     positions = Position.objects.all()  # Ensure positions are passed to the template
     return render(request, 'task_request_form.html', {'form': form, 'positions': positions})
 
-
 def task_request_detail(request, pk):
     task = get_object_or_404(JobRequest, pk=pk)  # Belirli bir talebi getir
-    return render(request, 'task_request_detail.html', {'task': task})
+    assigned_candidates = task.candidates.all()  # İşe atanmış tüm adayları alın
+    return render(request, 'task_request_detail.html', {'task': task, 'assigned_candidates': assigned_candidates})
 
+def assign_candidates(request, job_request_id):
+    job_request = get_object_or_404(JobRequest, id=job_request_id)
+    all_candidates = Candidate.objects.all()  # Tüm adaylar
+    assigned_candidates = job_request.candidates.all()  # Bu işe atanmış adaylar
 
+    if request.method == "POST":
+        selected_candidates = request.POST.get("candidates", "")  # "2,3,32" şeklinde gelir
+        selected_candidates_list = selected_candidates.split(",")  # Listeye çevir: ['2', '3', '32']
+        selected_candidates_list = [int(c) for c in selected_candidates_list]  # Sayılara çevir: [2, 3, 32]
+
+        job_request.candidates.set(selected_candidates_list)  # Seçilen adayları atar
+        return redirect("task_request_detail", pk=job_request.id)  # Detay sayfasına yönlendir
+
+    return render(
+        request,
+        "assign_candidates.html",
+        {
+            "job_request": job_request,
+            "all_candidates": all_candidates,
+            "assigned_candidates": assigned_candidates,
+        },
+    )

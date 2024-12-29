@@ -17,19 +17,39 @@
     <table>
         <tr><th>Lokasyon:</th><td>{{ task.location }}</td></tr>
         <tr><th>Organizasyon:</th><td>{{ task.organization }}</td></tr>
-        <tr><th>Görev Adı:</th><td>{{ task.task_name }}</td></tr>
-        <tr><th>Yeni Görev Adı:</th><td>{{ task.new_task_name }}</td></tr>
+        <tr><th>Görev Adı:</th><td>{{ task.position_name }}</td></tr>
+        <tr><th>Yeni Görev Adı:</th><td>{{ task.new_position_name }}</td></tr>
         <tr><th>Çalışma Türü:</th><td>{{ task.work_type }}</td></tr>
-        <tr><th>Talep Türü:</th><td>{{ task.task_type }}</td></tr>
+        <tr><th>Talep Türü:</th><td>{{ task.position_type }}</td></tr>
+
+        {% if task.position_type == "Mevcut Kadro" %}
         <tr><th>Kimin Yerine:</th><td>{{ task.replacement_for }}</td></tr>
+        {% endif %}
+
+        <!-- Talep Türü İlave Kadro ise "Talep Nedeni" göster -->
+        {% if task.position_type == "İlave Kadro" %}
         <tr><th>Talep Nedeni:</th><td>{{ task.request_reason }}</td></tr>
+        {% endif %}
+
         <tr><th>Açıklama:</th><td>{{ task.description }}</td></tr>
-        <tr><th>Göreve Başlama Tarihi:</th><td>{{ task.start_date }}</td></tr>
-        <tr><th>Alınacak Kişi Sayısı:</th><td>{{ task.personnel_count }}</td></tr>
-        <tr><th>Deneyim Yılı:</th><td>{{ task.experience_years }}</td></tr>
-        <tr><th>Eğitim:</th><td>{{ task.education }}</td></tr>
+        <tr><th>Göreve Başlama Tarihi:</th><td>{{ task.desired_start_date }}</td></tr>
+        <tr><th>Alınacak Kişi Sayısı:</th><td>{{ task.desired_personnel_count }}</td></tr>
+        <tr><th>Deneyim Yılı:</th><td>{{ task.desired_experience_years }}</td></tr>
+        <tr><th>Eğitim:</th><td>{{ task.required_education_level }}</td></tr>
         <tr><th>Varsa Özel Nitelikler:</th><td>{{ task.special_requirements }}</td></tr>
         <tr><th>Oluşturulma Tarihi:</th><td>{{ task.created_at }}</td></tr>
+        <h2>Atanan Adaylar</h2>
+        {% if assigned_candidates %}
+        <ul>
+            {% for candidate in assigned_candidates %}
+                <li>
+                    {{ candidate.name }} {{ candidate.surname }}
+                </li>
+                {% endfor %}
+        </ul>
+        {% else %}
+        <p>Bu iş talebine henüz aday atanmadı.</p>
+        {% endif %}
     </table>
     <a href="{% url 'task_request_list' %}">← Geri Dön</a>
 </body>
