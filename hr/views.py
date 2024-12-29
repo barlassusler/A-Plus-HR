@@ -21,3 +21,19 @@ def evaluate_job_request(request, job_request_id):
     job_request.save()
     job_request.request_status_hr = "HR-Suspended"
     job_request.save()
+
+
+
+
+@login_required
+def dashboard(request):
+    user_type = UserType.objects.filter(user=request.user).first()
+
+    return render(request, 'hr_dashboard.html',{'user': request.user, "user_type":user_type.user_type})
+
+
+
+
+
+
+

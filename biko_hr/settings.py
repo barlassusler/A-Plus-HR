@@ -46,6 +46,7 @@ INSTALLED_APPS = [
     "organization",
     "bootstrap4",
     "candidate",
+    "director",
 
 ]
 

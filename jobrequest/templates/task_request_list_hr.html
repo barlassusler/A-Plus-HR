@@ -1,0 +1,57 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <title>Personel Talep Listesi</title>
+    <style>
+        body { font-family: Arial, sans-serif; margin: 40px; }
+        table { width: 100%; border-collapse: collapse; margin-top: 20px; }
+        th, td { border: 1px solid #ddd; padding: 8px; text-align: left; }
+        th { background-color: #4CAF50; color: white; }
+        tr:nth-child(even) { background-color: #f2f2f2; }
+        h1 { text-align: center; }
+    </style>
+</head>
+<body>
+
+    <h1>Personel Talep Listesi</h1>
+    <table>
+        <tr>
+            <th>Lokasyon</th>
+            <th>Organizasyon</th>
+            <th>Görev Adı</th>
+            <th>Talep Nedeni</th>
+            <th>Kadro Durumu</th>
+            <th>Çalışma Türü</th>
+            <th>Alınacak Kişi Sayısı</th>
+            <th>Oluşturulma Tarihi</th>
+            <th>Detay</th>
+        </tr>
+        {% for task in tasks %}
+        <tr>
+            <td>{{ task.location }}</td>
+            <td>{{ task.organization }}</td>
+            <td>
+                {% if task.position_name %}
+                    {{ task.position_name.position }}
+                {% elif task.new_position_name %}
+                    {{ task.new_position_name }}
+                {% else %}
+                    <!-- Optionally handle the case where both are blank -->
+                    No position specified
+                {% endif %}
+            </td>
+            <td>{{ task.request_reason }}</td>
+            <td>{{ task.position_type }}</td>
+            <td>{{ task.work_type }}</td>
+            <td>{{ task.desired_personnel_count }}</td>
+            <td>{{ task.created_at }}</td>
+            <td><a href="{% url 'task_request_detail' task.pk %}">Detay</a></td>
+        </tr>
+        {% empty %}
+        <tr>
+            <td colspan="11">Henüz bir talep eklenmemiş.</td>
+        </tr>
+        {% endfor %}
+    </table>
+</body>
+</html>

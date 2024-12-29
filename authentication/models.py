@@ -28,6 +28,10 @@ class UserType(models.Model):
     user_type = models.CharField(max_length=50, choices=[
         ('hr_staff', 'HR Staff'),
         ('organization_staff', 'Organization Staff'),
+        ('Director', 'Director'),
+        
+        
+
     ])
 
 

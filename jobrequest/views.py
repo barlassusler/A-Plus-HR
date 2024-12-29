@@ -1,6 +1,6 @@
 from django.shortcuts import render, redirect, get_object_or_404
 from .forms import TaskRequestForm
-from .models import JobRequest
+from .models import *
 from biko_hr.models import IncubationJob, Profile, Position
 from django.contrib.auth.models import Group
 from django.contrib.auth.decorators import login_required
@@ -18,8 +18,8 @@ def task_request_list(request):
         profile = getattr(user, 'profile', None)
         if profile:
             job_requests = JobRequest.objects.filter(
-                organization=profile.Organization,
-                position_type=profile.Position
+                location=profile.Location,
+                organization=profile.Organization
             )
             print("Manager - showing filtered job requests")
 
@@ -27,12 +27,51 @@ def task_request_list(request):
         profile = getattr(user, 'profile', None)
         if profile:
             job_requests = JobRequest.objects.filter(
-                position_type=profile.Position
+                organization=profile.Organization
             )
             print("Director - showing filtered job requests")
 
     print(f"User: {user}, Requests: {job_requests}")
     return render(request, 'task_request_list.html', {'tasks': job_requests})
+@login_required
+def task_request_list_hr(request):
+    user = request.user
+    job_requests = JobRequest.objects.none()
+
+
+    if user.groups.filter(name='HR').exists():
+     job_requests = JobRequest.objects.filter(
+        request_status_organization_manager = "Accepted"
+                
+            )
+    elif user.groups.filter(name='Director').exists():
+        print("x")
+        profile = getattr(user, 'profile', None)
+        print(profile.Organization)
+        if profile:
+            job_requests = JobRequest.objects.filter(
+                organization=profile.Organization,
+                request_status_organization_manager = "Accepted"
+            )
+            print("Director - showing filtered job requests")
+
+    print(f"User: {user}, Requests: {job_requests}")
+    return render(request, 'task_request_list_hr.html', {'tasks': job_requests})
+@login_required
+def task_request_list_org(request):
+    user = request.user
+    job_requests = JobRequest.objects.none()
+    if user.groups.filter(name='Director').exists():
+     profile = getattr(user, 'profile', None)
+     if profile:
+      job_requests = JobRequest.objects.filter(
+        request_status_organization_manager = "Pending",
+        
+        organization=profile.Organization
+                
+            )
+    print(f"User: {user}, Requests: {job_requests}")
+    return render(request, 'task_request_list_director.html', {'tasks': job_requests})
 
 def create_task_request(request):
     if request.method == 'POST':
@@ -93,3 +132,13 @@ def task_request_detail(request, pk):
     return render(request, 'task_request_detail.html', {'task': task})
 
 
+@login_required
+def accept_task_request(request, pk):
+    try:
+        task_request = JobRequest.objects.get(pk=pk)
+        task_request.request_status_organization_manager = "Accepted"
+        task_request.save()
+        print(f"Task {pk} has been accepted.")
+    except JobRequest.DoesNotExist:
+        print(f"Task {pk} does not exist.")
+    return redirect('task_request_list')  # Redirect back to the task request list

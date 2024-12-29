@@ -26,7 +26,7 @@ class SignUpForm(forms.ModelForm):
         widget=forms.PasswordInput(),
         label="Confirm Password",
     )
-    user_type = forms.ChoiceField(choices=[('hr_staff', 'HR Staff'), ('organization_staff', 'Organization Staff')])
+    user_type = forms.ChoiceField(choices=[('hr_staff', 'HR Staff'), ('organization_staff', 'Organization Staff'),('Director', 'Director')])
 
 
     class Meta:

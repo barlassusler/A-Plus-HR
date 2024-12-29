@@ -6,7 +6,7 @@ from hr import views
 from biko_hr.views import home
 
 urlpatterns = [
-    path('', home),
+    path('', views.dashboard, name="hr_dashboard"),
     path('profile', views.get_profile, name="hr_profile"),
 ]
 

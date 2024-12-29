@@ -34,9 +34,11 @@ def log_in(request):
                     usertype = UserType.objects.filter(user=user).first()  # Add parentheses to call .first()
                     if usertype:
                         if usertype.user_type == 'hr_staff':
-                            return redirect('home')
+                            return redirect('hr_dashboard')
                         elif usertype.user_type == 'organization_staff':
                             return redirect('organization_dashboard')
+                        elif usertype.user_type == 'Director':
+                            return redirect('director_dashboard')
 
                     else:
                         return render(request, 'log_in.html', {'form': form, 'message': 'Profile not found.'})
