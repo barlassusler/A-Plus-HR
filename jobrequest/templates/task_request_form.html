@@ -1,102 +1,90 @@
-<!DOCTYPE html>
-<html lang="en">
-<head>
-    <title>Personel Talep Formu</title>
-    <style>
-        body { font-family: Arial, sans-serif; margin: 40px; }
-        form { width: 60%; margin: auto; }
-        label { display: block; margin-top: 10px; font-weight: bold; }
-        input, select, textarea { width: 100%; padding: 8px; margin-top: 5px; box-sizing: border-box; }
-        button { background-color: #4CAF50; color: white; padding: 10px 20px; border: none; cursor: pointer; }
-        button:hover { background-color: #45a049; }
-    </style>
-    <script>
-        function toggleFields() {
-            // Talep Türü kontrolü
-            var taskType = document.getElementById('id_position_type').value;
-            document.getElementById('replacement_for_field').style.display = (taskType === 'Mevcut Kadro') ? 'block' : 'none';
-            document.getElementById('request_reason_field').style.display = (taskType === 'İlave Kadro') ? 'block' : 'none';
+{% extends 'base.html' %}
 
-            // Yeni Görev kontrolü
-            var NewTask = document.getElementById('id_task_name').value;
-            document.getElementById('new_position_name_field').style.display = (NewTask === 'Yeni Görev') ? 'block' : 'none';
-        }
-        window.onload = toggleFields;
-    </script>
-</head>
-<body>
-    <h1>Personel Talep Formu</h1>
-    <form method="POST">
-        {% csrf_token %}
+{% block title %}Personel Talep Formu{% endblock %}
 
-        <!-- Lokasyon ve Organizasyon -->
-        <label for="id_location">Lokasyon:</label>
-        {{ form.location }}
+{% block content %}
+<h1 class="text-primary">Personel Talep Formu</h1>
+<form method="POST" class="mt-4">
+    {% csrf_token %}
 
-        <label for="id_organization">Organizasyon:</label>
-        {{ form.organization }}
+    <!-- Lokasyon ve Organizasyon -->
+    <label for="id_location">Lokasyon:</label>
+    {{ form.location }}
 
-        <!-- Görev Dropdown -->
-        <label for="id_position_name">Görev:</label>
-            <select id="id_position_name" name="position_name" onchange="toggleFields()">
-                <option value="">Görev Seçin</option>
-                <option value="Yeni Görev">Yeni Görev</option> <!-- Statik Seçenek -->
-                {% for position in positions %}
-                    <option value="{{ position.id }}">{{ position.position }}</option>
-                {% endfor %}
-            </select>
+    <label for="id_organization">Organizasyon:</label>
+    {{ form.organization }}
 
-        <!-- Yeni Görev Adı -->
-        <div id="new_position_name_field" style="display:none;">
-            <label for="id_new_position_name">Yeni Görev Adı:</label>
-            {{ form.new_position_name }}
-        </div>
+    <!-- Görev Dropdown -->
+    <label for="id_position_name">Görev:</label>
+    <select id="id_position_name" name="position_name" class="form-select" onchange="toggleFields()">
+        <option value="">Görev Seçin</option>
+        <option value="Yeni Görev">Yeni Görev</option>
+        {% for position in positions %}
+            <option value="{{ position.id }}">{{ position.position }}</option>
+        {% endfor %}
+    </select>
 
+    <!-- Yeni Görev Adı -->
+    <div id="new_position_name_field" style="display:none;">
+        <label for="id_new_position_name">Yeni Görev Adı:</label>
+        {{ form.new_position_name }}
+    </div>
 
-        <!-- Talep Türü Dropdown -->
-        <label for="id_position_type">Talep Türü:</label>
-        <select id="id_position_type" name="position_type" onchange="toggleFields()">
-            <option value="">Talep Türü Seçin</option>
-            <option value="Mevcut Kadro">Mevcut Kadro</option>
-            <option value="İlave Kadro">İlave Kadro</option>
-        </select>
+    <!-- Talep Türü Dropdown -->
+    <label for="id_position_type">Talep Türü:</label>
+    <select id="id_position_type" name="position_type" class="form-select" onchange="toggleFields()">
+        <option value="">Talep Türü Seçin</option>
+        <option value="Mevcut Kadro">Mevcut Kadro</option>
+        <option value="İlave Kadro">İlave Kadro</option>
+    </select>
 
-        <!-- Dinamik Alanlar -->
-        <div id="replacement_for_field" style="display:none;">
-            <label for="id_replacement_for">Kimin Yerine:</label>
-            <input type="text" name="replacement_for" id="id_replacement_for">
-        </div>
+    <!-- Dinamik Alanlar -->
+    <div id="replacement_for_field" style="display:none;">
+        <label for="id_replacement_for">Kimin Yerine:</label>
+        <input type="text" name="replacement_for" id="id_replacement_for" class="form-control">
+    </div>
 
-        <div id="request_reason_field" style="display:none;">
-            <label for="id_request_reason">Talep Nedeni:</label>
-            <textarea name="request_reason" id="id_request_reason"></textarea>
-        </div>
+    <div id="request_reason_field" style="display:none;">
+        <label for="id_request_reason">Talep Nedeni:</label>
+        <textarea name="request_reason" id="id_request_reason" class="form-control"></textarea>
+    </div>
 
+    <!-- Statik Sorular -->
+    <label for="id_work_type">Çalışma Türü:</label>
+    {{ form.work_type }}
 
-        <!-- Statik Sorular -->
-        <label for="id_work_type">Çalışma Türü:</label>
-        {{ form.work_type }}
+    <label for="id_description">Açıklama:</label>
+    {{ form.description }}
 
-        <label for="id_description">Açıklama:</label>
-        {{ form.description }}
+    <label for="id_start_date">Göreve Başlayacağı Tarih:</label>
+    {{ form.desired_start_date }}
 
-        <label for="id_start_date">Göreve Başlayacağı Tarih:</label>
-        {{ form.desired_start_date }}
+    <label for="id_personnel_count">Alınacak Kişi Sayısı:</label>
+    {{ form.desired_personnel_count }}
 
-        <label for="id_personnel_count">Alınacak Kişi Sayısı:</label>
-        {{ form.desired_personnel_count }}
+    <label for="id_experience_years">Deneyim Yılı:</label>
+    {{ form.desired_experience_years }}
 
-        <label for="id_experience_years">Deneyim Yılı:</label>
-        {{ form.desired_experience_years }}
+    <label for="id_education">Eğitim:</label>
+    {{ form.required_education_level }}
 
-        <label for="id_education">Eğitim:</label>
-        {{ form.required_education_level }}
+    <label for="id_special_requirements">Varsa Özel Nitelikler:</label>
+    {{ form.special_requirements }}
 
-        <label for="id_special_requirements">Varsa Özel Nitelikler:</label>
-        {{ form.special_requirements }}
+    <!-- Gönder Butonu -->
+    <button type="submit" class="btn btn-primary mt-3">Gönder</button>
+</form>
+<script>
+    function toggleFields() {
+        // Talep Türü kontrolü
+        var taskType = document.getElementById('id_position_type').value;
+        document.getElementById('replacement_for_field').style.display = (taskType === 'Mevcut Kadro') ? 'block' : 'none';
+        document.getElementById('request_reason_field').style.display = (taskType === 'İlave Kadro') ? 'block' : 'none';
 
-        <!-- Gönder Butonu -->
-        <button type="submit">Gönder</button>
-    </form>
-</body>
-</html>
+        // Yeni Görev kontrolü
+        var NewTask = document.getElementById('id_position_name').value;
+        document.getElementById('new_position_name_field').style.display = (NewTask === 'Yeni Görev') ? 'block' : 'none';
+    }
+    window.onload = toggleFields;
+</script>
+{% endblock %}

@@ -1,0 +1,132 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="tr" data-bs-theme="light">
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, shrink-to-fit=no">
+    <title>{% block title %}Gösterge Paneli - Aplus HR{% endblock %}</title>
+    <link rel="stylesheet" href="{% static 'bootstrap/css/bootstrap.min.css' %}">
+    <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Nunito:200,200i,300,300i,400,400i,600,600i,700,700i,800,800i,900,900i&display=swap">
+    <link rel="stylesheet" href="{% static 'fonts/fontawesome-all.min.css' %}">
+    <style>
+        .btn {
+            padding: 10px 20px;
+            background-color: #007BFF;
+            color: white;
+            border: none;
+            border-radius: 5px;
+            font-size: 16px;
+            cursor: pointer;
+            margin: 5px;
+        }
+        .btn:hover {
+            background-color: #0056b3;
+        }
+        .logo-img {
+            max-width: 100%;
+            height: auto;
+            filter: invert(0);
+        }
+    </style>
+</head>
+<body id="page-top">
+    <div id="wrapper">
+        {% block navigation %}
+        <!-- Yan Menü -->
+        <nav class="navbar align-items-start sidebar sidebar-dark accordion bg-gradient-primary p-0 navbar-dark">
+            <div class="container-fluid d-flex flex-column p-0">
+                <a class="navbar-brand d-flex justify-content-center align-items-center sidebar-brand m-0" href="#">
+                    <div class="sidebar-brand-icon">
+                        <img src="{% static 'aplus-acibadem-logo-beyaz-HD-transformed.png' %}" alt="Aplus HR Logo" class="logo-img" style="max-width: 70%; height: auto;">
+                    </div>
+                </a>
+                <hr class="sidebar-divider my-0">
+                <ul id="accordionSidebar" class="navbar-nav text-light">
+                    {% if user.is_authenticated %}
+                    <span class="navbar-text">Welcome, {{ user.first_name }} {{ user.last_name }}</span>
+                    <a href="{% url 'log-out' %}" class="btn btn-primary mr-2">Log out</a>
+                    {% else %}
+                    <a href="{% url 'log-in' %}" class="btn btn-primary mr-2">Login</a>
+                    <a href="{% url 'sign-up' %}" class="btn btn-outline-primary">Register</a>
+                    {% endif %}
+                    <li class="nav-item"><a class="nav-link active" href="{% url 'home' %}"><i class="fas fa-tachometer-alt"></i><span>Dashboard</span></a></li>
+                    {% if user_type == "hr_staff" %}
+                    <li class="nav-item"><a class="nav-link" href="{% url 'hr_profile' %}"><i class="fas fa-user"></i><span>Profile</span></a></li>
+                    {% elif user_type == "organization_staff" %}
+                    <li class="nav-item"><a class="nav-link" href="{% url 'organization_profile' %}"><i class="fas fa-user"></i><span>Profile</span></a></li>
+                    {% elif user_type == "Director" %}
+                    <li class="nav-item"><a class="nav-link" href="{% url 'director_profile' %}"><i class="fas fa-user"></i><span>Profile</span></a></li>
+                    {% endif %}
+                </ul>
+                <div class="text-center d-none d-md-inline">
+                    <button id="sidebarToggle" class="btn rounded-circle border-0" type="button"></button>
+                </div>
+            </div>
+        </nav>
+        {% endblock %}
+
+        <div id="content-wrapper" class="d-flex flex-column">
+            <div id="content">
+                {% block topbar %}
+                <!-- Üst Menü -->
+                <nav class="navbar navbar-expand bg-white shadow mb-4 topbar static-top navbar-light">
+                    <div class="container-fluid">
+                        <button id="sidebarToggleTop" class="btn btn-link d-md-none rounded-circle me-3" type="button">
+                            <i class="fas fa-bars"></i>
+                        </button>
+                        <form class="d-none d-sm-inline-block me-auto ms-md-3 my-2 my-md-0 mw-100 navbar-search">
+                            <div class="input-group">
+                                <input class="bg-light form-control border-0 small" type="text" placeholder="Search for ...">
+                                <button class="btn btn-primary py-0" type="button">
+                                    <i class="fas fa-search"></i>
+                                </button>
+                            </div>
+                        </form>
+                        <ul class="navbar-nav flex-nowrap ms-auto">
+                            <li class="nav-item dropdown no-arrow mx-1">
+                                <a class="dropdown-toggle nav-link" aria-expanded="false" data-bs-toggle="dropdown" href="#">
+                                    <span class="badge bg-danger badge-counter">3+</span>
+                                    <i class="fas fa-bell fa-fw"></i>
+                                </a>
+                                <div class="dropdown-menu dropdown-menu-end dropdown-list animated--grow-in">
+                                    <h6 class="dropdown-header">Alerts Center</h6>
+                                    <a class="dropdown-item text-center small text-gray-500" href="#">Show All Alerts</a>
+                                </div>
+                            </li>
+                            <li class="nav-item dropdown no-arrow">
+                                <a class="dropdown-toggle nav-link" aria-expanded="false" data-bs-toggle="dropdown" href="#">
+                                    <span class="d-none d-lg-inline me-2 text-gray-600 small">{{ user.first_name }}</span>
+                                    <img class="border rounded-circle img-profile" src="/static/img/avatars/avatar1.jpeg">
+                                </a>
+                            </li>
+                        </ul>
+                    </div>
+                </nav>
+                {% endblock %}
+
+                {% block content %}
+                <!-- Sayfa İçeriği -->
+                {% endblock %}
+            </div>
+
+            <!-- Alt Menü -->
+            <footer class="bg-white sticky-footer">
+                <div class="container my-auto">
+                    <div class="text-center my-auto copyright">
+                        <span>Copyright © Biko HRMS 2024</span>
+                    </div>
+                </div>
+            </footer>
+        </div>
+    </div>
+
+    <a class="border rounded d-inline scroll-to-top" href="#page-top">
+        <i class="fas fa-angle-up"></i>
+    </a>
+
+    <script src="{% static 'bootstrap/js/bootstrap.min.js' %}"></script>
+    <script src="{% static 'js/chart.min.js' %}"></script>
+    <script src="{% static 'js/bs-init.js' %}"></script>
+    <script src="{% static 'js/theme.js' %}"></script>
+</body>
+</html>

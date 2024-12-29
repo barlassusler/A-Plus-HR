@@ -1,119 +1,55 @@
-<!DOCTYPE html>
-<html lang="tr">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Başvuru Detayı</title>
-    <style>
-        body {
-            font-family: Arial, sans-serif;
-            margin: 0;
-            padding: 0;
-            background-color: #f9f9f9;
-            display: flex;
-            justify-content: center;
-            align-items: flex-start;
-            min-height: 100vh;
-        }
+{% extends 'base.html' %}
 
-        .container {
-            background-color: white;
-            width: 90%;
-            max-width: 800px;
-            padding: 20px;
-            border-radius: 8px;
-            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
-            margin-top: 20px;
-        }
+{% block title %}Başvuru Detayı{% endblock %}
 
-        h1 {
-            text-align: center;
-            color: #333;
-            margin-bottom: 20px;
-        }
+{% block content %}
+<div class="container">
+    <h1>Başvuru Detayı</h1>
 
-        .detail {
-            margin-bottom: 20px;
-        }
-
-        .detail strong {
-            color: #555;
-        }
-
-        .back-link {
-            text-align: center;
-            margin-top: 20px;
-        }
-
-        .back-link a {
-            color: #4CAF50;
-            text-decoration: none;
-            font-size: 16px;
-            font-weight: bold;
-        }
-
-        .back-link a:hover {
-            text-decoration: underline;
-        }
-    </style>
-</head>
-<body>
-    <div class="container">
-        <h1>Başvuru Detayı</h1>
-
-        <div class="detail">
-            <strong>Ad Soyad:</strong> {{ application.candidate.name}} {{application.candidate.surname }}
-        </div>
-        <div class="detail">
-            <strong>Doğum Tarihi:</strong> {{ application.candidate.birth_date }}
-        </div>
-        <div class="detail">
-            <strong>Telefon Numarası:</strong> {{ application.candidate.phone }}
-        </div>
-        <div class="detail">
-            <strong>İkamet Şehri:</strong> {{ application.candidate.residence_city }}
-        </div>
-        <div class="detail">
-            <strong>İkamet İlçesi:</strong> {{ application.candidate.residence_district }}
-        </div>
-        <div class="detail">
-            <strong>Eğitim Seviyesi:</strong> {{ application.candidate.education_level }}
-        </div>
-        <div class="detail">
-            <strong>Okul Adı:</strong> {{ application.candidate.school_name }}
-        </div>
-        <div class="detail">
-            <strong>Bölüm Adı:</strong> {{ application.candidate.department }}
-        </div>
-        <div class="detail">
-            <strong>Başvuru Tarihi:</strong> {{ application.application_date }}
-        </div>
-        <div class="detail">
-            <strong>Başvurulan Pozisyonlar:</strong>
-            {{ application.job.title }}
-{#            {% for position in application.applied_positions.all %}#}
-{#                {{ position.name }}{% if not forloop.last %}, {% endif %}#}
-{#            {% endfor %}#}
-        </div>
-        <div class="detail">
-            <strong>Tercih Edilen Lokasyonlar:</strong>
-            {{ application.candidate.desired_locations }}
-{#            {% for location in application.desired_locations.all %}#}
-{#                {{ location.name }}{% if not forloop.last %}, {% endif %}#}
-{#            {% endfor %}#}
-        </div>
-        <div class="detail">
-            <strong>Özgeçmiş:</strong>
-            {% if application.resume %}
-                <a href="{{ application.uploaded_resume.url }}" target="_blank">İndir</a>
-            {% else %}
-                Özgeçmiş Yüklenmemiş
-            {% endif %}
-        </div>
-
-        <div class="back-link">
-            <a href="{% url 'job_application_list' %}">← Başvuru Listesine Dön</a>
-        </div>
+    <div class="detail">
+        <strong>Ad Soyad:</strong> {{ application.candidate.name }} {{ application.candidate.surname }}
     </div>
-</body>
-</html>
+    <div class="detail">
+        <strong>Doğum Tarihi:</strong> {{ application.candidate.birth_date }}
+    </div>
+    <div class="detail">
+        <strong>Telefon Numarası:</strong> {{ application.candidate.phone }}
+    </div>
+    <div class="detail">
+        <strong>İkamet Şehri:</strong> {{ application.candidate.residence_city }}
+    </div>
+    <div class="detail">
+        <strong>İkamet İlçesi:</strong> {{ application.candidate.residence_district }}
+    </div>
+    <div class="detail">
+        <strong>Eğitim Seviyesi:</strong> {{ application.candidate.education_level }}
+    </div>
+    <div class="detail">
+        <strong>Okul Adı:</strong> {{ application.candidate.school_name }}
+    </div>
+    <div class="detail">
+        <strong>Bölüm Adı:</strong> {{ application.candidate.department }}
+    </div>
+    <div class="detail">
+        <strong>Başvuru Tarihi:</strong> {{ application.application_date }}
+    </div>
+    <div class="detail">
+        <strong>Başvurulan Pozisyonlar:</strong> {{ application.job.title }}
+    </div>
+    <div class="detail">
+        <strong>Tercih Edilen Lokasyonlar:</strong> {{ application.candidate.desired_locations }}
+    </div>
+    <div class="detail">
+        <strong>Özgeçmiş:</strong>
+        {% if application.resume %}
+            <a href="{{ application.uploaded_resume.url }}" target="_blank">İndir</a>
+        {% else %}
+            Özgeçmiş Yüklenmemiş
+        {% endif %}
+    </div>
+
+    <div class="back-link">
+        <a href="{% url 'job_application_list' %}">← Başvuru Listesine Dön</a>
+    </div>
+</div>
+{% endblock %}

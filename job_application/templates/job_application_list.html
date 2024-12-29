@@ -1,216 +1,83 @@
-<!DOCTYPE html>
-<html lang="tr">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Başvuru Listesi</title>
-    <style>
-        /* Genel Stiller */
-        body {
-            font-family: Arial, sans-serif;
-            margin: 0;
-            padding: 0;
-            background-color: #f4f4f4;
-            display: flex;
-            justify-content: center;
-            align-items: flex-start;
-            min-height: 100vh;
-        }
+{% extends 'base.html' %}
 
-        .container {
-            background-color: white;
-            width: 90%;
-            max-width: 1200px;
-            padding: 20px;
-            border-radius: 8px;
-            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
-            margin-top: 20px;
-        }
+{% block title %}Başvuru Listesi{% endblock %}
 
-        h1 {
-            text-align: center;
-            color: #333;
-            margin-bottom: 20px;
-        }
+{% block content %}
+<div class="container">
+    <h1>Başvuru Listesi</h1>
 
-        /* Form Stilleri */
-        form {
-            display: flex;
-            flex-wrap: wrap;
-            gap: 15px;
-            margin-bottom: 20px;
-        }
+    <!-- Arama ve Filtreleme Formu -->
+    <form method="get" action="{% url 'job_application_list' %}" style="margin-bottom: 20px;">
+        <input type="text" name="q" placeholder="İsimle Ara" value="{{ search_query }}" style="padding: 10px; margin-right: 10px;">
+        <input type="text" name="city" placeholder="Şehir Filtrele" value="{{ city_filter }}" style="padding: 10px; margin-right: 10px;">
+        <input type="text" name="district" placeholder="İlçe Filtrele" value="{{ district_filter }}" style="padding: 10px; margin-right: 10px;">
 
-        input, select, button {
-            padding: 10px;
-            font-size: 16px;
-            border-radius: 5px;
-            border: 1px solid #ddd;
-            flex: 1;
-            min-width: 200px;
-        }
+        <select name="sort_option" style="padding: 10px; margin-right: 10px;">
+            <option value="name_asc" {% if sort_option == "name_asc" %}selected{% endif %}>Ad (A-Z)</option>
+            <option value="name_desc" {% if sort_option == "name_desc" %}selected{% endif %}>Ad (Z-A)</option>
+            <option value="age_asc" {% if sort_option == "age_asc" %}selected{% endif %}>Yaş (Artan)</option>
+            <option value="age_desc" {% if sort_option == "age_desc" %}selected{% endif %}>Yaş (Azalan)</option>
+            <option value="experience_asc" {% if sort_option == "experience_asc" %}selected{% endif %}>Deneyim (Artan)</option>
+            <option value="experience_desc" {% if sort_option == "experience_desc" %}selected{% endif %}>Deneyim (Azalan)</option>
+        </select>
 
-        button {
-            background-color: #4CAF50;
-            color: white;
-            cursor: pointer;
-            border: none;
-        }
+        <button type="submit" style="padding: 10px; background-color: #4CAF50; color: white; border: none; cursor: pointer;">
+            Filtrele
+        </button>
+    </form>
 
-        button:hover {
-            background-color: #45a049;
-        }
-
-        /* Tablo Stilleri */
-        table {
-            width: 100%;
-            border-collapse: collapse;
-            margin-top: 20px;
-        }
-
-        th, td {
-            padding: 12px;
-            text-align: left;
-            border-bottom: 1px solid #ddd;
-        }
-
-        th {
-            background-color: #f8f8f8;
-        }
-
-        tr:nth-child(even) {
-            background-color: #f9f9f9;
-        }
-
-        a {
-            color: #4CAF50;
-            text-decoration: none;
-        }
-
-        a:hover {
-            text-decoration: underline;
-        }
-
-        /* Sayfalama */
-        .pagination {
-            display: flex;
-            justify-content: center;
-            margin-top: 20px;
-        }
-
-        .pagination a {
-            padding: 10px 15px;
-            border: 1px solid #ddd;
-            margin: 0 5px;
-            color: #333;
-            text-decoration: none;
-            border-radius: 5px;
-        }
-
-        .pagination a:hover {
-            background-color: #4CAF50;
-            color: white;
-        }
-
-        .pagination .current {
-            background-color: #f4f4f4;
-            color: #777;
-            pointer-events: none;
-        }
-
-        /* Mobil Uyumluluk */
-        @media (max-width: 768px) {
-            .container {
-                padding: 15px;
-            }
-
-            h1 {
-                font-size: 1.5rem;
-            }
-
-            input, select, button {
-                font-size: 14px;
-            }
-        }
-    </style>
-</head>
-<body>
-    <div class="container">
-        <h1>Başvuru Listesi</h1>
-
-        <!-- Arama ve Filtreleme Formu -->
-        <form method="get" action="{% url 'job_application_list' %}">
-            <input type="text" name="q" placeholder="İsimle Ara" value="{{ search_query }}">
-            <input type="text" name="city" placeholder="Şehir Filtrele" value="{{ city_filter }}">
-            <input type="text" name="district" placeholder="İlçe Filtrele" value="{{ district_filter }}">
-
-            <select name="sort_option">
-                <option value="name_asc" {% if sort_option == "name_asc" %}selected{% endif %}>Ad (A-Z)</option>
-                <option value="name_desc" {% if sort_option == "name_desc" %}selected{% endif %}>Ad (Z-A)</option>
-                <option value="age_asc" {% if sort_option == "age_asc" %}selected{% endif %}>Yaş (Artan)</option>
-                <option value="age_desc" {% if sort_option == "age_desc" %}selected{% endif %}>Yaş (Azalan)</option>
-                <option value="experience_asc" {% if sort_option == "experience_asc" %}selected{% endif %}>Deneyim (Artan)</option>
-                <option value="experience_desc" {% if sort_option == "experience_desc" %}selected{% endif %}>Deneyim (Azalan)</option>
-            </select>
-
-            <button type="submit">Filtrele</button>
-        </form>
-
-        <!-- Başvuru Ekle Butonu -->
-        <div style="text-align: center; margin-bottom: 20px;">
-            <a href="{% url 'job_application_form' %}">
-                <button type="button">Yeni Başvuru Ekle</button>
-            </a>
-        </div>
-
-        <!-- Başvuru Tablosu -->
-        <!-- Başvuru Tablosu -->
-<table>
-    <thead>
-        <tr>
-            <th>Ad Soyad</th>
-            <th>Şehir</th>
-            <th>İlçe</th>
-            <th>Yaş</th>
-            <th>Başvuru Tarihi</th>
-            <th>Detay</th>
-        </tr>
-    </thead>
-    <tbody>
-        {% for application in applications %}
-        <tr>
-            <td>{{ application.candidate.name}} {{application.candidate.surname }}</td>
-            <td>{{ application.candidate.residence_city }}</td>
-            <td>{{ application.candidate.residence_district }}</td>
-            <td>{{ application.age }}</td>
-            <td>{{ application.application_date }}</td>
-            <td>
-                <a href="{% url 'application_detail' application.id %}">Detay</a>
-            </td>
-        </tr>
-        {% empty %}
-        <tr>
-            <td colspan="6">Hiç başvuru bulunamadı.</td>
-        </tr>
-        {% endfor %}
-    </tbody>
-</table>
-
-
-        <!-- Sayfalama -->
-        <div class="pagination">
-            {% if candidates.has_previous %}
-            <a href="?page=1{{ request.GET.urlencode|slice:'&page=' }}">İlk</a>
-            <a href="?page={{ candidates.previous_page_number }}{{ request.GET.urlencode|slice:'&page=' }}">Önceki</a>
-            {% endif %}
-
-            <span>Sayfa {{ candidates.number }} / {{ candidates.paginator.num_pages }}</span>
-
-            {% if candidates.has_next %}
-            <a href="?page={{ candidates.next_page_number }}{{ request.GET.urlencode|slice:'&page=' }}">Sonraki</a>
-            <a href="?page={{ candidates.paginator.num_pages }}{{ request.GET.urlencode|slice:'&page=' }}">Son</a>
-            {% endif %}
-        </div>
+    <!-- Yeni Başvuru Ekle Butonu -->
+    <div style="text-align: center; margin-bottom: 20px;">
+        <a href="{% url 'job_application_form' %}">
+            <button type="button" style="padding: 10px 20px; background-color: #4CAF50; color: white; border: none; cursor: pointer;">Yeni Başvuru Ekle</button>
+        </a>
     </div>
-</body>
-</html>
+
+    <!-- Başvuru Tablosu -->
+    <table style="width: 100%; border-collapse: collapse; margin-top: 20px;">
+        <thead>
+            <tr style="background-color: #f8f8f8;">
+                <th style="padding: 12px; border-bottom: 1px solid #ddd;">Ad Soyad</th>
+                <th style="padding: 12px; border-bottom: 1px solid #ddd;">Şehir</th>
+                <th style="padding: 12px; border-bottom: 1px solid #ddd;">İlçe</th>
+                <th style="padding: 12px; border-bottom: 1px solid #ddd;">Yaş</th>
+                <th style="padding: 12px; border-bottom: 1px solid #ddd;">Başvuru Tarihi</th>
+                <th style="padding: 12px; border-bottom: 1px solid #ddd;">Detay</th>
+            </tr>
+        </thead>
+        <tbody>
+            {% for application in applications %}
+            <tr style="background-color: {% cycle '#f9f9f9' '#fff' %};">
+                <td style="padding: 12px; border-bottom: 1px solid #ddd;">{{ application.candidate.name }} {{ application.candidate.surname }}</td>
+                <td style="padding: 12px; border-bottom: 1px solid #ddd;">{{ application.candidate.residence_city }}</td>
+                <td style="padding: 12px; border-bottom: 1px solid #ddd;">{{ application.candidate.residence_district }}</td>
+                <td style="padding: 12px; border-bottom: 1px solid #ddd;">{{ application.age }}</td>
+                <td style="padding: 12px; border-bottom: 1px solid #ddd;">{{ application.application_date }}</td>
+                <td style="padding: 12px; border-bottom: 1px solid #ddd;">
+                    <a href="{% url 'application_detail' application.id %}" style="color: #4CAF50; text-decoration: none;">Detay</a>
+                </td>
+            </tr>
+            {% empty %}
+            <tr>
+                <td colspan="6" style="padding: 12px; text-align: center;">Hiç başvuru bulunamadı.</td>
+            </tr>
+            {% endfor %}
+        </tbody>
+    </table>
+
+    <!-- Sayfalama -->
+    <div style="text-align: center; margin-top: 20px;">
+        {% if candidates.has_previous %}
+        <a href="?page=1{{ request.GET.urlencode|slice:'&page=' }}" style="padding: 10px 15px; border: 1px solid #ddd; margin-right: 5px;">İlk</a>
+        <a href="?page={{ candidates.previous_page_number }}{{ request.GET.urlencode|slice:'&page=' }}" style="padding: 10px 15px; border: 1px solid #ddd; margin-right: 5px;">Önceki</a>
+        {% endif %}
+
+        <span>Sayfa {{ candidates.number }} / {{ candidates.paginator.num_pages }}</span>
+
+        {% if candidates.has_next %}
+        <a href="?page={{ candidates.next_page_number }}{{ request.GET.urlencode|slice:'&page=' }}" style="padding: 10px 15px; border: 1px solid #ddd; margin-left: 5px;">Sonraki</a>
+        <a href="?page={{ candidates.paginator.num_pages }}{{ request.GET.urlencode|slice:'&page=' }}" style="padding: 10px 15px; border: 1px solid #ddd; margin-left: 5px;">Son</a>
+        {% endif %}
+    </div>
+</div>
+{% endblock %}

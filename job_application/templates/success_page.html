@@ -1,12 +1,10 @@
-<!DOCTYPE html>
-<html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Başvuru Başarılı</title>
-</head>
-<body>
+{% extends 'base.html' %}
+
+{% block title %}Başvuru Başarılı{% endblock %}
+
+{% block content %}
+<div class="container">
     <h1>Başvurunuz başarıyla tamamlandı!</h1>
-    <a href="{% url 'job_application_list' %}">Başvurular listesine geri dön</a>
-</body>
-</html>
+    <a href="{% url 'job_application_list' %}" class="btn btn-primary mt-4">Başvurular Listesine Geri Dön</a>
+</div>
+{% endblock %}
