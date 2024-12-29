@@ -11,47 +11,47 @@
         <!-- Ad Soyad -->
         <div class="form-group">
             <label for="id_name">İsim:</label>
-            <input type="text" id="id_name" name="name" required>
+            <input type="text" id="id_name" name="name" class="form-control" required>
         </div>
         <div class="form-group">
             <label for="id_surname">Soyisim:</label>
-            <input type="text" id="id_surname" name="surname" required>
+            <input type="text" id="id_surname" name="surname" class="form-control" required>
         </div>
 
         <!-- Telefon Numarası -->
         <div class="form-group">
             <label for="id_phone_number">Telefon Numarası:</label>
-            <input type="text" id="id_phone_number" name="phone" required>
+            <input type="text" id="id_phone_number" name="phone" class="form-control" required>
         </div>
 
         <!-- Doğum Tarihi -->
         <div class="form-group">
             <label for="birth_date">Doğum Tarihi:</label>
-            <input type="date" id="birth_date" name="birth_date" required>
+            <input type="date" id="birth_date" name="birth_date" class="form-control" required>
         </div>
 
         <!-- Email -->
         <div class="form-group">
             <label for="id_email">Email:</label>
-            <input type="email" id="id_email" name="email" required>
+            <input type="email" id="id_email" name="email" class="form-control" required>
         </div>
 
         <!-- Deneyimler -->
         <div class="form-group">
             <label for="id_experience">Deneyimler:</label>
-            <textarea id="id_experience" name="experience" rows="4" required></textarea>
+            <textarea id="id_experience" name="experience" rows="4" class="form-control" required></textarea>
         </div>
 
         <!-- Beceriler -->
         <div class="form-group">
             <label for="id_skills">Beceriler:</label>
-            <textarea id="id_skills" name="skills" rows="4" required></textarea>
+            <textarea id="id_skills" name="skills" rows="4" class="form-control" required></textarea>
         </div>
 
         <!-- İkamet -->
         <div class="form-group">
             <label for="residence_city">İkamet - İl:</label>
-            <select id="residence_city" name="residence_city" onchange="updateDistricts()" required>
+            <select id="residence_city" name="residence_city" class="form-control" onchange="updateDistricts()" required>
                 <option value="">Seçiniz</option>
                 <option value="İstanbul">İstanbul</option>
                 <option value="Ankara">Ankara</option>
@@ -60,7 +60,7 @@
         </div>
         <div class="form-group">
             <label for="residence_district">İkamet - İlçe:</label>
-            <select id="residence_district" name="residence_district" required>
+            <select id="residence_district" name="residence_district" class="form-control" required>
                 <option value="">Seçiniz</option>
             </select>
         </div>
@@ -68,7 +68,7 @@
         <!-- Eğitim Durumu -->
         <div class="form-group">
             <label for="id_education_level">Eğitim Durumu:</label>
-            <select name="education_level" id="id_education_level" onchange="toggleSchoolFields()" required>
+            <select name="education_level" id="id_education_level" class="form-control" onchange="toggleSchoolFields()" required>
                 <option value="">Seçiniz</option>
                 <option value="read_write">Okuma Yazma Belgesi</option>
                 <option value="primary">İlkokul</option>
@@ -82,7 +82,8 @@
         <!-- Pozisyon Seçimi -->
         <div class="form-group">
             <label for="position">Başvurduğu Pozisyon:</label>
-            <select id="position" name="application_job" multiple required>
+            <select id="position" name="application_job" class="form-control" required>
+                <option value="">Seçiniz</option>
                 {% for position in positions %}
                 <option value="{{ position.id }}">
                     {% if position.position_name %}
@@ -100,25 +101,25 @@
         <!-- Lokasyon Seçimi -->
         <div class="form-group">
             <label for="locations">Çalışmak İstediğiniz Lokasyonlar:</label>
-            <select id="locations" name="desired_locations" multiple required>
+            <select id="locations" name="desired_locations" class="form-control" multiple required>
                 {% for location in locations %}
                 <option value="{{ location.id }}">{{ location.name }}</option>
                 {% endfor %}
             </select>
-            <small>Ctrl (veya Cmd) tuşuna basarak birden fazla lokasyon seçebilirsiniz.</small>
+            <small>Birden fazla seçim için Ctrl (veya Cmd) tuşunu basılı tutun.</small>
         </div>
 
         <!-- CV Yükleme -->
         <div class="form-group">
             <label for="cv_file">CV Yükleyin (PDF veya Word):</label>
-            <input type="file" id="cv_file" name="uploaded_resume" accept=".pdf,.doc,.docx">
+            <input type="file" id="cv_file" name="uploaded_resume" class="form-control" accept=".pdf,.doc,.docx">
             <small>Opsiyonel. Sadece PDF veya Word dosyası yükleyebilirsiniz.</small>
         </div>
 
         <!-- Kaydet ve İptal -->
-        <div class="form-buttons">
-            <button type="submit" class="btn-save">Kaydet</button>
-            <a href="{% url 'job_application_list' %}" class="btn-cancel">İptal</a>
+        <div class="form-buttons mt-3">
+            <button type="submit" class="btn btn-primary">Kaydet</button>
+            <a href="{% url 'job_application_list' %}" class="btn btn-secondary">İptal</a>
         </div>
     </form>
 </div>
