@@ -2,8 +2,12 @@ from django.shortcuts import render, redirect, get_object_or_404
 from .forms import TaskRequestForm
 from .models import *
 from biko_hr.models import IncubationJob, Profile, Position
+from .models import JobRequest
+from biko_hr.models import IncubationJob, Profile, Position, Candidate
 from django.contrib.auth.models import Group
 from django.contrib.auth.decorators import login_required
+from django.core.exceptions import PermissionDenied
+
 
 @login_required
 def task_request_list(request):
@@ -125,12 +129,40 @@ def create_task_request(request):
 
     positions = Position.objects.all()  # Ensure positions are passed to the template
     return render(request, 'task_request_form.html', {'form': form, 'positions': positions})
-
-
 def task_request_detail(request, pk):
     task = get_object_or_404(JobRequest, pk=pk)  # Belirli bir talebi getir
-    return render(request, 'task_request_detail.html', {'task': task})
+    assigned_candidates = task.candidates.all()  # İşe atanmış tüm adayları alın
+    return render(request, 'task_request_detail.html', {'task': task, 'assigned_candidates': assigned_candidates})
 
+@login_required
+def assign_candidates(request, job_request_id):
+    job_request = get_object_or_404(JobRequest, id=job_request_id)
+
+    # Check if the user is part of the HR group
+    if not request.user.groups.filter(name="HR").exists():
+        raise PermissionDenied("You do not have permission to assign candidates.")
+
+    # Check if the user's location matches the job request's location
+    user_profile = getattr(request.user, 'profile', None)  # Assuming you have a `profile` model
+    if not user_profile or user_profile.Location != job_request.location:
+        raise PermissionDenied("You do not have permission to assign candidates to this job request.")
+
+    all_candidates = Candidate.objects.all()  # All candidates
+    assigned_candidates = job_request.candidates.all()  # Candidates already assigned to this job request
+
+    if request.method == "POST":
+        selected_candidates = request.POST.get("candidates", "")  # e.g., "2,3,32"
+        selected_candidates_list = selected_candidates.split(",")  # Convert to list: ['2', '3', '32']
+        selected_candidates_list = [int(c) for c in selected_candidates_list]  # Convert to integers: [2, 3, 32]
+
+        job_request.candidates.set(selected_candidates_list)  # Assign selected candidates
+        return redirect("task_request_detail", pk=job_request.id)  # Redirect to the detail page
+
+    return render(request, "assign_candidates.html", {
+        "job_request": job_request,
+        "all_candidates": all_candidates,
+        "assigned_candidates": assigned_candidates,
+    })
 
 @login_required
 def accept_task_request(request, pk):
@@ -142,3 +174,5 @@ def accept_task_request(request, pk):
     except JobRequest.DoesNotExist:
         print(f"Task {pk} does not exist.")
     return redirect('task_request_list')  # Redirect back to the task request list
+
+

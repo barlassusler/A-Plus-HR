@@ -1,5 +1,5 @@
 from django.db import models
-from biko_hr.models import Location, Organization, IncubationJob, Position
+from biko_hr.models import Location, Organization, IncubationJob, Position, Candidate
 
 class JobRequest(models.Model): #talep eğer kabul edilirse IncubationJob tablosuna eklenilecek.
     TASK_TYPE_CHOICES = [
@@ -32,4 +32,5 @@ class JobRequest(models.Model): #talep eğer kabul edilirse IncubationJob tablos
     request_status_hr = models.CharField(max_length=50, default="Pending", blank=True)
     request_status_organization_manager = models.CharField(max_length=50, default="Pending", blank=True)
 
+    candidates = models.ManyToManyField(Candidate, related_name='job_requests')
 

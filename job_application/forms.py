@@ -1,7 +1,5 @@
 from django import forms
 from biko_hr.models import Candidate, Application, Location, Position
-from django import forms
-from biko_hr.models import Application, Position, Location
 
 # class JobApplicationForm(forms.ModelForm):
 #     class Meta:
