@@ -119,6 +119,8 @@ def create_task_request(request):
             # If the position doesn't exist, create a new entry in the Position table
             if not existing_position:
                 Position.objects.create(position=new_position_name)
+                # new_position = Position.objects.create(position=new_position_name) ## TODO: update the above line with this logic.
+                # JobRequest.position_name = new_position
         if form.is_valid():
             form.save()
             return redirect('task_request_list')  # Redirect to the task request list page

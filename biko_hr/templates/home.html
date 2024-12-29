@@ -58,6 +58,7 @@
                         <a href="{% url 'sign-up' %}" class="btn btn-outline-primary">Register</a>
                     {% endif %}
                     <li class="nav-item"><a class="nav-link active" href="{% url "home"%}"><i class="fas fa-tachometer-alt"></i><span>Dashboard</span></a></li>
+                    <li class="nav-item"><a class="nav-link active" href="{% url "candidate_pool_dashboard"%}"><i class="fas fa-tachometer-alt"></i><span>Candidate Pool</span></a></li>
                     {% if user_type == "hr_staff" %}
                         <li class="nav-item"><a class="nav-link" href="{% url "hr_profile" %}"><i class="fas fa-user"></i><span>Profile</span></a></li>
                     {% elif user_type == "organization_staff" %}
