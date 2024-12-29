@@ -1,104 +1,113 @@
 {% extends 'base.html' %}
+{% load bootstrap4 %}
 
 {% block title %}{{ job_request.position_name }} için Aday Atama{% endblock %}
 
-{% block custom_styles %}
-<style>
-    #candidate-list {
-        display: none;
-        border: 1px solid #ccc;
-        max-height: 200px;
-        overflow-y: auto;
-        padding: 10px;
-    }
-    #selected-candidates {
-        margin-top: 20px;
-    }
-    .candidate-item {
-        display: flex;
-        justify-content: space-between;
-        align-items: center;
-        margin-bottom: 5px;
-    }
-    .candidate-item button {
-        background: red;
-        color: white;
-        border: none;
-        padding: 5px;
-        cursor: pointer;
-    }
-</style>
-{% endblock %}
-
 {% block content %}
-<h1 class="text-primary">
-    {{ job_request.position_name }} - {{ job_request.location }} - {{ job_request.organization }}
-</h1>
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>{{ job_request.position_name }} için Aday Atama</title>
+    <link rel="stylesheet" href="/static/bootstrap/css/bootstrap.min.css">
+    <style>
+        #candidate-list {
+            display: none;
+            border: 1px solid #ccc;
+            max-height: 200px;
+            overflow-y: auto;
+            padding: 10px;
+        }
+        #selected-candidates {
+            margin-top: 20px;
+        }
+        .candidate-item {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 5px;
+        }
+        .candidate-item button {
+            background: red;
+            color: white;
+            border: none;
+            padding: 5px;
+            cursor: pointer;
+        }
+    </style>
+</head>
+<body class="container py-4">
+    <h1 class="text-primary">
+        {{ job_request.position_name }} -
+        {{ job_request.location }} -
+        {{ job_request.organization }}
+    </h1>
 
-<!-- Aday Ekleme Formu -->
-<form method="post" id="candidate-form" class="mt-4">
-    {% csrf_token %}
-    <input type="hidden" name="candidates" id="hidden-candidates">
+    <!-- Aday Ekleme Formu -->
+    <form method="post" id="candidate-form" class="mt-4">
+        {% csrf_token %}
+        <input type="hidden" name="candidates" id="hidden-candidates">
 
-    <!-- Aday Listesini Göster -->
-    <button type="button" class="btn btn-primary mb-3" onclick="toggleCandidateList()">Adayları Seç</button>
-    <div id="candidate-list" class="border rounded p-3">
-        {% for candidate in all_candidates %}
-        <div class="candidate-item" id="candidate-{{ candidate.id }}">
-            <span>{{ candidate.name }} {{ candidate.surname }}</span>
-            <button type="button" class="btn btn-danger btn-sm" onclick="addCandidate({{ candidate.id }}, '{{ candidate.first_name }} {{ candidate.last_name }}')">Ekle</button>
+        <!-- Aday Listesini Göster -->
+        <button type="button" class="btn btn-primary mb-3" onclick="toggleCandidateList()">Adayları Seç</button>
+        <div id="candidate-list" class="border rounded p-3">
+            {% for candidate in all_candidates %}
+            <div class="candidate-item" id="candidate-{{ candidate.id }}">
+                <span>{{ candidate.name }} {{ candidate.surname }}</span>
+                <button type="button" class="btn btn-danger btn-sm" onclick="addCandidate({{ candidate.id }}, '{{ candidate.first_name }} {{ candidate.last_name }}')">Ekle</button>
+            </div>
+            {% endfor %}
         </div>
-        {% endfor %}
-    </div>
 
-    <!-- Eklenen Adaylar -->
-    <div id="selected-candidates" class="mt-4">
-        <h3 class="text-secondary">Eklenen Adaylar:</h3>
-        <ul id="selected-candidates-list" class="list-group"></ul>
-    </div>
+        <!-- Eklenen Adaylar -->
+        <div id="selected-candidates" class="mt-4">
+            <h3 class="text-secondary">Eklenen Adaylar:</h3>
+            <ul id="selected-candidates-list" class="list-group"></ul>
+        </div>
 
-    <button type="submit" class="btn btn-success mt-3">Kaydet</button>
-</form>
-{% endblock %}
+        <button type="submit" class="btn btn-success mt-3">Kaydet</button>
+    </form>
 
-{% block custom_scripts %}
-<script>
-    let selectedCandidates = [];
+    <script src="/static/bootstrap/js/bootstrap.bundle.min.js"></script>
+    <script>
+        let selectedCandidates = [];
 
-    // Aday Listesini Göster/Gizle
-    function toggleCandidateList() {
-        const candidateList = document.getElementById('candidate-list');
-        candidateList.style.display = candidateList.style.display === 'block' ? 'none' : 'block';
-    }
+        // Aday Listesini Göster/Gizle
+        function toggleCandidateList() {
+            const candidateList = document.getElementById('candidate-list');
+            candidateList.style.display = candidateList.style.display === 'block' ? 'none' : 'block';
+        }
 
-    // Adayı Eklenenler Listesine Ekle
-    function addCandidate(candidateId, candidateName) {
-        if (!selectedCandidates.includes(candidateId)) {
-            selectedCandidates.push(candidateId);
+        // Adayı Eklenenler Listesine Ekle
+        function addCandidate(candidateId, candidateName) {
+            if (!selectedCandidates.includes(candidateId)) {
+                selectedCandidates.push(candidateId);
+                updateSelectedCandidatesUI();
+            }
+        }
+
+        // Adayı Eklenenlerden Çıkar
+        function removeCandidate(candidateId) {
+            selectedCandidates = selectedCandidates.filter(id => id !== candidateId);
             updateSelectedCandidatesUI();
         }
-    }
 
-    // Adayı Eklenenlerden Çıkar
-    function removeCandidate(candidateId) {
-        selectedCandidates = selectedCandidates.filter(id => id !== candidateId);
-        updateSelectedCandidatesUI();
-    }
-
-    // Eklenen Adayların UI'sini Güncelle
-    function updateSelectedCandidatesUI() {
-        const list = document.getElementById('selected-candidates-list');
-        list.innerHTML = '';
-        selectedCandidates.forEach(candidateId => {
-            const candidateItem = document.createElement('li');
-            candidateItem.className = 'list-group-item d-flex justify-content-between align-items-center';
-            candidateItem.innerHTML = `
-                ${document.querySelector(`#candidate-${candidateId} span`).textContent}
-                <button type="button" class="btn btn-danger btn-sm" onclick="removeCandidate(${candidateId})">Çıkar</button>
-            `;
-            list.appendChild(candidateItem);
-        });
-        document.getElementById('hidden-candidates').value = selectedCandidates.join(',');
-    }
-</script>
+        // Eklenen Adayların UI'sini Güncelle
+        function updateSelectedCandidatesUI() {
+            const list = document.getElementById('selected-candidates-list');
+            list.innerHTML = '';
+            selectedCandidates.forEach(candidateId => {
+                const candidateItem = document.createElement('li');
+                candidateItem.className = 'list-group-item d-flex justify-content-between align-items-center';
+                candidateItem.innerHTML = `
+                    ${document.querySelector(`#candidate-${candidateId} span`).textContent}
+                    <button type="button" class="btn btn-danger btn-sm" onclick="removeCandidate(${candidateId})">Çıkar</button>
+                `;
+                list.appendChild(candidateItem);
+            });
+            document.getElementById('hidden-candidates').value = selectedCandidates.join(',');
+        }
+    </script>
+</body>
+</html>
 {% endblock %}
