@@ -1,0 +1,54 @@
+<div class="modal fade" id="scheduleInterviewModal" tabindex="-1" role="dialog">
+    <div class="modal-dialog" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title">Schedule Interview</h5>
+                <button type="button" class="close" data-dismiss="modal">
+                    <span>&times;</span>
+                </button>
+            </div>
+            <form method="post" action="{% url 'schedule_interview' candidate.id %}">
+                {% csrf_token %}
+                <div class="modal-body">
+                    <div class="form-group">
+                        <label>Application</label>
+                        <select name="application" class="form-control" required>
+                            {% for app in applications %}
+                                <option value="{{ app.id }}">
+                                    {{ app.job.position.position }} at {{ app.job.organization.organization }}
+                                </option>
+                            {% endfor %}
+                        </select>
+                    </div>
+                    <div class="form-group">
+                        <label>Date</label>
+                        <input type="date" name="date" class="form-control" required>
+                    </div>
+                    <div class="form-group">
+                        <label>Evaluator</label>
+                        <select name="evaluator" class="form-control" required>
+                            {% for user in users %}
+                                <option value="{{ user.id }}">
+                                    {{ user.get_full_name }} ({{ user.username }})
+                                </option>
+                            {% endfor %}
+                        </select>
+                    </div>
+                    <div class="form-group">
+                        <label>Evaluator Role</label>
+                        <select name="evaluator_role" class="form-control" required>
+                            <option value="HR Interview">HR Interview</option>
+                            <option value="Technical Interview">Technical Interview</option>
+                            <option value="Manager Interview">Manager Interview</option>
+                            <option value="Final Interview">Final Interview</option>
+                        </select>
+                    </div>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+                    <button type="submit" class="btn btn-primary">Schedule</button>
+                </div>
+            </form>
+        </div>
+    </div>
+</div>

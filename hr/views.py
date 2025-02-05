@@ -1,8 +1,13 @@
+import json
+
+from django.contrib import messages
 from django.contrib.auth.decorators import login_required
-from django.shortcuts import render
+from django.contrib.auth.models import User
+from django.shortcuts import render, redirect, get_object_or_404
 
 # Create your views here.
 from authentication.models import UserType
+from biko_hr.models import Interview, Application, Notification, InterviewAttributes
 from jobrequest.models import JobRequest
 
 
@@ -23,8 +28,6 @@ def evaluate_job_request(request, job_request_id):
     job_request.save()
 
 
-
-
 @login_required
 def dashboard(request):
     user_type = UserType.objects.filter(user=request.user).first()
@@ -32,8 +35,89 @@ def dashboard(request):
     return render(request, 'hr_dashboard.html',{'user': request.user, "user_type":user_type.user_type})
 
 
+@login_required
+def interview_assessment(request, interview_id):
+    interview = get_object_or_404(
+        Interview.objects.select_related(
+            'candidate',
+            'application__job__position',
+            'evaluator'
+        ),
+        id=interview_id
+    )
+    
+    # Check if the user is the assigned evaluator
+    if interview.evaluator != request.user:
+        messages.error(request, "You are not authorized to assess this interview.")
+        return redirect('home')
+    
+    if request.method == 'POST':
+        # Create InterviewAttributes
+        attributes = InterviewAttributes.objects.create(
+            candidate=interview.candidate,
+            application=interview.application,
+            problem_solving=request.POST.get('problem_solving'),
+            technical_skills=request.POST.get('technical_skills')
+        )
+        
+        # Update Interview
+        interview.attributes_id = str(attributes.id)
+        interview.general_assessment = request.POST.get('general_assessment')
+        interview.work_hours_assessment = request.POST.get('work_hours_assessment')
+        interview.decision = request.POST.get('decision')
+        
+        # Calculate and store evaluation scores
+        scores = {
+            'problem_solving': request.POST.get('problem_solving'),
+            'technical_skills': request.POST.get('technical_skills')
+        }
+        interview.evaluation_scores = json.dumps(scores)
+        
+        interview.save()
+        
+        # Update application status based on decision
+        if interview.decision == 'Passed':
+            interview.application.status = 'HR Assessment'
+        elif interview.decision == 'Failed':
+            interview.application.status = 'Rejected'
+        interview.application.save()
+        
+        # Notify HR manager
+        Notification.objects.create(
+            user=interview.manager,
+            message=f'Interview assessment completed for {interview.candidate.name} {interview.candidate.surname}',
+            status='Unread'
+        )
+        
+        messages.success(request, 'Interview assessment submitted successfully')
+        return redirect('candidate_profile', candidate_id=interview.candidate.id)
+    
+    return render(request, 'interview_form.html', {
+        'interview': interview
+    })
 
-
-
-
-
+@login_required
+def my_interviews(request):
+    # Get pending interviews for the logged-in user
+    pending_interviews = Interview.objects.filter(
+        evaluator=request.user,
+        decision='Pending'
+    ).select_related(
+        'candidate',
+        'application__job__position'
+    ).order_by('date')
+    
+    # Get completed interviews
+    completed_interviews = Interview.objects.filter(
+        evaluator=request.user
+    ).exclude(
+        decision='Pending'
+    ).select_related(
+        'candidate',
+        'application__job__position'
+    ).order_by('-date')
+    
+    return render(request, 'my_interviews.html', {
+        'pending_interviews': pending_interviews,
+        'completed_interviews': completed_interviews
+    })

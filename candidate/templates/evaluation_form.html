@@ -1,0 +1,80 @@
+{% extends 'home.html' %}
+{% load bootstrap4 %}
+{% load candidate_filters %}
+
+{% block content %}
+<div class="container-fluid">
+    <div class="card shadow mb-4">
+
+        <div class="card-header py-3">
+            <h6 class="text-primary fw-bold m-0">Final Evaluation</h6>
+        </div>
+        <div class="card-body">
+            <div class="row mb-4">
+                <div class="col-md-6">
+                    <h5>Candidate: {{ application.candidate.name }} {{ application.candidate.surname }}</h5>
+                    <p>Position: {{ application.job.position.position }}</p>
+                </div>
+            </div>
+
+            <div class="card mb-4">
+                <div class="card-header">
+                    <h6 class="mb-0">Interview Results</h6>
+                </div>
+                <div class="card-body">
+                    {% for interview in interviews %}
+                    <div class="mb-3">
+                        <h6>{{ interview.evaluator_role }} - {{ interview.date }}</h6>
+                        <p>{{ interview.general_assessment }}</p>
+                        {% if interview.evaluation_scores %}
+                            {% with scores=interview.evaluation_scores|json_parse %}
+                            <ul>
+                                <li>Problem Solving: {{ scores.problem_solving }}/10</li>
+                                <li>Technical Skills: {{ scores.technical_skills }}/10</li>
+                            </ul>
+                            {% endwith %}
+                        {% endif %}
+                    </div>
+                    {% endfor %}
+                </div>
+            </div>
+
+            <form method="post">
+                {% csrf_token %}
+                <div class="card mb-4">
+                    <div class="card-header">
+                        <h6 class="mb-0">Final Decision</h6>
+                    </div>
+                    <div class="card-body">
+                        <div class="form-group">
+                            <label>Decision</label>
+                            <select name="decision" class="form-control" required>
+                                <option value="Approved">Approve for Incubation</option>
+                                <option value="Rejected">Reject</option>
+                            </select>
+                        </div>
+                        
+                        <div id="incubationDetails" style="display: none;">
+                            <div class="form-group">
+                                <label>Incubation Start Date</label>
+                                <input type="date" name="start_date" class="form-control">
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="text-right">
+                    <button type="submit" class="btn btn-primary">Submit Evaluation</button>
+                </div>
+            </form>
+        </div>
+    </div>
+</div>
+
+<script>
+document.querySelector('select[name="decision"]').addEventListener('change', function() {
+    const incubationDetails = document.getElementById('incubationDetails');
+    incubationDetails.style.display = this.value === 'Approved' ? 'block' : 'none';
+});
+</script>
+{% endblock %}

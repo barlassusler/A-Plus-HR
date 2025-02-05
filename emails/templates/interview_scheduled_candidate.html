@@ -1,0 +1,39 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <style>
+        body { font-family: Arial, sans-serif; line-height: 1.6; }
+        .container { max-width: 600px; margin: 0 auto; padding: 20px; }
+        .header { background-color: #f8f9fa; padding: 20px; text-align: center; }
+        .content { padding: 20px; }
+        .footer { text-align: center; padding: 20px; font-size: 12px; color: #666; }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="header">
+            <h2>Interview Scheduled</h2>
+        </div>
+        <div class="content">
+            <p>Dear {{ interview.candidate.name }},</p>
+            
+            <p>Your interview has been scheduled for the position of <strong>{{ interview.application.job.position.position }}</strong>.</p>
+            
+            <p><strong>Interview Details:</strong></p>
+            <ul>
+                <li>Date: {{ interview.date }}</li>
+                <li>Position: {{ interview.application.job.position.position }}</li>
+                <li>Organization: {{ interview.application.job.organization.organization }}</li>
+                <li>Interview Type: {{ interview.evaluator_role }}</li>
+            </ul>
+            
+            <p>Please make sure to be available at the scheduled time. If you need to reschedule, please contact us as soon as possible.</p>
+            
+            <p>Best regards,<br>{{ company_name }} HR Team</p>
+        </div>
+        <div class="footer">
+            This is an automated message, please do not reply directly to this email.
+        </div>
+    </div>
+</body>
+</html> 

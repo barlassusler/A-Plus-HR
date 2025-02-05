@@ -10,7 +10,9 @@
     <link rel="stylesheet" href="/static/bootstrap/css/bootstrap.min.css">
     <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Nunito:200,200i,300,300i,400,400i,600,600i,700,700i,800,800i,900,900i&amp;display=swap">
     <link rel="stylesheet" href="/static/fonts/fontawesome-all.min.css">
+    <link rel="shortcut icon" href="{% static "img/faviconV2.png" %}" />
 
+{% block style %}
     <style>
         .btn {
             padding: 10px 20px;
@@ -31,6 +33,8 @@
             filter: invert(0); /* Converts white to black for images with transparent backgrounds */
         }
     </style>
+{% endblock %}
+
 </head>
 
 
@@ -61,6 +65,7 @@
                     <li class="nav-item"><a class="nav-link active" href="{% url "candidate_pool_dashboard"%}"><i class="fas fa-tachometer-alt"></i><span>Candidate Pool</span></a></li>
                     {% if user_type == "hr_staff" %}
                         <li class="nav-item"><a class="nav-link" href="{% url "hr_profile" %}"><i class="fas fa-user"></i><span>Profile</span></a></li>
+                        <li class="nav-item"><a class="nav-link" href="{% url "my_interviews" %}"><i class="fas fa-user"></i><span>My Interviews</span></a></li>
                     {% elif user_type == "organization_staff" %}
                         <li class="nav-item"><a class="nav-link" href="{% url "organization_profile" %}"><i class="fas fa-user"></i><span>Profile</span></a></li>
                     {% elif user_type == "Director" %}
@@ -416,6 +421,8 @@
                 </div>
             {% endblock %}
 
+                    {% block custom_scripts %}{% endblock %}
+
             <footer class="bg-white sticky-footer">
                 <div class="container my-auto">
                     <div class="text-center my-auto copyright"><span>Copyright © Biko HRMS 2024</span></div>
@@ -427,6 +434,9 @@
     <script src="/static/js/chart.min.js"></script>
     <script src="/static/js/bs-init.js"></script>
     <script src="/static/js/theme.js"></script>
+    <!-- In the head section or at the end of body -->
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@4.6.0/dist/js/bootstrap.bundle.min.js"></script>
 </body>
 
 </html>

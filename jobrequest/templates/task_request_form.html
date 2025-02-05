@@ -13,11 +13,27 @@
         <!-- Lokasyon ve Organizasyon -->
         <div class="mb-3">
             <label for="id_location">Lokasyon:</label>
-            <input type="text" id="id_location" name="location" class="form-control" placeholder="Lokasyon Giriniz">
+
+            <select id="id_location" name="location" class="form-select">
+                <option value="">Lokasyon Seçin</option>
+
+                {% for location in locations %}
+                    <option value="{{ location.id }}">{{location.location }}</option>
+                {% endfor %}
+            </select>
         </div>
+
+
         <div class="mb-3">
             <label for="id_organization">Organizasyon:</label>
-            <input type="text" id="id_organization" name="organization" class="form-control" placeholder="Organizasyon Adı">
+
+            <select id="id_organization" name="organization" class="form-select">
+                <option value="">Organizasyon Seçin</option>
+
+                {% for organization in organizations %}
+                    <option value="{{ organization.id }}">{{ organization.organization }}</option>
+                {% endfor %}
+            </select>
         </div>
 
         <!-- Görev Seçimi -->
@@ -61,7 +77,11 @@
         <!-- Statik Sorular -->
         <div class="mb-3">
             <label for="id_work_type">Çalışma Türü:</label>
-            <input type="text" id="id_work_type" name="work_type" class="form-control" placeholder="Çalışma Türünü Giriniz">
+            <select id="id_work_type" name="work_type" class="form-select">
+                <option value="">Çalışma Türü Seçin</option>
+                <option value="Tam Zamanlı">Tam Zamanlı</option>
+                <option value="Yarı Zamanlı">Yarı Zamanlı</option>
+            </select>
         </div>
         <div class="mb-3">
             <label for="id_description">Açıklama:</label>
@@ -79,9 +99,19 @@
             <label for="id_experience_years">Deneyim Yılı:</label>
             <input type="number" id="id_experience_years" name="desired_experience_years" class="form-control" placeholder="Deneyim Yılını Giriniz">
         </div>
+
+        <!-- Eğitim Durumu -->
         <div class="mb-3">
-            <label for="id_education">Eğitim:</label>
-            <input type="text" id="id_education" name="required_education_level" class="form-control" placeholder="Eğitim Seviyesini Giriniz">
+            <label for="id_education">Eğitim Durumu:</label>
+            <select name="required_education_level" id="id_education" class="form-select">
+                <option value="">Seçiniz</option>
+                <option value="read_write">Okuma Yazma Belgesi</option>
+                <option value="primary">İlkokul</option>
+                <option value="middle">Ortaokul</option>
+                <option value="high">Lise</option>
+                <option value="university">Üniversite</option>
+                <option value="postgraduate">Yüksek Lisans ve Üzeri</option>
+            </select>
         </div>
         <div class="mb-3">
             <label for="id_special_requirements">Varsa Özel Nitelikler:</label>

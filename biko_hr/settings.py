@@ -47,9 +47,13 @@ INSTALLED_APPS = [
     "bootstrap4",
     "candidate",
     "director",
+    "emails",
+    "django_crontab",
 
 ]
-
+# CRONJOBS = [
+#     ('0 0 * * *', 'candidate.utils.send_interview_reminder')  # Run daily at midnight
+# ]
 MIDDLEWARE = [
     'django.middleware.security.SecurityMiddleware',
     'django.contrib.sessions.middleware.SessionMiddleware',
@@ -73,8 +77,10 @@ TEMPLATES = [
                  BASE_DIR / 'jobrequest/templates',
                  BASE_DIR / 'organization/templates',
                  BASE_DIR / 'candidate/templates',
+                 BASE_DIR / 'emails/templates',
         ],
         'APP_DIRS': True,
+
         'OPTIONS': {
             'context_processors': [
                 'django.template.context_processors.debug',
@@ -156,3 +162,11 @@ STATICFILES_DIRS = [
 AUTH_USER_MODEL = 'auth.User'
 
 LOGIN_URL = '/auth/log-in/'
+
+# # Email settings
+# EMAIL_BACKEND = 'django.core.mail.backends.smtp.EmailBackend'
+# EMAIL_HOST = 'smtp.gmail.com'  # Or your SMTP server
+# EMAIL_PORT = 587
+# EMAIL_USE_TLS = True
+# EMAIL_HOST_USER = 'your-email@gmail.com'  # Replace with your email
+# EMAIL_HOST_PASSWORD = 'your-app-password'  # Use app password for Gmail

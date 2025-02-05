@@ -1,7 +1,9 @@
 from django.shortcuts import render, redirect, get_object_or_404
+from django.utils import timezone
+
 from .forms import TaskRequestForm
 from .models import *
-from biko_hr.models import IncubationJob, Profile, Position
+from biko_hr.models import IncubationJob, Profile, Position, Application
 from .models import JobRequest
 from biko_hr.models import IncubationJob, Profile, Position, Candidate
 from django.contrib.auth.models import Group
@@ -130,10 +132,20 @@ def create_task_request(request):
         form = TaskRequestForm()
 
     positions = Position.objects.all()  # Ensure positions are passed to the template
-    return render(request, 'task_request_form.html', {'form': form, 'positions': positions})
+    organizations = Organization.objects.all()  # Ensure positions are passed to the template
+    locations = Location.objects.all()  # Ensure positions are passed to the template
+    return render(request, 'task_request_form.html', {'form': form, 'positions': positions, "locations": locations, "organizations": organizations})
+
+
+
 def task_request_detail(request, pk):
     task = get_object_or_404(JobRequest, pk=pk)  # Belirli bir talebi getir
-    assigned_candidates = task.candidates.all()  # İşe atanmış tüm adayları alın
+    # assigned_candidates = task.candidates.all()  # İşe atanmış tüm adayları alın
+    job_request = JobRequest.objects.filter(pk = pk).first()
+    application = IncubationJob.objects.filter(position=job_request.position_name)
+
+    assigned_candidates = Application.objects.filter(job=application)
+
     return render(request, 'task_request_detail.html', {'task': task, 'assigned_candidates': assigned_candidates})
 
 @login_required
@@ -149,7 +161,7 @@ def assign_candidates(request, job_request_id):
     if not user_profile or user_profile.Location != job_request.location:
         raise PermissionDenied("You do not have permission to assign candidates to this job request.")
 
-    all_candidates = Candidate.objects.all()  # All candidates
+    all_candidates = Candidate.objects.all()  # All candidates ##TODO: restrict this to the people that the hr manager who is authorized to his specific working field (e.g., Adana)
     assigned_candidates = job_request.candidates.all()  # Candidates already assigned to this job request
 
     if request.method == "POST":
@@ -158,7 +170,20 @@ def assign_candidates(request, job_request_id):
         selected_candidates_list = [int(c) for c in selected_candidates_list]  # Convert to integers: [2, 3, 32]
 
         job_request.candidates.set(selected_candidates_list)  # Assign selected candidates
+        for candidate in all_candidates:
+            old_application = Application.objects.filter(candidate=candidate).first()
+            resume = old_application.uploaded_resume if old_application else None
+
+            if resume:
+                application = IncubationJob.objects.create(position=job_request.position_name)
+                Application.objects.create(job=application, candidate=candidate, status="HR Assesment", application_date=timezone.now(), uploaded_resume=resume)
+            else:
+                application = IncubationJob.objects.create(position=job_request.position_name)
+                Application.objects.create(job=application, candidate=candidate, status="HR Assesment", application_date=timezone.now())
+
+
         return redirect("task_request_detail", pk=job_request.id)  # Redirect to the detail page
+
 
     return render(request, "assign_candidates.html", {
         "job_request": job_request,

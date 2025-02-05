@@ -1,77 +1,434 @@
-from django.shortcuts import render
-
-# Create your views here.
-from biko_hr.models import JobCategory
+from django.shortcuts import render, get_object_or_404, redirect
+from biko_hr.models import JobCategory, Application, Candidate, Position, Interview, Evaluation, IncubationJob, InterviewAttributes, IncubationEvaluation, Reference, IncubationAttributes
+from jobrequest.models import JobRequest
+from django.core.paginator import Paginator
+from django.contrib.auth.decorators import login_required
+from django.contrib import messages
+from django.contrib.auth.models import User
+from datetime import date, datetime, timedelta
+import json
+from biko_hr.models import Notification
+from .utils import send_interview_notification
 
 
 def get_candidate_pool(request):
-    category = JobCategory.objects.all()
+    # Get raw categories for the dropdown
+    raw_categories = JobCategory.objects.all()
+    
+    # Get categories with their related data for the cards
+    categories = JobCategory.objects.prefetch_related(
+        'position_set',
+        'position_set__incubationjob_set__application_set__candidate'
+    ).all()
+    
+    # Structure the data for the cards
+    category_data = []
+    for category in categories:
+        applications = []
+        for position in category.position_set.all():
+            for job in position.incubationjob_set.all():
+                for application in job.application_set.all():
+                    applications.append({
+                        'candidate': application.candidate,
+                        'position': position.position,
+                        'job': job,
+                        'application_date': application.application_date,
+                        'status': application.status
+                    })
+        
+        category_data.append({
+            'id': category.id,
+            'name': category.category_name,
+            'applications': applications
+        })
 
-    return render(request, 'candidate_pool_dashboard.html', {"category":category})
-from django.shortcuts import render
+    return render(request, 'candidate_pool_dashboard.html', {
+        'raw_categories': raw_categories,  # For the dropdown
+        'categories': category_data       # For the cards
+    })
 
-def get_candidate_pool(request):
-    # Simulated example data
-    categories = [
-        {
-            "id": 1,
-            "category_name": "Operasyon ve Destek",
-            "persons": [
-                {"name": "Alice Smith", "position": "Backend Developer", "office": "New York", "avatar_url": "avatars/alice.jpg"},
-                {"name": "Bob Johnson", "position": "Frontend Developer", "office": "San Francisco", "avatar_url": "avatars/bob.jpg"},
-                {"name": "Charlie Davis", "position": "Full-Stack Developer", "office": "Austin", "avatar_url": "avatars/charlie.jpg"},
-                {"name": "Diana Lee", "position": "DevOps Engineer", "office": "Seattle", "avatar_url": "avatars/diana.jpg"},
-                {"name": "Evan Garcia", "position": "QA Engineer", "office": "Boston", "avatar_url": "avatars/evan.jpg"},
-                {"name": "Fiona Brown", "position": "Software Architect", "office": "Chicago", "avatar_url": "avatars/fiona.jpg"},
-                {"name": "George White", "position": "Mobile Developer", "office": "Miami", "avatar_url": "avatars/george.jpg"},
-            ],
-        },
-        {
-            "id": 2,
-            "category_name": "Gıda ve Yemek Hizmetleri",
-            "persons": [
-                {"name": "Hannah Green", "position": "Data Scientist", "office": "New York", "avatar_url": "avatars/hannah.jpg"},
-                {"name": "Ian Black", "position": "Machine Learning Engineer", "office": "San Francisco", "avatar_url": "avatars/ian.jpg"},
-                {"name": "Jack Brown", "position": "AI Researcher", "office": "Austin", "avatar_url": "avatars/jack.jpg"},
-                {"name": "Karen Gray", "position": "Data Analyst", "office": "Seattle", "avatar_url": "avatars/karen.jpg"},
-                {"name": "Liam Carter", "position": "Big Data Engineer", "office": "Boston", "avatar_url": "avatars/liam.jpg"},
-                {"name": "Mia Lopez", "position": "Statistician", "office": "Chicago", "avatar_url": "avatars/mia.jpg"},
-                {"name": "Nathan Scott", "position": "Data Engineer", "office": "Miami", "avatar_url": "avatars/nathan.jpg"},
-            ],
-        },
-        {
-            "id": 3,
-            "category_name": "Lojistik ve Depo",
-            "persons": [
-                {"name": "Olivia Morgan", "position": "HR Specialist", "office": "New York", "avatar_url": "avatars/olivia.jpg"},
-                {"name": "Paul Parker", "position": "Recruiter", "office": "San Francisco", "avatar_url": "avatars/paul.jpg"},
-                {"name": "Quinn Walker", "position": "HR Manager", "office": "Austin", "avatar_url": "avatars/quinn.jpg"},
-                {"name": "Rachel Hill", "position": "Talent Acquisition", "office": "Seattle", "avatar_url": "avatars/rachel.jpg"},
-                {"name": "Samuel Young", "position": "Training Coordinator", "office": "Boston", "avatar_url": "avatars/samuel.jpg"},
-                {"name": "Tina Bell", "position": "Compensation Analyst", "office": "Chicago", "avatar_url": "avatars/tina.jpg"},
-                {"name": "Ursula King", "position": "HR Consultant", "office": "Miami", "avatar_url": "avatars/ursula.jpg"},
-            ],
-        },
-        {
-            "id": 4,
-            "category_name": "Kafe ve Servis Hizmetleri",
-            "persons": [
-                {"name": "Olivia Morgan", "position": "HR Specialist", "office": "New York",
-                 "avatar_url": "avatars/olivia.jpg"},
-                {"name": "Paul Parker", "position": "Recruiter", "office": "San Francisco",
-                 "avatar_url": "avatars/paul.jpg"},
-                {"name": "Quinn Walker", "position": "HR Manager", "office": "Austin",
-                 "avatar_url": "avatars/quinn.jpg"},
-                {"name": "Rachel Hill", "position": "Talent Acquisition", "office": "Seattle",
-                 "avatar_url": "avatars/rachel.jpg"},
-                {"name": "Samuel Young", "position": "Training Coordinator", "office": "Boston",
-                 "avatar_url": "avatars/samuel.jpg"},
-                {"name": "Tina Bell", "position": "Compensation Analyst", "office": "Chicago",
-                 "avatar_url": "avatars/tina.jpg"},
-                {"name": "Ursula King", "position": "HR Consultant", "office": "Miami",
-                 "avatar_url": "avatars/ursula.jpg"},
-            ],
-        },
-    ]
 
-    return render(request, "candidate_pool_dashboard.html", {"category": categories})
+# def get_candidate_pool(request):
+#     # Simulated example data
+#     categories = [
+#         {
+#             "id": 1,
+#             "category_name": "Operasyon ve Destek",
+#             "persons": [
+#                 {"name": "Alice Smith", "position": "Backend Developer", "office": "New York", "avatar_url": "avatars/alice.jpg"},
+#                 {"name": "Bob Johnson", "position": "Frontend Developer", "office": "San Francisco", "avatar_url": "avatars/bob.jpg"},
+#                 {"name": "Charlie Davis", "position": "Full-Stack Developer", "office": "Austin", "avatar_url": "avatars/charlie.jpg"},
+#                 {"name": "Diana Lee", "position": "DevOps Engineer", "office": "Seattle", "avatar_url": "avatars/diana.jpg"},
+#                 {"name": "Evan Garcia", "position": "QA Engineer", "office": "Boston", "avatar_url": "avatars/evan.jpg"},
+#                 {"name": "Fiona Brown", "position": "Software Architect", "office": "Chicago", "avatar_url": "avatars/fiona.jpg"},
+#                 {"name": "George White", "position": "Mobile Developer", "office": "Miami", "avatar_url": "avatars/george.jpg"},
+#             ],
+#         },
+#         {
+#             "id": 2,
+#             "category_name": "Gıda ve Yemek Hizmetleri",
+#             "persons": [
+#                 {"name": "Hannah Green", "position": "Data Scientist", "office": "New York", "avatar_url": "avatars/hannah.jpg"},
+#                 {"name": "Ian Black", "position": "Machine Learning Engineer", "office": "San Francisco", "avatar_url": "avatars/ian.jpg"},
+#                 {"name": "Jack Brown", "position": "AI Researcher", "office": "Austin", "avatar_url": "avatars/jack.jpg"},
+#                 {"name": "Karen Gray", "position": "Data Analyst", "office": "Seattle", "avatar_url": "avatars/karen.jpg"},
+#                 {"name": "Liam Carter", "position": "Big Data Engineer", "office": "Boston", "avatar_url": "avatars/liam.jpg"},
+#                 {"name": "Mia Lopez", "position": "Statistician", "office": "Chicago", "avatar_url": "avatars/mia.jpg"},
+#                 {"name": "Nathan Scott", "position": "Data Engineer", "office": "Miami", "avatar_url": "avatars/nathan.jpg"},
+#             ],
+#         },
+#         {
+#             "id": 3,
+#             "category_name": "Lojistik ve Depo",
+#             "persons": [
+#                 {"name": "Olivia Morgan", "position": "HR Specialist", "office": "New York", "avatar_url": "avatars/olivia.jpg"},
+#                 {"name": "Paul Parker", "position": "Recruiter", "office": "San Francisco", "avatar_url": "avatars/paul.jpg"},
+#                 {"name": "Quinn Walker", "position": "HR Manager", "office": "Austin", "avatar_url": "avatars/quinn.jpg"},
+#                 {"name": "Rachel Hill", "position": "Talent Acquisition", "office": "Seattle", "avatar_url": "avatars/rachel.jpg"},
+#                 {"name": "Samuel Young", "position": "Training Coordinator", "office": "Boston", "avatar_url": "avatars/samuel.jpg"},
+#                 {"name": "Tina Bell", "position": "Compensation Analyst", "office": "Chicago", "avatar_url": "avatars/tina.jpg"},
+#                 {"name": "Ursula King", "position": "HR Consultant", "office": "Miami", "avatar_url": "avatars/ursula.jpg"},
+#             ],
+#         },
+#         {
+#             "id": 4,
+#             "category_name": "Kafe ve Servis Hizmetleri",
+#             "persons": [
+#                 {"name": "Olivia Morgan", "position": "HR Specialist", "office": "New York",
+#                  "avatar_url": "avatars/olivia.jpg"},
+#                 {"name": "Paul Parker", "position": "Recruiter", "office": "San Francisco",
+#                  "avatar_url": "avatars/paul.jpg"},
+#                 {"name": "Quinn Walker", "position": "HR Manager", "office": "Austin",
+#                  "avatar_url": "avatars/quinn.jpg"},
+#                 {"name": "Rachel Hill", "position": "Talent Acquisition", "office": "Seattle",
+#                  "avatar_url": "avatars/rachel.jpg"},
+#                 {"name": "Samuel Young", "position": "Training Coordinator", "office": "Boston",
+#                  "avatar_url": "avatars/samuel.jpg"},
+#                 {"name": "Tina Bell", "position": "Compensation Analyst", "office": "Chicago",
+#                  "avatar_url": "avatars/tina.jpg"},
+#                 {"name": "Ursula King", "position": "HR Consultant", "office": "Miami",
+#                  "avatar_url": "avatars/ursula.jpg"},
+#             ],
+#         },
+#     ]
+#
+#     return render(request, "candidate_pool_dashboard.html", {"category": categories})
+
+
+@login_required
+def candidate_profile(request, candidate_id):
+    candidate = get_object_or_404(
+        Candidate.objects.prefetch_related('desired_locations'),
+        id=candidate_id
+    )
+    
+    # Get all related data
+    applications = Application.objects.filter(
+        candidate=candidate
+    ).select_related(
+        'job__position',
+        'job__organization'
+    ).order_by('-application_date')
+    
+    interviews = Interview.objects.filter(
+        candidate=candidate
+    ).select_related(
+        'evaluator',
+        'manager',
+        'application__job'
+    ).order_by('-date')
+    
+    evaluations = Evaluation.objects.filter(
+        candidate=candidate
+    ).select_related('job', 'evaluator')
+    
+    incubation_evaluations = IncubationEvaluation.objects.filter(
+        candidate=candidate
+    ).select_related('job', 'evaluator')
+    
+    references = Reference.objects.filter(candidate=candidate)
+    
+    return render(request, 'candidate_profile.html', {
+        'candidate': candidate,
+        'applications': applications,
+        'interviews': interviews,
+        'evaluations': evaluations,
+        'incubation_evaluations': incubation_evaluations,
+        'references': references,
+    })
+
+def category_detail(request, category_id):
+    category = get_object_or_404(JobCategory, id=category_id)
+    
+    # Get all applications for this category
+    applications = []
+    for position in category.position_set.all():
+        for job in position.incubationjob_set.all():
+            for application in job.application_set.all():
+                applications.append({
+                    'candidate': application.candidate,
+                    'position': position.position,
+                    'job': job,
+                    'application_date': application.application_date,
+                    'status': application.status
+                })
+    
+    # Add pagination
+    paginator = Paginator(applications, 20)  # Show 20 applications per page
+    page_number = request.GET.get('page')
+    page_obj = paginator.get_page(page_number)
+    
+    return render(request, 'candidate_category_detail.html', {
+        'category': category,
+        'page_obj': page_obj,
+    })
+
+
+
+@login_required
+def assign_job(request, candidate_id):
+    if request.method == 'POST':
+        job_request = get_object_or_404(JobRequest, id=request.POST['job_request'])
+        
+        # Create or get IncubationJob
+        incubation_job, created = IncubationJob.objects.get_or_create(
+            position=job_request.position_name,
+            organization=job_request.organization,
+            defaults={
+                'title': f"{job_request.position_name} at {job_request.organization}",
+                'description': job_request.description or '',
+                'required_skills': job_request.special_requirements or '',
+                'status': 'Active',
+                'preferred_locations': job_request.location.location if job_request.location else '',
+                'department': job_request.organization.organization
+            }
+        )
+        
+        # Create application
+        application = Application.objects.create(
+            candidate_id=candidate_id,
+            job=incubation_job,
+            application_date=date.today(),
+            status='Pending'
+        )
+        
+        if 'resume' in request.FILES:
+            application.uploaded_resume = request.FILES['resume']
+            application.save()
+        
+        messages.success(request, 'Candidate assigned to job successfully')
+    return redirect('candidate_profile', candidate_id=candidate_id)
+
+
+@login_required
+def add_hr_note(request, candidate_id):
+    if request.method == 'POST':
+        Interview.objects.create(
+            candidate_id=candidate_id,
+            application=None,  # No specific application for general notes
+            date=date.today(),
+            general_assessment=request.POST['content'],
+            manager=request.user,  # Author of the note
+            evaluator=request.user,  # Same as manager for HR notes
+            evaluator_role='HR Note',
+            application_source='Internal Note',
+            work_hours_assessment='',
+            evaluation_scores='',
+            decision='Note'  # Indicates this is a note, not an interview
+        )
+        messages.success(request, 'Note added successfully')
+    return redirect('candidate_profile', candidate_id=candidate_id)
+
+
+@login_required
+def schedule_interview(request, candidate_id):
+    if request.method == 'POST':
+        application = get_object_or_404(Application, id=request.POST['application'])
+        evaluator = get_object_or_404(User, id=request.POST['evaluator'])
+
+        interview = Interview.objects.create(
+            application=application,
+            candidate_id=candidate_id,
+            date=request.POST['date'],
+            evaluator=evaluator,
+            evaluator_role=request.POST['evaluator_role'],
+            manager=request.user,
+            application_source='Internal',
+            general_assessment='',
+            work_hours_assessment='',
+            evaluation_scores='',
+            decision='Pending'
+        )
+
+        # Create notification for evaluator
+        Notification.objects.create(
+            user=evaluator,
+            message=f'You have been assigned to interview {application.candidate.name} {application.candidate.surname} for {application.job.position.position} position on {interview.date}',
+            status='Unread'
+        )
+
+        application.status = 'Interviewing'
+        application.save()
+
+        # Send email notifications
+        try:
+            send_interview_notification(interview)
+            messages.success(request, 'Interview scheduled and notifications sent successfully')
+        except Exception as e:
+            messages.warning(request, 'Interview scheduled but there was an error sending notifications')
+            
+        return redirect('candidate_profile', candidate_id=candidate_id)
+
+
+## CANDIDATE EVALUATION
+@login_required
+def candidate_evaluation(request, application_id):
+    application = get_object_or_404(
+        Application.objects.select_related(
+            'candidate', 
+            'job'
+        ),
+        id=application_id
+    )
+    
+    # Get all interviews for this application
+    interviews = Interview.objects.filter(
+        application=application
+    ).select_related('evaluator')
+    
+    if request.method == 'POST':
+        # Calculate average scores from interviews
+        interview_scores = []
+        for interview in interviews:
+            if interview.evaluation_scores:
+                scores = json.loads(interview.evaluation_scores)
+                interview_scores.append({
+                    'problem_solving': int(scores.get('problem_solving', 0)),
+                    'technical_skills': int(scores.get('technical_skills', 0))
+                })
+        
+        avg_problem_solving = sum(s['problem_solving'] for s in interview_scores) / len(interview_scores)
+        avg_technical_skills = sum(s['technical_skills'] for s in interview_scores) / len(interview_scores)
+        
+        # Create final evaluation
+        evaluation = Evaluation.objects.create(
+            candidate=application.candidate,
+            job=application.job,
+            interview_decision=request.POST.get('decision'),
+            evaluation_scores=json.dumps({
+                'avg_problem_solving': avg_problem_solving,
+                'avg_technical_skills': avg_technical_skills
+            }),
+            evaluator=request.user,
+            decision=request.POST.get('decision')
+        )
+        
+        # If approved, create incubation period
+        if request.POST.get('decision') == 'Approved':
+            start_date = datetime.strptime(request.POST.get('start_date'), '%Y-%m-%d').date()
+            IncubationEvaluation.objects.create(
+                candidate=application.candidate,
+                job=application.job,
+                start_date=start_date,
+                end_date=start_date + timedelta(days=90),  # 3 months
+                evaluator=request.user,
+                manager_decision='Pending'
+            )
+            application.status = 'Incubation'
+        else:
+            application.status = 'Rejected'
+        
+        application.save()
+        messages.success(request, 'Evaluation completed successfully')
+        return redirect('candidate_profile', candidate_id=application.candidate.id)
+    
+    return render(request, 'evaluation_form.html', {
+        'application': application,
+        'interviews': interviews
+    })
+
+@login_required
+def incubation_evaluation(request, incubation_id):
+    incubation = get_object_or_404(
+        IncubationEvaluation.objects.select_related(
+            'candidate',
+            'job'
+        ),
+        id=incubation_id
+    )
+    
+    if request.method == 'POST':
+        # Create incubation attributes
+        attributes = IncubationAttributes.objects.create(
+            candidate=incubation.candidate,
+            team_work=request.POST.get('team_work'),
+            rule_compliance=request.POST.get('rule_compliance'),
+            learning_capacity=request.POST.get('learning_capacity'),
+            willingness_to_learn=request.POST.get('willingness_to_learn'),
+            stress_handling=request.POST.get('stress_handling'),
+            tool_usage=request.POST.get('tool_usage'),
+            task_completion=request.POST.get('task_completion'),
+            interpersonal_skills=request.POST.get('interpersonal_skills'),
+            leadership=request.POST.get('leadership'),
+            planning=request.POST.get('planning'),
+            problem_solving=request.POST.get('problem_solving')
+        )
+        
+        # Update incubation evaluation
+        incubation.incubation_attributes_id = str(attributes.id)
+        incubation.evaluation_scores = json.dumps({
+            'team_work': attributes.team_work,
+            'rule_compliance': attributes.rule_compliance,
+            'learning_capacity': attributes.learning_capacity,
+            'willingness_to_learn': attributes.willingness_to_learn,
+            'stress_handling': attributes.stress_handling,
+            'tool_usage': attributes.tool_usage,
+            'task_completion': attributes.task_completion,
+            'interpersonal_skills': attributes.interpersonal_skills,
+            'leadership': attributes.leadership,
+            'planning': attributes.planning,
+            'problem_solving': attributes.problem_solving
+        })
+        incubation.manager_decision = request.POST.get('decision')
+        incubation.decision_explanation = request.POST.get('explanation')
+        incubation.save()
+        
+        # Update application status
+        application = Application.objects.get(
+            candidate=incubation.candidate,
+            job=incubation.job
+        )
+        application.status = 'Completed' if request.POST.get('decision') == 'Approved' else 'Rejected'
+        application.save()
+        
+        messages.success(request, 'Incubation evaluation completed successfully')
+        return redirect('candidate_profile', candidate_id=incubation.candidate.id)
+    
+    return render(request, 'incubation_evaluation_form.html', {
+        'incubation': incubation
+    })
+
+@login_required
+def add_reference(request, candidate_id):
+    candidate = get_object_or_404(Candidate, id=candidate_id)
+    
+    if request.method == 'POST':
+        Reference.objects.create(
+            candidate=candidate,
+            reference_name=request.POST.get('reference_name'),
+            reference_role=request.POST.get('reference_role'),
+            reference_company=request.POST.get('reference_company'),
+            reference_phone=request.POST.get('reference_phone'),
+            work_duration=request.POST.get('work_duration'),
+            duties=request.POST.get('duties'),
+            strengths=request.POST.get('strengths'),
+            weaknesses=request.POST.get('weaknesses'),
+            reason_for_leaving=request.POST.get('reason_for_leaving'),
+            would_work_again=request.POST.get('would_work_again') == 'true'
+        )
+        messages.success(request, 'Reference added successfully')
+        return redirect('candidate_profile', candidate_id=candidate_id)
+    
+    return render(request, 'add_reference.html', {
+        'candidate': candidate
+    })

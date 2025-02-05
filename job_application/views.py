@@ -1,6 +1,8 @@
 from django.core.paginator import Paginator
 from django.shortcuts import render, get_object_or_404, redirect
 from django import forms
+from django.utils import timezone
+
 from jobrequest.models import JobRequest
 from .forms import ApplicationForm, CandidateForm
 from django.db.models import F, ExpressionWrapper, fields
@@ -76,25 +78,37 @@ def job_application_form(request):
         print("POST Data:", request.POST)  # Debugging
         print("FILES Data:", request.FILES)  # Debugging
         if candidate_form.is_valid():
-            candidate = candidate_form.save()  # Save the candidate
+            pass
         else:
             print("Candidate Form Errors:", candidate_form.errors)  # Print errors here
             raise forms.ValidationError("Aday bilgileri geçersiz.")
         # Formlar geçerliyse işlemi yapıyoruz
         if candidate_form.is_valid() and application_form.is_valid():
             # Candidate modelini kaydediyoruz
-            candidate = candidate_form.save()
-            print("candidate",candidate)
+            candidate = candidate_form.save(commit=False)  # Önce kaydetme işlemi durduruluyor
+            candidate.save() # Adayı kaydediyoruz (ancak dönüş değerini değiştirmiyoruz!)
+            print("Candidate saved:", candidate)  # Debugging için
+
+            # Kullanıcının seçtiği birden fazla lokasyonu alıyoruz
+            selected_location_ids = request.POST.getlist('desired_locations')
+            if selected_location_ids:
+                selected_locations = Location.objects.filter(id__in=selected_location_ids)
+                candidate.desired_locations.set(selected_locations)  # ManyToMany ilişkilendirme
+            else:
+                # Handle the case when no location is selected (e.g., don't set anything or set default)
+                candidate.desired_locations.clear()  # Clear existing locations if none are selected
+
             job_id = request.POST.get('application_job')
             print(f"Selected job ID: {job_id}")
 
             position = get_object_or_404(JobRequest, id=job_id)  # Ensure the JobRequest exists
-            incubation_job, created = IncubationJob.objects.get_or_create(position=position.position_name)
+            incubation_job = IncubationJob.objects.create(position=position.position_name)
 
             # Application modelini kaydediyoruz (commit=False çünkü ilişkilendirme yapmamız gerekiyor)
             application = application_form.save(commit=False)
             application.candidate = candidate  # Candidate ile ilişkilendiriyoruz
             application.job = incubation_job  # Associate the job with the application
+            application.application_date = timezone.now()  # Başvuru tarihini kaydediyoruz
             application.save()  # Application kaydını yapıyoruz
             application_form.save_m2m()  # Many-to-many ilişkilerini kaydediyoruz
 
@@ -116,8 +130,8 @@ def job_application_form(request):
     application_form = ApplicationForm()
 
     return render(request, 'job_application_form.html', {
-        'candidate_form': candidate_form,
-        'application_form': application_form,
+        'candidate_form': CandidateForm(),
+        'application_form': ApplicationForm(),
         'positions': JobRequest.objects.all(),
         'locations': Location.objects.all(),
     })

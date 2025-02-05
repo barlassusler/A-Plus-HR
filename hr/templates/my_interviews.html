@@ -1,0 +1,96 @@
+{% extends 'home.html' %}
+{% load bootstrap4 %}
+
+{% block content %}
+<div class="container-fluid">
+    <!-- Pending Interviews -->
+    <div class="card shadow mb-4">
+        <div class="card-header py-3">
+            <h6 class="text-primary fw-bold m-0">Pending Interviews</h6>
+        </div>
+        <div class="card-body">
+            <div class="table-responsive">
+                <table class="table">
+                    <thead>
+                        <tr>
+                            <th>Candidate</th>
+                            <th>Position</th>
+                            <th>Date</th>
+                            <th>Role</th>
+                            <th>Action</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        {% for interview in pending_interviews %}
+                        <tr>
+                            <td>{{ interview.candidate.name }} {{ interview.candidate.surname }}</td>
+                            <td>{{ interview.application.job.position.position }}</td>
+                            <td>{{ interview.date }}</td>
+                            <td>{{ interview.evaluator_role }}</td>
+                            <td>
+                                <a href="{% url 'interview_assessment' interview.id %}" 
+                                   class="btn btn-primary btn-sm">
+                                    Fill Assessment
+                                </a>
+                            </td>
+                        </tr>
+                        {% empty %}
+                        <tr>
+                            <td colspan="5">No pending interviews</td>
+                        </tr>
+                        {% endfor %}
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </div>
+
+    <!-- Completed Interviews -->
+    <div class="card shadow mb-4">
+        <div class="card-header py-3">
+            <h6 class="text-primary fw-bold m-0">Completed Interviews</h6>
+        </div>
+        <div class="card-body">
+            <div class="table-responsive">
+                <table class="table">
+                    <thead>
+                        <tr>
+                            <th>Candidate</th>
+                            <th>Position</th>
+                            <th>Date</th>
+                            <th>Decision</th>
+                            <th>Action</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        {% for interview in completed_interviews %}
+                        <tr>
+                            <td>{{ interview.candidate.name }} {{ interview.candidate.surname }}</td>
+                            <td>{{ interview.application.job.position.position }}</td>
+                            <td>{{ interview.date }}</td>
+                            <td>
+                                <span class="badge {% if interview.decision == 'Passed' %}badge-success
+                                               {% elif interview.decision == 'Failed' %}badge-danger
+                                               {% else %}badge-warning{% endif %}">
+                                    {{ interview.decision }}
+                                </span>
+                            </td>
+                            <td>
+                                <a href="{% url 'interview_assessment' interview.id %}" 
+                                   class="btn btn-info btn-sm">
+                                    View Assessment
+                                </a>
+                            </td>
+                        </tr>
+                        {% empty %}
+                        <tr>
+                            <td colspan="5">No completed interviews</td>
+                        </tr>
+                        {% endfor %}
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %} 

@@ -37,10 +37,10 @@ class Position(models.Model):
 class Candidate(models.Model):
     name = models.CharField(max_length=100)
     surname = models.CharField(max_length=100)
-    email = models.EmailField()
+    email = models.EmailField(null=True, blank=True)
     phone = models.CharField(max_length=15)
-    experience = models.TextField()
-    skills = models.TextField()
+    experience = models.TextField(null=True, blank=True)
+    skills = models.TextField(null=True, blank=True)
     birth_date = models.DateField()
     residence_city = models.CharField(max_length=100)
     residence_district = models.CharField(max_length=100)
@@ -53,9 +53,9 @@ class Candidate(models.Model):
     #         ('postgraduate', 'Yüksek Lisans ve Üzeri'),
     #     ]
     # )
-    school_name = models.CharField(max_length=150)
-    department = models.CharField(max_length=100)
-    desired_locations = models.ManyToManyField('Location')
+    school_name = models.CharField(max_length=150, null=True, blank=True)
+    department = models.CharField(max_length=100, null=True, blank=True)
+    desired_locations = models.ManyToManyField('Location', null=True, blank=True)
 
 class IncubationJob(models.Model):
     position = models.ForeignKey(Position, on_delete=models.CASCADE, default=None,blank=True, null=True)
@@ -74,7 +74,7 @@ class Application(models.Model):
     job = models.ForeignKey(IncubationJob, on_delete=models.CASCADE) # in order to terminate or success the application after incubation period. Also shows the applied job.
     application_date = models.DateField()
     status = models.CharField(max_length=50, default="Pending")
-    uploaded_resume = models.FileField(upload_to='resumes/')
+    uploaded_resume = models.FileField(upload_to='resumes/', null=True, blank=True)
 
 class Interview(models.Model):
     application = models.ForeignKey(Application, on_delete=models.CASCADE)

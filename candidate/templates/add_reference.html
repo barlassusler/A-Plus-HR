@@ -1,0 +1,69 @@
+{% extends 'home.html' %}
+{% load bootstrap4 %}
+
+{% block content %}
+<div class="container-fluid">
+    <div class="card shadow mb-4">
+        <div class="card-header py-3">
+            <h6 class="text-primary fw-bold m-0">Add Reference for {{ candidate.name }} {{ candidate.surname }}</h6>
+        </div>
+        <div class="card-body">
+            <form method="post">
+                {% csrf_token %}
+                <div class="row">
+                    <div class="col-md-6">
+                        <div class="form-group">
+                            <label>Reference Name</label>
+                            <input type="text" name="reference_name" class="form-control" required>
+                        </div>
+                        <div class="form-group">
+                            <label>Role</label>
+                            <input type="text" name="reference_role" class="form-control" required>
+                        </div>
+                        <div class="form-group">
+                            <label>Company</label>
+                            <input type="text" name="reference_company" class="form-control" required>
+                        </div>
+                        <div class="form-group">
+                            <label>Phone</label>
+                            <input type="tel" name="reference_phone" class="form-control" required>
+                        </div>
+                        <div class="form-group">
+                            <label>Work Duration</label>
+                            <input type="text" name="work_duration" class="form-control" required>
+                        </div>
+                    </div>
+                    <div class="col-md-6">
+                        <div class="form-group">
+                            <label>Duties</label>
+                            <textarea name="duties" class="form-control" rows="2" required></textarea>
+                        </div>
+                        <div class="form-group">
+                            <label>Strengths</label>
+                            <textarea name="strengths" class="form-control" rows="2" required></textarea>
+                        </div>
+                        <div class="form-group">
+                            <label>Areas for Improvement</label>
+                            <textarea name="weaknesses" class="form-control" rows="2" required></textarea>
+                        </div>
+                        <div class="form-group">
+                            <label>Reason for Leaving</label>
+                            <textarea name="reason_for_leaving" class="form-control" rows="2" required></textarea>
+                        </div>
+                        <div class="form-group">
+                            <label>Would Work with Again?</label>
+                            <select name="would_work_again" class="form-control" required>
+                                <option value="true">Yes</option>
+                                <option value="false">No</option>
+                            </select>
+                        </div>
+                    </div>
+                </div>
+                <div class="text-right">
+                    <button type="submit" class="btn btn-primary">Add Reference</button>
+                </div>
+            </form>
+        </div>
+    </div>
+</div>
+{% endblock %}

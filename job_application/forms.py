@@ -29,6 +29,7 @@ class CandidateForm(forms.ModelForm):
     desired_locations = forms.ModelMultipleChoiceField(
         queryset=Location.objects.all(),
         widget=forms.CheckboxSelectMultiple,
+        required=False,  # Make it optional
         label="Çalışmak istediğiniz lokasyonlar"
     )
 
@@ -53,35 +54,18 @@ class ApplicationForm(forms.ModelForm):
 
     class Meta:
         model = Application
-        fields = ['application_date','uploaded_resume']
+        fields = ['application_date', 'uploaded_resume']
 
     def __init__(self, *args, **kwargs):
         super().__init__(*args, **kwargs)
         self.fields['application_date'].widget = forms.DateInput(attrs={'type': 'date'})
 
     def save(self, commit=True):
-        # Application objesini oluşturuyoruz
+        # Just handle the application object normally
         instance = super().save(commit=False)
-
-        # # Eğer Candidate yoksa, onu oluşturuyoruz
-        # candidate = self.initial.get('candidate')
-        # if candidate:
-        #     instance.candidate = candidate
-        # else:
-        #     # If no candidate is provided, raise an error
-        #     raise forms.ValidationError("No candidate associated with this application.")
-
-        if not instance.candidate:
-            candidate_form = CandidateForm(self.data)
-            if candidate_form.is_valid():
-                candidate = candidate_form.save()  # Yeni Candidate kaydediyoruz
-                instance.candidate = candidate
-            else:
-                raise forms.ValidationError("Aday bilgileri geçersiz.")
-
-        # Candidate ile ilişkilendirilmiş Application kaydını yapıyoruz
+        
         if commit:
-            instance.save()  # Application'ı kaydediyoruz
-            self.save_m2m()  # Many-to-Many alanları kaydediyoruz
-
+            instance.save()
+            self.save_m2m()
+            
         return instance

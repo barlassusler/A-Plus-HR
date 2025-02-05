@@ -2,216 +2,364 @@
 {% load bootstrap4 %}
 {% load static %}
 {% block content %}
-<head>
-    <meta charset="utf-8" />
-    <meta name="viewport" content="width=device-width, initial-scale=1.0, shrink-to-fit=no" />
-    <title>Profile - Aplus HR</title>
-</head>
+{% load candidate_filters %}
 
-<body id="page-top">
-    <div id="wrapper">
-        <div id="content-wrapper" class="d-flex flex-column">
-            <div id="content">
-                <div class="container-fluid">
-                    <h3 class="text-dark mb-4">{{ user.get_full_name }}'s Profile</h3>
-                    <div class="row mb-3">
-                        <!-- Assign to a Job -->
-                        <div class="col-lg-4">
-                            <div class="card mb-3">
-                                <div class="card-body text-center shadow"><img class="rounded-circle mb-3 mt-4" src="{{ user.profile_picture.url }}" alt="Profile Picture" width="160" height="160" />
-                                    <div class="mb-3"><button class="btn btn-primary btn-sm" type="button">Change Photo</button></div>
-                                </div>
-                            </div>
-                            <div class="card shadow mb-4">
-                                <div class="card-header py-3">
-                                    <h6 class="text-primary fw-bold m-0">Projects</h6>
-                                </div>
-                                <div class="card-body">
-                                    <h4 class="small fw-bold">Server migration<span class="float-end">20%</span></h4>
-                                    <div class="progress progress-sm mb-3">
-                                        <div class="progress-bar bg-danger" aria-valuenow="20" aria-valuemin="0" aria-valuemax="100" style="width: 20%;"><span class="visually-hidden">20%</span></div>
-                                    </div>
-                                    <h4 class="small fw-bold">Sales tracking<span class="float-end">40%</span></h4>
-                                    <div class="progress progress-sm mb-3">
-                                        <div class="progress-bar bg-warning" aria-valuenow="40" aria-valuemin="0" aria-valuemax="100" style="width: 40%;"><span class="visually-hidden">40%</span></div>
-                                    </div>
-                                    <h4 class="small fw-bold">Customer Database<span class="float-end">60%</span></h4>
-                                    <div class="progress progress-sm mb-3">
-                                        <div class="progress-bar bg-primary" aria-valuenow="60" aria-valuemin="0" aria-valuemax="100" style="width: 60%;"><span class="visually-hidden">60%</span></div>
-                                    </div>
-                                    <h4 class="small fw-bold">Payout Details<span class="float-end">80%</span></h4>
-                                    <div class="progress progress-sm mb-3">
-                                        <div class="progress-bar bg-info" aria-valuenow="80" aria-valuemin="0" aria-valuemax="100" style="width: 80%;"><span class="visually-hidden">80%</span></div>
-                                    </div>
-                                    <h4 class="small fw-bold">Account setup<span class="float-end">Complete!</span></h4>
-                                    <div class="progress progress-sm mb-3">
-                                        <div class="progress-bar bg-success" aria-valuenow="100" aria-valuemin="0" aria-valuemax="100" style="width: 100%;"><span class="visually-hidden">100%</span></div>
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
-                        <!-- Profile Picture -->
-                        <div class="col-lg-4">
-                            <div class="card mb-3">
-                                <div class="card-body text-center shadow"><img class="rounded-circle mb-3 mt-4" src="{{ user.profile_picture.url }}" alt="Profile Picture" width="160" height="160" />
-                                    <div class="mb-3"><button class="btn btn-primary btn-sm" type="button">Change Photo</button></div>
-                                </div>
-                            </div>
-                            <div class="card shadow mb-4">
-                                <div class="card-header py-3">
-                                    <h6 class="text-primary fw-bold m-0">Projects</h6>
-                                </div>
-                                <div class="card-body">
-                                    <h4 class="small fw-bold">Server migration<span class="float-end">20%</span></h4>
-                                    <div class="progress progress-sm mb-3">
-                                        <div class="progress-bar bg-danger" aria-valuenow="20" aria-valuemin="0" aria-valuemax="100" style="width: 20%;"><span class="visually-hidden">20%</span></div>
-                                    </div>
-                                    <h4 class="small fw-bold">Sales tracking<span class="float-end">40%</span></h4>
-                                    <div class="progress progress-sm mb-3">
-                                        <div class="progress-bar bg-warning" aria-valuenow="40" aria-valuemin="0" aria-valuemax="100" style="width: 40%;"><span class="visually-hidden">40%</span></div>
-                                    </div>
-                                    <h4 class="small fw-bold">Customer Database<span class="float-end">60%</span></h4>
-                                    <div class="progress progress-sm mb-3">
-                                        <div class="progress-bar bg-primary" aria-valuenow="60" aria-valuemin="0" aria-valuemax="100" style="width: 60%;"><span class="visually-hidden">60%</span></div>
-                                    </div>
-                                    <h4 class="small fw-bold">Payout Details<span class="float-end">80%</span></h4>
-                                    <div class="progress progress-sm mb-3">
-                                        <div class="progress-bar bg-info" aria-valuenow="80" aria-valuemin="0" aria-valuemax="100" style="width: 80%;"><span class="visually-hidden">80%</span></div>
-                                    </div>
-                                    <h4 class="small fw-bold">Account setup<span class="float-end">Complete!</span></h4>
-                                    <div class="progress progress-sm mb-3">
-                                        <div class="progress-bar bg-success" aria-valuenow="100" aria-valuemin="0" aria-valuemax="100" style="width: 100%;"><span class="visually-hidden">100%</span></div>
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
+<div class="container-fluid">
+    <div class="row mb-4">
+        <div class="col-md-8">
+            <h3 class="text-dark">{{ candidate.name }} {{ candidate.surname }}</h3>
+        </div>
+        <div class="col-md-4 text-right">
+            <button class="btn btn-primary" data-toggle="modal" data-target="#assignJobModal">
+                <i class="fas fa-plus"></i> Assign to Job
+            </button>
+        </div>
+    </div>
 
-                        <!-- Profile Details -->
-                        <div class="col-lg-8">
-                            <div class="card shadow mb-3">
-                                <div class="card-header py-3">
-                                    <h6 class="text-primary fw-bold m-0">Profile Details</h6>
-                                </div>
-                                <div class="card-body">
-                                    <form>
-                                        <div class="mb-3">
-                                            <label class="form-label" for="name"><strong>Name</strong></label>
-                                            <input class="form-control" type="text" id="name" value="{{ user.get_full_name }}" readonly>
-                                        </div>
-                                        <div class="mb-3">
-                                            <label class="form-label" for="email"><strong>Email</strong></label>
-                                            <input class="form-control" type="email" id="email" value="{{ user.email }}" readonly>
-                                        </div>
-                                    </form>
-                                </div>
-                            </div>
-                        </div>
-
-                        <div class="col-lg-8">
-                            <div class="row mb-3 d-none">
-                                <div class="col">
-                                    <div class="card text-white bg-primary shadow">
-                                        <div class="card-body">
-                                            <div class="row mb-2">
-                                                <div class="col">
-                                                    <p class="m-0">Peformance</p>
-                                                    <p class="m-0"><strong>65.2%</strong></p>
-                                                </div>
-                                                <div class="col-auto"><i class="fas fa-rocket fa-2x"></i></div>
-                                            </div>
-                                            <p class="text-white-50 small m-0"><i class="fas fa-arrow-up"></i> 5% since last month</p>
-                                        </div>
-                                    </div>
-                                </div>
-                                <div class="col">
-                                    <div class="card text-white bg-success shadow">
-                                        <div class="card-body">
-                                            <div class="row mb-2">
-                                                <div class="col">
-                                                    <p class="m-0">Peformance</p>
-                                                    <p class="m-0"><strong>65.2%</strong></p>
-                                                </div>
-                                                <div class="col-auto"><i class="fas fa-rocket fa-2x"></i></div>
-                                            </div>
-                                            <p class="text-white-50 small m-0"><i class="fas fa-arrow-up"></i> 5% since last month</p>
-                                        </div>
-                                    </div>
-                                </div>
-                            </div>
-                            <div class="row">
-                                <div class="col">
-                                    <div class="card shadow mb-3">
-                                        <div class="card-header py-3">
-                                            <p class="text-primary m-0 fw-bold">User Settings</p>
-                                        </div>
-                                        <div class="card-body">
-                                            <form>
-                                                <div class="row">
-                                                    <div class="col">
-                                                        <div class="mb-3"><label class="form-label" for="username"><strong>Username</strong></label><input id="username" class="form-control" type="text" placeholder="user.name" name="username" /></div>
-                                                    </div>
-                                                    <div class="col">
-                                                        <div class="mb-3"><label class="form-label" for="email"><strong>Email Address</strong></label><input id="email" class="form-control" type="email" placeholder="user@example.com" name="email" /></div>
-                                                    </div>
-                                                </div>
-                                                <div class="row">
-                                                    <div class="col">
-                                                        <div class="mb-3"><label class="form-label" for="first_name"><strong>First Name</strong></label><input id="first_name" class="form-control" type="text" placeholder="John" name="first_name" /></div>
-                                                    </div>
-                                                    <div class="col">
-                                                        <div class="mb-3"><label class="form-label" for="last_name"><strong>Last Name</strong></label><input id="last_name" class="form-control" type="text" placeholder="Doe" name="last_name" /></div>
-                                                    </div>
-                                                </div>
-                                                <div class="mb-3"><button class="btn btn-primary btn-sm" type="submit">Save Settings</button></div>
-                                            </form>
-                                        </div>
-                                    </div>
-                                    <div class="card shadow">
-                                        <div class="card-header py-3">
-                                            <p class="text-primary m-0 fw-bold">Contact Settings</p>
-                                        </div>
-                                        <div class="card-body">
-                                            <form>
-                                                <div class="mb-3"><label class="form-label" for="address"><strong>Address</strong></label><input id="address" class="form-control" type="text" placeholder="Sunset Blvd, 38" name="address" /></div>
-                                                <div class="row">
-                                                    <div class="col">
-                                                        <div class="mb-3"><label class="form-label" for="city"><strong>City</strong></label><input id="city" class="form-control" type="text" placeholder="Los Angeles" name="city" /></div>
-                                                    </div>
-                                                    <div class="col">
-                                                        <div class="mb-3"><label class="form-label" for="country"><strong>Country</strong></label><input id="country" class="form-control" type="text" placeholder="USA" name="country" /></div>
-                                                    </div>
-                                                </div>
-                                                <div class="mb-3"><button class="btn btn-primary btn-sm" type="submit">Save Settings</button></div>
-                                            </form>
-                                        </div>
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
+    <div class="row">
+        <!-- Left Column - Basic Info -->
+        <div class="col-lg-4">
+            <div class="card shadow mb-4">
+                <div class="card-header py-3">
+                    <h6 class="text-primary fw-bold m-0">Basic Information</h6>
+                </div>
+                <div class="card-body">
+                    <div class="mb-3">
+                        <strong>Email:</strong> {{ candidate.email }}
                     </div>
-                    <!-- Forum Settings -->
-                    <div class="card shadow mb-5">
-                        <div class="card-header py-3">
-                            <p class="text-primary m-0 fw-bold">Forum Settings</p>
-                        </div>
-                        <div class="card-body">
-                            <div class="row">
-                                <div class="col-md-6">
-                                    <form>
-                                        <div class="mb-3"><label class="form-label" for="signature"><strong>Signature</strong><br /></label><textarea id="signature" class="form-control" rows="4" name="signature"></textarea></div>
-                                        <div class="mb-3">
-                                            <div class="form-check form-switch"><input id="formCheck-1" class="form-check-input" type="checkbox" /><label class="form-check-label" for="formCheck-1"><strong>Notify me about new replies</strong></label></div>
-                                        </div>
-                                        <div class="mb-3"><button class="btn btn-primary btn-sm" type="submit">Save Settings</button></div>
-                                    </form>
-                                </div>
-                            </div>
-                        </div>
+                    <div class="mb-3">
+                        <strong>Phone:</strong> {{ candidate.phone }}
+                    </div>
+                    <div class="mb-3">
+                        <strong>Location:</strong> {{ candidate.residence_city }}, {{ candidate.residence_district }}
+                    </div>
+                    <div class="mb-3">
+                        <strong>Education:</strong> 
+                        <p>{{ candidate.education_level }} - {{ candidate.school_name }}</p>
+                        <p>{{ candidate.department }}</p>
+                    </div>
+                    <div class="mb-3">
+                        <strong>Desired Locations:</strong>
+                        <ul class="list-unstyled">
+                            {% for location in candidate.desired_locations.all %}
+                                <li>{{ location.location }}</li>
+                            {% endfor %}
+                        </ul>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Skills and Experience -->
+            <div class="card shadow mb-4">
+                <div class="card-header py-3">
+                    <h6 class="text-primary fw-bold m-0">Skills & Experience</h6>
+                </div>
+                <div class="card-body">
+                    <div class="mb-3">
+                        <strong>Skills:</strong>
+                        <p>{{ candidate.skills|linebreaks }}</p>
+                    </div>
+                    <div class="mb-3">
+                        <strong>Experience:</strong>
+                        <p>{{ candidate.experience|linebreaks }}</p>
                     </div>
                 </div>
             </div>
         </div>
+
+        <!-- Middle Column - Application Status -->
+        <div class="col-lg-4">
+            <!-- Current Applications Card -->
+            <div class="card shadow mb-4">
+                <div class="card-header py-3">
+                    <h6 class="text-primary fw-bold m-0">Current Applications</h6>
+                </div>
+                <div class="card-body">
+                    {% for application in applications %}
+                    <div class="application-card mb-3 p-3 border rounded">
+                        <h6>{{ application.job.title }}</h6>
+                        <p class="mb-1">
+                            <strong>Position:</strong> {{ application.job.position.position }}
+                            at {{ application.job.organization.organization }}
+                        </p>
+                        <p class="mb-1">
+                            <strong>Status:</strong> 
+                            <span class="badge {% if application.status == 'Pending' %}bg-warning
+                                           {% elif application.status == 'Interviewing' %}bg-info
+                                           {% elif application.status == 'HR Assesment' %}bg-primary
+                                           {% elif application.status == 'Accepted' %}bg-success
+                                           {% elif application.status == 'Rejected' %}bg-danger
+                                           {% endif %}">
+                                {{ application.status }}
+                            </span>
+                        </p>
+                        <p class="mb-1"><small>Applied: {{ application.application_date }}</small></p>
+                        {% if application.uploaded_resume %}
+                            <a href="{{ application.uploaded_resume.url }}" class="btn btn-sm btn-outline-primary">
+                                <i class="fas fa-file-pdf"></i> View Resume
+                            </a>
+                        {% endif %}
+                    </div>
+                    {% empty %}
+                    <p>No active applications</p>
+                    {% endfor %}
+                </div>
+            </div>
+
+            <!-- Interviews and Assessments Card -->
+            <div class="card shadow mb-4">
+                <div class="card-header py-3 d-flex justify-content-between align-items-center">
+                    <h6 class="text-primary fw-bold m-0">Interviews & Assessments</h6>
+                    <button class="btn btn-sm btn-primary" data-toggle="modal" data-target="#scheduleInterviewModal">
+                        <i class="fas fa-plus"></i> Schedule Interview
+                    </button>
+                </div>
+                <div class="card-body">
+                    {% regroup interviews by application as application_interviews %}
+                    {% for app_group in application_interviews %}
+                        {% if app_group.grouper %}  <!-- If interview is tied to an application -->
+                            <div class="mb-4">
+                                <h6 class="border-bottom pb-2">
+                                    {{ app_group.grouper.job.title }}
+                                </h6>
+                                {% for interview in app_group.list %}
+                                    <div class="interview-card mb-3 p-3 border rounded">
+                                        <p class="mb-1">
+                                            <strong>{{ interview.evaluator_role }}</strong> - 
+                                            {{ interview.evaluator.get_full_name }}
+                                        </p>
+                                        <p class="mb-1"><strong>Date:</strong> {{ interview.date }}</p>
+                                        {% if interview.general_assessment %}
+                                            <p class="mb-1">{{ interview.general_assessment }}</p>
+                                        {% endif %}
+                                        {% if interview.decision != 'Note' %}
+                                            <p class="mb-1">
+                                                <strong>Decision:</strong> 
+                                                <span class="badge {% if interview.decision == 'Pending' %}badge-warning
+                                                       {% elif interview.decision == 'Passed' %}badge-success
+                                                       {% elif interview.decision == 'Failed' %}badge-danger
+                                                       {% else %}badge-secondary{% endif %}">
+                                                    {{ interview.decision }}
+                                                </span>
+                                            </p>
+                                        {% endif %}
+                                        <small class="text-muted">
+                                            Added by {{ interview.manager.get_full_name }}
+                                        </small>
+                                    </div>
+                                {% endfor %}
+                            </div>
+                        {% endif %}
+                    {% empty %}
+                        <p>No interviews or assessments yet</p>
+                    {% endfor %}
+                </div>
+            </div>
+        </div>
+
+        <!-- Right Column - HR Notes and Evaluations -->
+        <div class="col-lg-4">
+            <!-- HR Notes -->
+            <div class="card shadow mb-4">
+                <div class="card-header py-3 d-flex justify-content-between align-items-center">
+                    <h6 class="text-primary fw-bold m-0">HR Notes & Assessments</h6>
+                    <button class="btn btn-sm btn-primary" data-toggle="modal" data-target="#addNoteModal">
+                        <i class="fas fa-plus"></i> Add Note
+                    </button>
+                </div>
+                <div class="card-body">
+                    {% for interview in interviews %}
+                        <div class="note-card mb-3 p-3 border rounded">
+                            {% if interview.decision == 'Note' %}
+                                <!-- General HR Note -->
+                                <p>{{ interview.general_assessment }}</p>
+                                <small class="text-muted">
+                                    General Note by {{ interview.manager.get_full_name }} on {{ interview.date|date:"M d, Y" }}
+                                </small>
+                            {% else %}
+                                <!-- Interview Assessment -->
+                                <h6>{{ interview.evaluator_role }} Assessment</h6>
+                                <p class="mb-2">{{ interview.general_assessment }}</p>
+                                {% if interview.evaluation_scores %}
+                                    <div class="mb-2">
+                                        <strong>Technical Evaluation:</strong>
+                                        {% with scores=interview.evaluation_scores|json_parse %}
+                                            <ul class="list-unstyled">
+                                                <li>Problem Solving: {{ scores.problem_solving }}/10</li>
+                                                <li>Technical Skills: {{ scores.technical_skills }}/10</li>
+                                            </ul>
+                                        {% endwith %}
+                                    </div>
+                                {% endif %}
+                                <p class="mb-1">
+                                    <strong>Decision:</strong> 
+                                    <span class="badge {% if interview.decision == 'Passed' %}badge-success
+                                                   {% elif interview.decision == 'Failed' %}badge-danger
+                                                   {% else %}badge-warning{% endif %}">
+                                        {{ interview.decision }}
+                                    </span>
+                                </p>
+                                <small class="text-muted">
+                                    By {{ interview.evaluator.get_full_name }} on {{ interview.date|date:"M d, Y" }}
+                                    {% if interview.application %}
+                                        for {{ interview.application.job.position.position }}
+                                    {% endif %}
+                                </small>
+                            </div>
+                        {% endif %}
+                    {% empty %}
+                        <p>No notes or assessments yet</p>
+                    {% endfor %}
+                </div>
+            </div>
+
+            <!-- Evaluations -->
+            <div class="card shadow mb-4">
+                <div class="card-header py-3">
+                    <h6 class="text-primary fw-bold m-0">Evaluation Summary</h6>
+                </div>
+                <div class="card-body">
+                    {% for eval in evaluations %}
+                    <div class="evaluation-card mb-3">
+                        <h6>{{ eval.job.title }}</h6>
+                        <div class="progress-item mb-2">
+                            <label>Technical Skills</label>
+                            <div class="progress">
+                                <div class="progress-bar" role="progressbar" style="width: {{ eval.technical_score }}%">
+                                    {{ eval.technical_score }}%
+                                </div>
+                            </div>
+                        </div>
+                        <!-- Add more evaluation metrics as needed -->
+                    </div>
+                    {% empty %}
+                    <p>No evaluations recorded</p>
+                    {% endfor %}
+                </div>
+            </div>
+
+            
+<!-- Add this section after the HR Notes & Assessments card -->
+
+<!-- References Card -->
+            <div class="card shadow mb-4">
+                <div class="card-header py-3 d-flex justify-content-between align-items-center">
+                    <h6 class="text-primary fw-bold m-0">References</h6>
+                    <button class="btn btn-sm btn-primary" onclick="window.location.href='{% url 'add_reference' candidate.id %}'">
+                        <i class="fas fa-plus"></i> Add Reference
+                    </button>
+                </div>
+                <div class="card-body">
+                    {% for reference in references %}
+                        <div class="reference-card mb-3 p-3 border rounded">
+                            <h6>{{ reference.reference_name }} - {{ reference.reference_role }}</h6>
+                            <p class="mb-1"><strong>Company:</strong> {{ reference.reference_company }}</p>
+                            <p class="mb-1"><strong>Duration:</strong> {{ reference.work_duration }}</p>
+                            <p class="mb-1"><strong>Duties:</strong> {{ reference.duties }}</p>
+                            <div class="row mt-2">
+                                <div class="col-md-6">
+                                    <p class="mb-1"><strong>Strengths:</strong> {{ reference.strengths }}</p>
+                                </div>
+                                <div class="col-md-6">
+                                    <p class="mb-1"><strong>Areas for Improvement:</strong> {{ reference.weaknesses }}</p>
+                                </div>
+                            </div>
+                            <p class="mb-1">
+                                <strong>Would Work Again:</strong>
+                                <span class="badge {% if reference.would_work_again %}badge-success{% else %}badge-danger{% endif %}">
+                                    {{ reference.would_work_again|yesno:"Yes,No" }}
+                                </span>
+                            </p>
+                        </div>
+                    {% empty %}
+                        <p>No references added yet</p>
+                    {% endfor %}
+                </div>
+            </div>
+
+            <!-- Evaluations Card -->
+            <div class="card shadow mb-4">
+                <div class="card-header py-3">
+                    <h6 class="text-primary fw-bold m-0">Evaluations & Incubation</h6>
+                </div>
+                <div class="card-body">
+                    {% for application in applications %}
+                        <div class="evaluation-section mb-4 border-bottom">
+                            <h6>{{ application.job.position.position }} at {{ application.job.organization.organization }}</h6>
+                            
+                            <!-- Interview Evaluations -->
+                            {% for evaluation in evaluations %}
+                                {% if evaluation.job == application.job %}
+                                    <div class="mb-3">
+                                        <h6 class="text-muted">Final Interview Evaluation</h6>
+                                        <p><strong>Decision:</strong> {{ evaluation.interview_decision }}</p>
+                                        {% with scores=evaluation.evaluation_scores|json_parse %}
+                                            <p><strong>Average Scores:</strong></p>
+                                            <ul>
+                                                <li>Problem Solving: {{ scores.avg_problem_solving|floatformat:1 }}/10</li>
+                                                <li>Technical Skills: {{ scores.avg_technical_skills|floatformat:1 }}/10</li>
+                                            </ul>
+                                        {% endwith %}
+                                        <p><small>Evaluated by {{ evaluation.evaluator.get_full_name }}</small></p>
+                                    </div>
+                                {% endif %}
+                            {% endfor %}
+                            
+                            <!-- Incubation Evaluations -->
+                            {% for incubation in incubation_evaluations %}
+                                {% if incubation.job == application.job %}
+                                    <div class="mb-3">
+                                        <h6 class="text-muted">Incubation Evaluation</h6>
+                                        <p><strong>Period:</strong> {{ incubation.start_date }} to {{ incubation.end_date }}</p>
+                                        {% if incubation.evaluation_scores %}
+                                            {% with scores=incubation.evaluation_scores|json_parse %}
+                                                <div class="row">
+                                                    <div class="col-md-6">
+                                                        <ul class="list-unstyled">
+                                                            <li>Team Work: {{ scores.team_work }}/10</li>
+                                                            <li>Rule Compliance: {{ scores.rule_compliance }}/10</li>
+                                                            <li>Learning Capacity: {{ scores.learning_capacity }}/10</li>
+                                                            <li>Willingness to Learn: {{ scores.willingness_to_learn }}/10</li>
+                                                            <li>Stress Handling: {{ scores.stress_handling }}/10</li>
+                                                        </ul>
+                                                    </div>
+                                                    <div class="col-md-6">
+                                                        <ul class="list-unstyled">
+                                                            <li>Tool Usage: {{ scores.tool_usage }}/10</li>
+                                                            <li>Task Completion: {{ scores.task_completion }}/10</li>
+                                                            <li>Interpersonal Skills: {{ scores.interpersonal_skills }}/10</li>
+                                                            <li>Leadership: {{ scores.leadership }}/10</li>
+                                                            <li>Planning: {{ scores.planning }}/10</li>
+                                                        </ul>
+                                                    </div>
+                                                </div>
+                                            {% endwith %}
+                                        {% endif %}
+                                        <p><strong>Decision:</strong> {{ incubation.manager_decision }}</p>
+                                        <p><strong>Explanation:</strong> {{ incubation.decision_explanation }}</p>
+                                        <p><small>Evaluated by {{ incubation.evaluator.get_full_name }}</small></p>
+                                    </div>
+                                {% endif %}
+                            {% endfor %}
+                            
+                            {% if application.status == 'Interviewing' %}
+                                <div class="text-right">
+                                    <a href="{% url 'candidate_evaluation' application.id %}" class="btn btn-primary btn-sm">
+                                        Complete Final Evaluation
+                                    </a>
+                                </div>
+                            {% endif %}
+                        </div>
+                    {% endfor %}
+                </div>
+            </div>
+        </div>
     </div>
-</body>
+</div>
+
+<!-- Modals -->
+{% include 'modals/schedule_interview_modal.html' %}
+{% include 'modals/assign_job_modal.html' %}
+{% include 'modals/add_note_modal.html' %}
 
 {% endblock %}
