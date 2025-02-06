@@ -38,7 +38,7 @@ class Candidate(models.Model):
     name = models.CharField(max_length=100)
     surname = models.CharField(max_length=100)
     email = models.EmailField(null=True, blank=True)
-    phone = models.CharField(max_length=15)
+    phone = models.CharField(max_length=15) ##TODO: Make this unique=True for production.
     experience = models.TextField(null=True, blank=True)
     skills = models.TextField(null=True, blank=True)
     birth_date = models.DateField()
@@ -78,7 +78,7 @@ class Application(models.Model):
 
 class Interview(models.Model):
     application = models.ForeignKey(Application, on_delete=models.CASCADE)
-    date = models.DateField()
+    date = models.DateTimeField()  # Changed from DateField to DateTimeField
     candidate = models.ForeignKey(Candidate, on_delete=models.CASCADE)
     application_source = models.CharField(max_length=200)
     general_assessment = models.TextField()

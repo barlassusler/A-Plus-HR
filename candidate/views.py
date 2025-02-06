@@ -9,6 +9,7 @@ from datetime import date, datetime, timedelta
 import json
 from biko_hr.models import Notification
 from .utils import send_interview_notification
+from authentication.models import UserType
 
 
 def get_candidate_pool(request):
@@ -117,45 +118,37 @@ def get_candidate_pool(request):
 
 @login_required
 def candidate_profile(request, candidate_id):
-    candidate = get_object_or_404(
-        Candidate.objects.prefetch_related('desired_locations'),
-        id=candidate_id
+    candidate = get_object_or_404(Candidate, id=candidate_id)
+    
+    # Get HR staff for evaluator selection
+    hr_staff = User.objects.filter(
+        user_type__user_type='hr_staff'
+    ).exclude(
+        user_type__isnull=True
     )
-    
-    # Get all related data
-    applications = Application.objects.filter(
-        candidate=candidate
-    ).select_related(
-        'job__position',
-        'job__organization'
-    ).order_by('-application_date')
-    
-    interviews = Interview.objects.filter(
-        candidate=candidate
-    ).select_related(
-        'evaluator',
-        'manager',
-        'application__job'
-    ).order_by('-date')
-    
-    evaluations = Evaluation.objects.filter(
-        candidate=candidate
-    ).select_related('job', 'evaluator')
-    
-    incubation_evaluations = IncubationEvaluation.objects.filter(
-        candidate=candidate
-    ).select_related('job', 'evaluator')
-    
-    references = Reference.objects.filter(candidate=candidate)
-    
-    return render(request, 'candidate_profile.html', {
+
+    # Get managers for manager selection
+    managers = User.objects.filter(
+        user_type__user_type__in=['organization_staff', 'Director']
+    ).exclude(
+        user_type__isnull=True
+    )
+
+    # Get applications and other data
+    applications = Application.objects.filter(candidate=candidate)
+    evaluations = Evaluation.objects.filter(candidate=candidate)
+    interviews = Interview.objects.filter(candidate=candidate)
+
+    context = {
         'candidate': candidate,
         'applications': applications,
-        'interviews': interviews,
         'evaluations': evaluations,
-        'incubation_evaluations': incubation_evaluations,
-        'references': references,
-    })
+        'interviews': interviews,
+        'hr_staff': hr_staff,
+        'managers': managers,
+    }
+    
+    return render(request, 'candidate_profile.html', context)
 
 def category_detail(request, category_id):
     category = get_object_or_404(JobCategory, id=category_id)
@@ -241,43 +234,59 @@ def add_hr_note(request, candidate_id):
 
 
 @login_required
-def schedule_interview(request, candidate_id):
+def schedule_interview(request, application_id):
+    application = get_object_or_404(Application, id=application_id)
+    candidate = application.candidate
+
+    # Get all HR staff users
+    hr_staff = User.objects.filter(
+        user_type__user_type='hr_staff'
+    ).exclude(
+        user_type__isnull=True
+    )
+
+    # Get all managers (organization staff and directors)
+    managers = User.objects.filter(
+        user_type__user_type__in=['organization_staff', 'Director']
+    ).exclude(
+        user_type__isnull=True
+    )
+
     if request.method == 'POST':
-        application = get_object_or_404(Application, id=request.POST['application'])
-        evaluator = get_object_or_404(User, id=request.POST['evaluator'])
-
-        interview = Interview.objects.create(
-            application=application,
-            candidate_id=candidate_id,
-            date=request.POST['date'],
-            evaluator=evaluator,
-            evaluator_role=request.POST['evaluator_role'],
-            manager=request.user,
-            application_source='Internal',
-            general_assessment='',
-            work_hours_assessment='',
-            evaluation_scores='',
-            decision='Pending'
-        )
-
-        # Create notification for evaluator
-        Notification.objects.create(
-            user=evaluator,
-            message=f'You have been assigned to interview {application.candidate.name} {application.candidate.surname} for {application.job.position.position} position on {interview.date}',
-            status='Unread'
-        )
-
-        application.status = 'Interviewing'
-        application.save()
-
-        # Send email notifications
         try:
-            send_interview_notification(interview)
-            messages.success(request, 'Interview scheduled and notifications sent successfully')
+            # Combine date and time
+            interview_date = request.POST.get('date')
+            interview_time = request.POST.get('time')
+            interview_datetime = datetime.strptime(f"{interview_date} {interview_time}", "%Y-%m-%d %H:%M")
+
+            # Create interview with datetime
+            interview = Interview.objects.create(
+                application=application,
+                date=interview_datetime,  # Now storing the full datetime
+                candidate=candidate,
+                evaluator=get_object_or_404(User, id=request.POST.get('evaluator')),
+                evaluator_role=request.POST.get('evaluator_role'),
+                application_source=request.POST.get('application_source'),
+                manager=get_object_or_404(User, id=request.POST.get('manager')),
+                general_assessment='',
+                work_hours_assessment='',
+                evaluation_scores='',
+                decision='Pending'
+            )
+
+            messages.success(request, 'Interview scheduled successfully')
+            return redirect('candidate_profile', candidate_id=candidate.id)
+
         except Exception as e:
-            messages.warning(request, 'Interview scheduled but there was an error sending notifications')
-            
-        return redirect('candidate_profile', candidate_id=candidate_id)
+            messages.error(request, f'Error scheduling interview: {str(e)}')
+
+    context = {
+        'candidate': candidate,
+        'application': application,
+        'hr_staff': hr_staff,
+        'managers': managers,
+    }
+    return render(request, 'schedule_interview.html', context)
 
 
 ## CANDIDATE EVALUATION

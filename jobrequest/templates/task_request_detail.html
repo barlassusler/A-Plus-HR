@@ -1,51 +1,125 @@
 {% extends 'base.html' %}
 
-{% block title %}Talep Detayları{% endblock %}
+{% block title %}{{ task.position_name }} Detay{% endblock %}
 
 {% block content %}
-<h1 class="text-primary">Talep Detayları</h1>
-<div class="table-responsive">
-    <table class="table table-bordered">
-        <tr><th>Lokasyon:</th><td>{{ task.location }}</td></tr>
-        <tr><th>Organizasyon:</th><td>{{ task.organization }}</td></tr>
-        <tr><th>Görev Adı:</th><td>{{ task.position_name }}</td></tr>
-        <tr><th>Yeni Görev Adı:</th><td>{{ task.new_position_name }}</td></tr>
-        <tr><th>Çalışma Türü:</th><td>{{ task.work_type }}</td></tr>
-        <tr><th>Talep Türü:</th><td>{{ task.position_type }}</td></tr>
+<div class="container py-4">
+    <div class="card shadow mb-4">
+        <div class="card-header py-3">
+            <h6 class="text-primary fw-bold m-0">İş Talebi Detayları</h6>
+        </div>
+        <div class="card-body">
+            <div class="row">
+                <div class="col-md-6">
+                    <p><strong>Lokasyon:</strong> {{ task.location }}</p>
+                    <p><strong>Organizasyon:</strong> {{ task.organization }}</p>
+                    <p><strong>Pozisyon:</strong> 
+                        {% if task.position_name %}
+                            {{ task.position_name.position }}
+                        {% elif task.new_position_name %}
+                            {{ task.new_position_name }}
+                        {% endif %}
+                    </p>
+                    <p><strong>Kadro Durumu:</strong> {{ task.position_type }}</p>
+                    <p><strong>Çalışma Türü:</strong> {{ task.work_type }}</p>
+                </div>
+                <div class="col-md-6">
+                    <p><strong>Alınacak Kişi Sayısı:</strong> {{ task.desired_personnel_count }}</p>
+                    <p><strong>İstenilen Deneyim:</strong> {{ task.desired_experience_years }} yıl</p>
+                    <p><strong>Eğitim Seviyesi:</strong> {{ task.required_education_level }}</p>
+                    <p><strong>Başlama Tarihi:</strong> {{ task.desired_start_date }}</p>
+                    <p><strong>Durum:</strong> {{ task.request_status_organization_manager }}</p>
+                </div>
+            </div>
 
-        {% if task.position_type == "Mevcut Kadro" %}
-        <tr><th>Kimin Yerine:</th><td>{{ task.replacement_for }}</td></tr>
-        {% endif %}
+            {% if task.description or task.special_requirements %}
+            <div class="mt-4">
+                {% if task.description %}
+                <div class="mb-3">
+                    <h6>Açıklama</h6>
+                    <p>{{ task.description }}</p>
+                </div>
+                {% endif %}
+                {% if task.special_requirements %}
+                <div>
+                    <h6>Özel Nitelikler</h6>
+                    <p>{{ task.special_requirements }}</p>
+                </div>
+                {% endif %}
+            </div>
+            {% endif %}
+        </div>
+    </div>
 
-        {% if task.position_type == "İlave Kadro" %}
-        <tr><th>Talep Nedeni:</th><td>{{ task.request_reason }}</td></tr>
-        {% endif %}
-
-        <tr><th>Açıklama:</th><td>{{ task.description }}</td></tr>
-        <tr><th>Göreve Başlama Tarihi:</th><td>{{ task.desired_start_date }}</td></tr>
-        <tr><th>Alınacak Kişi Sayısı:</th><td>{{ task.desired_personnel_count }}</td></tr>
-        <tr><th>Deneyim Yılı:</th><td>{{ task.desired_experience_years }}</td></tr>
-        <tr><th>Eğitim:</th><td>{{ task.required_education_level }}</td></tr>
-        <tr><th>Varsa Özel Nitelikler:</th><td>{{ task.special_requirements }}</td></tr>
-        <tr><th>Durum:</th><td>{{ task.request_status_organization_manager }}</td></tr>
-        <tr><th>Oluşturulma Tarihi:</th><td>{{ task.created_at }}</td></tr>
-    </table>
-</div>
-
-<h2 class="text-secondary text-center mt-5">Atanan Adaylar</h2>
-<div class="mt-3 text-center">
-    {% if assigned_candidates %}
-    <ul class="list-group w-50 mx-auto">
-        {% for candidate in assigned_candidates %}
-            <li class="list-group-item">
-                {{ candidate.name }} {{ candidate.surname }}
-            </li>
-        {% endfor %}
-    </ul>
-    {% else %}
-    <p class="text-center">Bu iş talebine henüz aday atanmadı.</p>
-    {% endif %}
-
-
+    <!-- Assigned Candidates Section -->
+    <div class="card shadow mb-4">
+        <div class="card-header py-3 d-flex justify-content-between align-items-center">
+            <h6 class="text-primary fw-bold m-0">Atanan Adaylar</h6>
+            <a href="{% url 'assign_candidates' task.id %}" class="btn btn-primary btn-sm">
+                <i class="fas fa-plus"></i> Aday Ata
+            </a>
+        </div>
+        <div class="card-body">
+            {% if assigned_candidates %}
+                <div class="table-responsive">
+                    <table class="table table-bordered">
+                        <thead>
+                            <tr>
+                                <th>Aday Bilgileri</th>
+                                <th>Durum</th>
+                                <th>Deneyim</th>
+                                <th>Eğitim</th>
+                                <th>İşlemler</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            {% for candidate in assigned_candidates %}
+                                <tr>
+                                    <td>
+                                        <a href="{% url 'candidate_profile' candidate.id %}" class="text-primary font-weight-bold">
+                                            {{ candidate.name }} {{ candidate.surname }}
+                                        </a>
+                                        <br>
+                                        <small class="text-muted">
+                                            <i class="fas fa-phone-alt"></i> {{ candidate.phone }}
+                                        </small>
+                                    </td>
+                                    <td>
+                                        {% for application in candidate.application_set.all %}
+                                            {% if application.job.position == task.position_name %}
+                                                <span class="badge {% if application.status == 'Interviewing' %}bg-warning
+                                                      {% elif application.status == 'Approved' %}bg-success
+                                                      {% elif application.status == 'HR Assesment' %}bg-primary
+                                                      {% elif application.status == 'Rejected' %}bg-danger
+                                                      {% else %}bg-info{% endif %}">
+                                                    {{ application.status }}
+                                                </span>
+                                            {% endif %}
+                                        {% endfor %}
+                                    </td>
+                                    <td>{{ candidate.experience|truncatewords:10 }}</td>
+                                    <td>{{ candidate.education_level }}</td>
+                                    <td>
+                                        {% for application in candidate.application_set.all %}
+                                            {% if application.job.position == task.position_name %}
+                                                {% if application.status == 'Interviewing' %}
+                                                    <a href="{% url 'candidate_evaluation' application.id %}" 
+                                                       class="btn btn-primary btn-sm">
+                                                        Değerlendir
+                                                    </a>
+                                                {% endif %}
+                                            {% endif %}
+                                        {% endfor %}
+                                    </td>
+                                </tr>
+                            {% endfor %}
+                        </tbody>
+                    </table>
+                </div>
+            {% else %}
+                <p class="text-muted">Henüz aday atanmamış.</p>
+            {% endif %}
+        </div>
+    </div>
 </div>
 {% endblock %}

@@ -42,7 +42,7 @@
             <td>{{ task.desired_personnel_count }}</td>
             <td>{{ task.created_at }}</td>
             <td>{{ task.request_status_organization_manager}}</td>
-            <td><a href="{% url 'assign_candidates' task.pk %}" class="btn btn-warning btn-sm">Aday Atama</a></td>
+            <td><a href="{% url 'assign_candidates' job_request_id=task.pk %}" class="btn btn-warning btn-sm">Aday Atama</a></td>
             <td><a href="{% url 'task_request_detail' task.pk %}" class="btn btn-info btn-sm">Detay</a></td>
         </tr>
         {% empty %}

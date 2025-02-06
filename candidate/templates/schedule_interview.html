@@ -1,0 +1,62 @@
+{% extends 'base.html' %}
+{% load bootstrap4 %}
+
+{% block content %}
+<div class="container">
+    <div class="card shadow mb-4">
+        <div class="card-header py-3">
+            <h6 class="text-primary fw-bold m-0">Schedule Interview for {{ candidate.name }} {{ candidate.surname }}</h6>
+        </div>
+        <div class="card-body">
+            <form method="post">
+                {% csrf_token %}
+                
+                <!-- Interview Date and Time -->
+                <div class="form-group">
+                    <label for="interview_date">Interview Date:</label>
+                    <input type="date" class="form-control" id="interview_date" name="date" required>
+                </div>
+                
+                <div class="form-group">
+                    <label for="interview_time">Interview Time:</label>
+                    <input type="time" class="form-control" id="interview_time" name="time" required>
+                </div>
+
+                <!-- Evaluator Selection -->
+                <div class="form-group">
+                    <label for="evaluator">Evaluator:</label>
+                    <select class="form-control" id="evaluator" name="evaluator" required>
+                        <option value="">Select an evaluator</option>
+                        {% for evaluator in hr_staff %}
+                            <option value="{{ evaluator.id }}">{{ evaluator.get_full_name }}</option>
+                        {% endfor %}
+                    </select>
+                </div>
+
+                <!-- Other fields -->
+                <div class="form-group">
+                    <label for="evaluator_role">Evaluator Role:</label>
+                    <input type="text" class="form-control" id="evaluator_role" name="evaluator_role" required>
+                </div>
+
+                <div class="form-group">
+                    <label for="application_source">Application Source:</label>
+                    <input type="text" class="form-control" id="application_source" name="application_source" required>
+                </div>
+
+                <div class="form-group">
+                    <label for="manager">Manager:</label>
+                    <select class="form-control" id="manager" name="manager" required>
+                        <option value="">Select a manager</option>
+                        {% for manager in managers %}
+                            <option value="{{ manager.id }}">{{ manager.get_full_name }}</option>
+                        {% endfor %}
+                    </select>
+                </div>
+
+                <button type="submit" class="btn btn-primary">Schedule Interview</button>
+            </form>
+        </div>
+    </div>
+</div>
+{% endblock %} 

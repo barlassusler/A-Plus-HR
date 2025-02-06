@@ -1,5 +1,7 @@
 from django.shortcuts import render, redirect, get_object_or_404
 from django.utils import timezone
+from datetime import date
+from django.contrib import messages
 
 from .forms import TaskRequestForm
 from .models import *
@@ -138,58 +140,68 @@ def create_task_request(request):
 
 
 
+@login_required
 def task_request_detail(request, pk):
-    task = get_object_or_404(JobRequest, pk=pk)  # Belirli bir talebi getir
-    # assigned_candidates = task.candidates.all()  # İşe atanmış tüm adayları alın
-    job_request = JobRequest.objects.filter(pk = pk).first()
-    application = IncubationJob.objects.filter(position=job_request.position_name)
-
-    assigned_candidates = Application.objects.filter(job=application)
-
-    return render(request, 'task_request_detail.html', {'task': task, 'assigned_candidates': assigned_candidates})
+    task = get_object_or_404(JobRequest, pk=pk)
+    assigned_candidates = task.candidates.all().prefetch_related(
+        'application_set__job'
+    )
+    
+    return render(request, 'task_request_detail.html', {
+        'task': task,
+        'assigned_candidates': assigned_candidates,
+    })
 
 @login_required
 def assign_candidates(request, job_request_id):
     job_request = get_object_or_404(JobRequest, id=job_request_id)
+    all_candidates = Candidate.objects.all()
 
-    # Check if the user is part of the HR group
-    if not request.user.groups.filter(name="HR").exists():
-        raise PermissionDenied("You do not have permission to assign candidates.")
+    if request.method == 'POST':
+        candidate_ids = request.POST.get('candidates', '').split(',')
+        if candidate_ids and candidate_ids[0]:  # Check if there are any candidates selected
+            # Create or get IncubationJob for this JobRequest
+            incubation_job, created = IncubationJob.objects.get_or_create(
+                position=job_request.position_name,
+                organization=job_request.organization,
+                defaults={
+                    'title': job_request.position_name.position if job_request.position_name else job_request.new_position_name,
+                    'description': job_request.description or '',
+                    'required_skills': job_request.special_requirements or '',
+                    'status': 'Active',
+                    'preferred_locations': job_request.location.location,
+                    'department': job_request.organization.organization
+                }
+            )
 
-    # Check if the user's location matches the job request's location
-    user_profile = getattr(request.user, 'profile', None)  # Assuming you have a `profile` model
-    if not user_profile or user_profile.Location != job_request.location:
-        raise PermissionDenied("You do not have permission to assign candidates to this job request.")
+            # Create Application entries for each candidate
+            for candidate_id in candidate_ids:
+                candidate = get_object_or_404(Candidate, id=int(candidate_id))
+                
+                # Check if application already exists
+                application, created = Application.objects.get_or_create(
+                    candidate=candidate,
+                    job=incubation_job,
+                    defaults={
+                        'application_date': date.today(),
+                        'status': 'Interviewing'  # Initial status
+                    }
+                )
+                
+                # Add candidate to job_request.candidates if not already added
+                job_request.candidates.add(candidate)
 
-    all_candidates = Candidate.objects.all()  # All candidates ##TODO: restrict this to the people that the hr manager who is authorized to his specific working field (e.g., Adana)
-    assigned_candidates = job_request.candidates.all()  # Candidates already assigned to this job request
+            messages.success(request, f'{len(candidate_ids)} candidates have been assigned successfully.')
+            return redirect('task_request_detail', pk=job_request_id)
+        else:
+            messages.error(request, 'No candidates were selected.')
 
-    if request.method == "POST":
-        selected_candidates = request.POST.get("candidates", "")  # e.g., "2,3,32"
-        selected_candidates_list = selected_candidates.split(",")  # Convert to list: ['2', '3', '32']
-        selected_candidates_list = [int(c) for c in selected_candidates_list]  # Convert to integers: [2, 3, 32]
-
-        job_request.candidates.set(selected_candidates_list)  # Assign selected candidates
-        for candidate in all_candidates:
-            old_application = Application.objects.filter(candidate=candidate).first()
-            resume = old_application.uploaded_resume if old_application else None
-
-            if resume:
-                application = IncubationJob.objects.create(position=job_request.position_name)
-                Application.objects.create(job=application, candidate=candidate, status="HR Assesment", application_date=timezone.now(), uploaded_resume=resume)
-            else:
-                application = IncubationJob.objects.create(position=job_request.position_name)
-                Application.objects.create(job=application, candidate=candidate, status="HR Assesment", application_date=timezone.now())
-
-
-        return redirect("task_request_detail", pk=job_request.id)  # Redirect to the detail page
-
-
-    return render(request, "assign_candidates.html", {
-        "job_request": job_request,
-        "all_candidates": all_candidates,
-        "assigned_candidates": assigned_candidates,
-    })
+    context = {
+        'job_request': job_request,
+        'all_candidates': all_candidates,
+        'assigned_candidates': job_request.candidates.all()
+    }
+    return render(request, 'assign_candidates.html', context)
 
 @login_required
 def accept_task_request(request, pk):
@@ -201,5 +213,33 @@ def accept_task_request(request, pk):
     except JobRequest.DoesNotExist:
         print(f"Task {pk} does not exist.")
     return redirect('task_request_list')  # Redirect back to the task request list
+
+@login_required
+def view_assigned_candidates(request, job_request_id):
+    job_request = get_object_or_404(JobRequest, id=job_request_id)
+    assigned_candidates = job_request.candidates.all()
+    
+    # Get applications and their status
+    incubation_job = IncubationJob.objects.filter(
+        position=job_request.position_name,
+        organization=job_request.organization
+    ).first()
+    
+    candidate_status = {}
+    if incubation_job:
+        applications = Application.objects.filter(
+            job=incubation_job,
+            candidate__in=assigned_candidates
+        ).select_related('candidate')
+        
+        for app in applications:
+            candidate_status[app.candidate.id] = app.status
+
+    context = {
+        'job_request': job_request,
+        'assigned_candidates': assigned_candidates,
+        'candidate_status': candidate_status
+    }
+    return render(request, 'view_assigned_candidates.html', context)
 
 

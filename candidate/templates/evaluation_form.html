@@ -24,7 +24,7 @@
                 <div class="card-body">
                     {% for interview in interviews %}
                     <div class="mb-3">
-                        <h6>{{ interview.evaluator_role }} - {{ interview.date }}</h6>
+                        <h6>{{ interview.evaluator_role }} - {{ interview.date|date:"F j, Y, g:i A" }}</h6>
                         <p>{{ interview.general_assessment }}</p>
                         {% if interview.evaluation_scores %}
                             {% with scores=interview.evaluation_scores|json_parse %}

@@ -1,54 +1,65 @@
-<div class="modal fade" id="scheduleInterviewModal" tabindex="-1" role="dialog">
+<div class="modal fade" id="scheduleInterviewModal" tabindex="-1" role="dialog" aria-labelledby="scheduleInterviewModalLabel" aria-hidden="true">
     <div class="modal-dialog" role="document">
         <div class="modal-content">
             <div class="modal-header">
-                <h5 class="modal-title">Schedule Interview</h5>
-                <button type="button" class="close" data-dismiss="modal">
-                    <span>&times;</span>
+                <h5 class="modal-title text-primary" id="scheduleInterviewModalLabel">Schedule Interview for {{ candidate.name }} {{ candidate.surname }}</h5>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
                 </button>
             </div>
-            <form method="post" action="{% url 'schedule_interview' candidate.id %}">
-                {% csrf_token %}
-                <div class="modal-body">
-                    <div class="form-group">
-                        <label>Application</label>
-                        <select name="application" class="form-control" required>
-                            {% for app in applications %}
-                                <option value="{{ app.id }}">
-                                    {{ app.job.position.position }} at {{ app.job.organization.organization }}
-                                </option>
+            <div class="modal-body">
+                <form method="post" action="{% url 'schedule_interview' candidate.id %}">
+                    {% csrf_token %}
+                    
+                    <!-- Interview Date and Time -->
+                    <div class="form-group mb-3">
+                        <label for="interview_date">Interview Date:</label>
+                        <input type="date" class="form-control" id="interview_date" name="date" required>
+                    </div>
+                    
+                    <div class="form-group mb-3">
+                        <label for="interview_time">Interview Time:</label>
+                        <input type="time" class="form-control" id="interview_time" name="time" required>
+                    </div>
+
+                    <!-- Evaluator Selection -->
+                    <div class="form-group mb-3">
+                        <label for="evaluator">Evaluator:</label>
+                        <select class="form-control" id="evaluator" name="evaluator" required>
+                            <option value="">Select an evaluator</option>
+                            {% for evaluator in hr_staff %}
+                                <option value="{{ evaluator.id }}">{{ evaluator.get_full_name }}</option>
                             {% endfor %}
                         </select>
                     </div>
-                    <div class="form-group">
-                        <label>Date</label>
-                        <input type="date" name="date" class="form-control" required>
+
+                    <!-- Other fields -->
+                    <div class="form-group mb-3">
+                        <label for="evaluator_role">Evaluator Role:</label>
+                        <input type="text" class="form-control" id="evaluator_role" name="evaluator_role" required>
                     </div>
-                    <div class="form-group">
-                        <label>Evaluator</label>
-                        <select name="evaluator" class="form-control" required>
-                            {% for user in users %}
-                                <option value="{{ user.id }}">
-                                    {{ user.get_full_name }} ({{ user.username }})
-                                </option>
+
+                    <div class="form-group mb-3">
+                        <label for="application_source">Application Source:</label>
+                        <input type="text" class="form-control" id="application_source" name="application_source" required>
+                    </div>
+
+                    <div class="form-group mb-3">
+                        <label for="manager">Manager:</label>
+                        <select class="form-control" id="manager" name="manager" required>
+                            <option value="">Select a manager</option>
+                            {% for manager in managers %}
+                                <option value="{{ manager.id }}">{{ manager.get_full_name }}</option>
                             {% endfor %}
                         </select>
                     </div>
-                    <div class="form-group">
-                        <label>Evaluator Role</label>
-                        <select name="evaluator_role" class="form-control" required>
-                            <option value="HR Interview">HR Interview</option>
-                            <option value="Technical Interview">Technical Interview</option>
-                            <option value="Manager Interview">Manager Interview</option>
-                            <option value="Final Interview">Final Interview</option>
-                        </select>
+
+                    <div class="modal-footer">
+                        <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+                        <button type="submit" class="btn btn-primary">Schedule Interview</button>
                     </div>
-                </div>
-                <div class="modal-footer">
-                    <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
-                    <button type="submit" class="btn btn-primary">Schedule</button>
-                </div>
-            </form>
+                </form>
+            </div>
         </div>
     </div>
 </div>

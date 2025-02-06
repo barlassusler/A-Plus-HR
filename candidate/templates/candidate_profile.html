@@ -110,7 +110,7 @@
             <div class="card shadow mb-4">
                 <div class="card-header py-3 d-flex justify-content-between align-items-center">
                     <h6 class="text-primary fw-bold m-0">Interviews & Assessments</h6>
-                    <button class="btn btn-sm btn-primary" data-toggle="modal" data-target="#scheduleInterviewModal">
+                    <button type="button" class="btn btn-primary" data-toggle="modal" data-target="#scheduleInterviewModal">
                         <i class="fas fa-plus"></i> Schedule Interview
                     </button>
                 </div>
@@ -128,7 +128,7 @@
                                             <strong>{{ interview.evaluator_role }}</strong> - 
                                             {{ interview.evaluator.get_full_name }}
                                         </p>
-                                        <p class="mb-1"><strong>Date:</strong> {{ interview.date }}</p>
+                                        <p class="mb-1"><strong>Date & Time:</strong> {{ interview.date|date:"F j, Y, g:i A" }}</p>
                                         {% if interview.general_assessment %}
                                             <p class="mb-1">{{ interview.general_assessment }}</p>
                                         {% endif %}
