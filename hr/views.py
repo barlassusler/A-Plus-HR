@@ -31,8 +31,9 @@ def evaluate_job_request(request, job_request_id):
 @login_required
 def dashboard(request):
     user_type = UserType.objects.filter(user=request.user).first()
+    applications = Application.objects.filter(assigned_by=request.user).order_by('-status')
 
-    return render(request, 'hr_dashboard.html',{'user': request.user, "user_type":user_type.user_type})
+    return render(request, 'hr_dashboard.html',{'user': request.user, "user_type":user_type.user_type, "applications":applications})
 
 
 @login_required

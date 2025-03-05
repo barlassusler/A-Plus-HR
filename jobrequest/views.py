@@ -182,9 +182,10 @@ def assign_candidates(request, job_request_id):
                 application, created = Application.objects.get_or_create(
                     candidate=candidate,
                     job=incubation_job,
+                    assigned_by=request.user,
                     defaults={
                         'application_date': date.today(),
-                        'status': 'Interviewing'  # Initial status
+                        'status': 'HR Assesment'  # Initial status
                     }
                 )
                 

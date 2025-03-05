@@ -202,7 +202,8 @@ def assign_job(request, candidate_id):
             candidate_id=candidate_id,
             job=incubation_job,
             application_date=date.today(),
-            status='Pending'
+            status='Pending',
+            assigned_by=request.user
         )
         
         if 'resume' in request.FILES:

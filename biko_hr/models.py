@@ -75,6 +75,7 @@ class Application(models.Model):
     application_date = models.DateField()
     status = models.CharField(max_length=50, default="Pending")
     uploaded_resume = models.FileField(upload_to='resumes/', null=True, blank=True)
+    assigned_by = models.ForeignKey(User, on_delete=models.CASCADE, null=True, blank=True)
 
 class Interview(models.Model):
     application = models.ForeignKey(Application, on_delete=models.CASCADE)
