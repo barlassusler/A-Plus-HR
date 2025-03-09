@@ -13,6 +13,8 @@ from authentication.models import UserType
 
 
 def get_candidate_pool(request):
+    user_type = UserType.objects.filter(user=request.user).first()
+
     # Get raw categories for the dropdown
     raw_categories = JobCategory.objects.all()
     
@@ -45,7 +47,9 @@ def get_candidate_pool(request):
 
     return render(request, 'candidate_pool_dashboard.html', {
         'raw_categories': raw_categories,  # For the dropdown
-        'categories': category_data       # For the cards
+        'categories': category_data,       # For the cards
+        'user': request.user, "user_type": user_type.user_type
+
     })
 
 

@@ -26,162 +26,417 @@
             height: auto;    /* Maintain aspect ratio */
             filter: invert(0); /* Converts white to black for images with transparent backgrounds */
         }
+        .upcoming-interviews {
+            margin: 0 auto;
+            border: 1px solid #ddd;
+            border-radius: 8px;
+            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+            cursor: pointer;
+            transition: transform 0.2s, box-shadow 0.2s;
+        }
+
+        .upcoming-interviews:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 6px 12px rgba(0, 0, 0, 0.15);
+        }
+        .recruitment-progress {
+            margin: 0 auto;
+            border: 1px solid #ddd;
+            border-radius: 8px;
+            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+            cursor: pointer;
+            transition: transform 0.2s, box-shadow 0.2s;
+        }
+
+        .recruitment-progress:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 6px 12px rgba(0, 0, 0, 0.15);
+        }
+        .mb-4-button-1 {
+            margin: 0 auto;
+            border: 1px solid #ddd;
+            border-radius: 8px;
+            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+            cursor: pointer;
+            transition: transform 0.2s, box-shadow 0.2s;
+        }
+
+        .mb-4-button-1:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 6px 12px rgba(0, 0, 0, 0.15);
+        }
+        .mb-4-button-2 {
+            margin: 0 auto;
+            border: 1px solid #ddd;
+            border-radius: 8px;
+            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+            cursor: pointer;
+            transition: transform 0.2s, box-shadow 0.2s;
+        }
+
+        .mb-4-button-2:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 6px 12px rgba(0, 0, 0, 0.15);
+        }
+        .mb-4-button-3 {
+            margin: 0 auto;
+            border: 1px solid #ddd;
+            border-radius: 8px;
+            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+            cursor: pointer;
+            transition: transform 0.2s, box-shadow 0.2s;
+        }
+
+        .mb-4-button-3:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 6px 12px rgba(0, 0, 0, 0.15);
+        }
+        .mb-4-button-4 {
+            margin: 0 auto;
+            border: 1px solid #ddd;
+            border-radius: 8px;
+            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+            cursor: pointer;
+            transition: transform 0.2s, box-shadow 0.2s;
+        }
+
+        .mb-4-button-4:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 6px 12px rgba(0, 0, 0, 0.15);
+        }
+            /* Butonları düzenleyen kapsayıcı */
+        .button-container {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            gap: 15px;
+            justify-content: center;
+            align-items: center;
+            max-width: 800px;
+            margin: auto;
+            padding: 20px;
+        }
+
+        /* Buton Stili */
+        .btn-custom {
+            width: 100%;
+            padding: 15px;
+            font-size: 18px;
+            font-weight: bold;
+            color: white;
+            background: linear-gradient(135deg, #007bff, #0056b3);
+            border: none;
+            border-radius: 8px;
+            box-shadow: 3px 3px 10px rgba(0, 0, 0, 0.15);
+            transition: all 0.3s ease-in-out;
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 10px;
+        }
+
+        /* Hover efekti */
+        .btn-custom:hover {
+            background: linear-gradient(135deg, #0056b3, #004099);
+            transform: scale(1.05);
+            box-shadow: 5px 5px 15px rgba(0, 0, 0, 0.2);
+        }
+
+        /* Mobil uyumluluk */
+        @media (max-width: 600px) {
+            .button-container {
+                grid-template-columns: 1fr;
+            }
+            .btn-custom {
+                font-size: 16px;
+                padding: 12px;
+            }
+        }
+
+
+        /* Kartları ortalamak için */
+        .container-centered {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+        }
+
+        /* Kart genişliği */
+        .card {
+            width: 90%;
+            max-width: 800px; /* Çok geniş olmaması için sınır */
+            margin-bottom: 20px;
+            transition: transform 0.3s ease-in-out, box-shadow 0.3s ease-in-out;
+        }
+
+        /* Hover efekti */
+        .card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 8px 16px rgba(0, 0, 0, 0.2);
+        }
+
+        /* Başlık hizalama */
+        .card-header {
+            text-align: center;
+        }
+
+        /* Mobil uyumluluk */
+        @media (max-width: 768px) {
+            .card {
+                width: 95%;
+            }
+        }
+
     </style>
 </head>
 
 
 <body id="page-top">
     <div id="wrapper">
-
-
         <div id="content-wrapper" class="d-flex flex-column">
                 <div id="content">
-
-
                     <div class="container-fluid">
                         <div class="d-sm-flex justify-content-between align-items-center mb-4">
-                            <h3 class="text-dark mb-0">Dashboard</h3><a class="btn btn-primary btn-sm d-none d-sm-inline-block" role="button" href="#"><i class="fas fa-download fa-sm text-white-50"></i> Generate Report</a>
+                            <h3 class="text-dark mb-0">Dashboard</h3>
                         </div>
-                        <h1>Hoş Geldiniz</h1>
-                        <p>Başvuru sistemine erişim için aşağıdaki butonları kullanabilirsiniz.</p>
+                        <div class="button-container">
+                            <a href="{% url 'job_application_list' %}">
+                                <button class="btn-custom">📋 Başvuruları Listele</button>
+                            </a>
+                            <a href="{% url 'task_request_list_hr' %}">
+                                <button class="btn-custom">🛠 İş İstemleri</button>
+                            </a>
+                            <a href="{% url 'my_interviews' %}">
+                                <button class="btn-custom">🗓 Görüşmeler</button>
+                            </a>
+                            <a href="{% url 'candidate_pool_dashboard' %}">
+                                <button class="btn-custom">👥 Aday Havuzu</button>
+                            </a>
+                        </div>
 
-                        <a href="{% url 'task_request_list' %}">
-                            <button class="btn">İş İstemleri</button>
-                        </a>
-                        
+{#                        <div class="row">#}
+{#                            <div class="col-md-6 col-xl-3 mb-4-button-1">#}
+{#                                <div class="card shadow border-start-primary py-2">#}
+{#                                    <div class="card-body">#}
+{#                                        <div class="row align-items-center no-gutters">#}
+{#                                            <div class="col me-2">#}
+{#                                                <div class="text-uppercase text-primary fw-bold text-xs mb-1"></div>#}
+{#                                                <div class="text-dark fw-bold h5 mb-0"><span>Başvurular</span></div>#}
+{#                                            </div>#}
+{#                                            <div class="col-auto"><i class="fas fa-calendar fa-2x text-gray-300"></i></div>#}
+{#                                        </div>#}
+{#                                    </div>#}
+{#                                </div>#}
+{#                            </div>#}
+{#                            <div class="col-md-6 col-xl-3 mb-4-button-2">#}
+{#                                <div class="card shadow border-start-success py-2">#}
+{#                                    <div class="card-body">#}
+{#                                        <div class="row align-items-center no-gutters">#}
+{#                                            <div class="col me-2">#}
+{#                                                <div class="text-uppercase text-success fw-bold text-xs mb-1"></div>#}
+{#                                                <div class="text-dark fw-bold h5 mb-0"><span>İş İstemleri</span></div>#}
+{#                                            </div>#}
+{#                                            <div class="col-auto"><i class="fas fa-dollar-sign fa-2x text-gray-300"></i></div>#}
+{#                                        </div>#}
+{#                                    </div>#}
+{#                                </div>#}
+{#                            </div>#}
+{#                            <div class="col-md-6 col-xl-3 mb-4-button-3">#}
+{#                                <div class="card shadow border-start-info py-2">#}
+{#                                    <div class="card-body">#}
+{#                                        <div class="row align-items-center no-gutters">#}
+{#                                            <div class="col me-2">#}
+{#                                                <div class="text-uppercase text-info fw-bold text-xs mb-1"></div>#}
+{#                                                <div class="row g-0 align-items-center">#}
+{#                                                    <div class="col-auto">#}
+{#                                                        <div class="text-dark fw-bold h5 mb-0 me-3"><span>Görüşmeler</span></div>#}
+{#                                                    </div>#}
+{#                                                    <div class="col">#}
+{#                                                        <div class="progress progress-sm">#}
+{#                                                            <div class="progress-bar bg-info" aria-valuenow="50" aria-valuemin="0" aria-valuemax="100" style="width: 50%;"><span class="visually-hidden">50%</span></div>#}
+{#                                                        </div>#}
+{#                                                    </div>#}
+{#                                                </div>#}
+{#                                            </div>#}
+{#                                            <div class="col-auto"><i class="fas fa-clipboard-list fa-2x text-gray-300"></i></div>#}
+{#                                        </div>#}
+{#                                    </div>#}
+{#                                </div>#}
+{#                            </div>#}
+{#                            <div class="col-md-6 col-xl-3 mb-4-button-4">#}
+{#                                <div class="card shadow border-start-warning py-2">#}
+{#                                    <div class="card-body">#}
+{#                                        <div class="row align-items-center no-gutters">#}
+{#                                            <div class="col me-2">#}
+{#                                                <div class="text-uppercase text-warning fw-bold text-xs mb-1"><span>Pending Requests</span></div>#}
+{#                                                <div class="text-dark fw-bold h5 mb-0"><span>Aday Havuzu</span></div>#}
+{#                                            </div>#}
+{#                                            <div class="col-auto"><i class="fas fa-comments fa-2x text-gray-300"></i></div>#}
+{#                                        </div>#}
+{#                                    </div>#}
+{#                                </div>#}
+{#                            </div>#}
+{#                        </div>#}
 
-                        <div class="row">
-                            <div class="col-md-6 col-xl-3 mb-4">
-                                <div class="card shadow border-start-primary py-2">
-                                    <div class="card-body">
-                                        <div class="row align-items-center no-gutters">
-                                            <div class="col me-2">
-                                                <div class="text-uppercase text-primary fw-bold text-xs mb-1"><span>Earnings (monthly)</span></div>
-                                                <div class="text-dark fw-bold h5 mb-0"><span>$40,000</span></div>
-                                            </div>
-                                            <div class="col-auto"><i class="fas fa-calendar fa-2x text-gray-300"></i></div>
-                                        </div>
+                        <div class="container container-centered">
+                                <div id="upcomingInterviews" class="card shadow upcoming-interviews" data-bs-toggle="modal" data-bs-target="#upcomingInterviewsModal">
+
+                                    <div class="card-header d-flex justify-content-between align-items-center">
+                                        <h6 class="text-primary fw-bold m-0">Upcoming Interviews</h6>
+
                                     </div>
-                                </div>
-                            </div>
-                            <div class="col-md-6 col-xl-3 mb-4">
-                                <div class="card shadow border-start-success py-2">
                                     <div class="card-body">
-                                        <div class="row align-items-center no-gutters">
-                                            <div class="col me-2">
-                                                <div class="text-uppercase text-success fw-bold text-xs mb-1"><span>Earnings (annual)</span></div>
-                                                <div class="text-dark fw-bold h5 mb-0"><span>$215,000</span></div>
-                                            </div>
-                                            <div class="col-auto"><i class="fas fa-dollar-sign fa-2x text-gray-300"></i></div>
+                                        <div class="table-responsive">
+                                            <table class="table">
+                                                <thead>
+                                                    <tr>
+                                                        <th>Candidate</th>
+                                                        <th>Position</th>
+                                                        <th>Date</th>
+                                                        <th>Role</th>
+                                                        <th>Action</th>
+                                                    </tr>
+                                                </thead>
+                                                <tbody>
+                                                    {% for interview in pending_interviews|slice:":5" %}
+                                                    <tr>
+                                                        <td>{{ interview.candidate.name }} {{ interview.candidate.surname }}</td>
+                                                        <td>{{ interview.application.job.position.position }}</td>
+                                                        <td>{{ interview.date }}</td>
+                                                        <td>{{ interview.evaluator_role }}</td>
+                                                        <td>
+                                                            <a href="{% url 'interview_assessment' interview.id %}"
+                                                               class="btn btn-primary btn-sm">
+                                                                Fill Assessment
+                                                            </a>
+                                                        </td>
+                                                    </tr>
+                                                    {% empty %}
+                                                    <tr>
+                                                        <td colspan="5">No pending interviews</td>
+                                                    </tr>
+                                                    {% endfor %}
+                                                </tbody>
+                                            </table>
                                         </div>
+
                                     </div>
+                                    <div class="text-center small mt-4"><span class="me-2"><i class="fas fa-arrow-down text-primary"></i> See All</span></div>
+
                                 </div>
+
                             </div>
-                            <div class="col-md-6 col-xl-3 mb-4">
-                                <div class="card shadow border-start-info py-2">
-                                    <div class="card-body">
-                                        <div class="row align-items-center no-gutters">
-                                            <div class="col me-2">
-                                                <div class="text-uppercase text-info fw-bold text-xs mb-1"><span>Tasks</span></div>
-                                                <div class="row g-0 align-items-center">
-                                                    <div class="col-auto">
-                                                        <div class="text-dark fw-bold h5 mb-0 me-3"><span>50%</span></div>
-                                                    </div>
-                                                    <div class="col">
-                                                        <div class="progress progress-sm">
-                                                            <div class="progress-bar bg-info" aria-valuenow="50" aria-valuemin="0" aria-valuemax="100" style="width: 50%;"><span class="visually-hidden">50%</span></div>
-                                                        </div>
-                                                    </div>
+
+                        <!-- Modal for Upcoming Interviews -->
+                        <div class="modal fade" id="upcomingInterviewsModal" tabindex="-1" aria-labelledby="upcomingInterviewsModalLabel" aria-hidden="true">
+                                    <div class="modal-dialog modal-lg">
+                                        <div class="modal-content">
+                                            <div class="modal-header">
+                                                <h5 class="modal-title" id="upcomingInterviewsModalLabel">Upcoming Interviews</h5>
+                                                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                                            </div>
+                                            <div class="modal-body">
+                                                <div class="table-responsive">
+                                                    <table class="table">
+                                                        <thead>
+                                                            <tr>
+                                                                <th>Candidate</th>
+                                                                <th>Position</th>
+                                                                <th>Date</th>
+                                                                <th>Role</th>
+                                                                <th>Action</th>
+                                                            </tr>
+                                                        </thead>
+                                                        <tbody>
+                                                            {% for interview in pending_interviews|slice:":5" %}
+                                                            <tr>
+                                                                <td>{{ interview.candidate.name }} {{ interview.candidate.surname }}</td>
+                                                                <td>{{ interview.application.job.position.position }}</td>
+                                                                <td>{{ interview.date }}</td>
+                                                                <td>{{ interview.evaluator_role }}</td>
+                                                                <td>
+                                                                    <a href="{% url 'interview_assessment' interview.id %}"
+                                                                       class="btn btn-primary btn-sm">
+                                                                        Fill Assessment
+                                                                    </a>
+                                                                </td>
+                                                            </tr>
+                                                            {% empty %}
+                                                            <tr>
+                                                                <td colspan="5">No pending interviews</td>
+                                                            </tr>
+                                                            {% endfor %}
+                                                        </tbody>
+                                                    </table>
                                                 </div>
                                             </div>
-                                            <div class="col-auto"><i class="fas fa-clipboard-list fa-2x text-gray-300"></i></div>
                                         </div>
                                     </div>
                                 </div>
-                            </div>
-                            <div class="col-md-6 col-xl-3 mb-4">
-                                <div class="card shadow border-start-warning py-2">
-                                    <div class="card-body">
-                                        <div class="row align-items-center no-gutters">
-                                            <div class="col me-2">
-                                                <div class="text-uppercase text-warning fw-bold text-xs mb-1"><span>Pending Requests</span></div>
-                                                <div class="text-dark fw-bold h5 mb-0"><span>18</span></div>
-                                            </div>
-                                            <div class="col-auto"><i class="fas fa-comments fa-2x text-gray-300"></i></div>
-                                        </div>
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
-                        <div class="row">
-                            <div class="col-lg-7 col-xl-8">
-                                <div class="card shadow mb-4">
-                                    <div class="card-header d-flex justify-content-between align-items-center">
-                                        <h6 class="text-primary fw-bold m-0">Earnings Overview</h6>
-                                        <div class="dropdown no-arrow"><button class="btn btn-link btn-sm dropdown-toggle" aria-expanded="false" data-bs-toggle="dropdown" type="button"><i class="fas fa-ellipsis-v text-gray-400"></i></button>
-                                            <div class="dropdown-menu shadow dropdown-menu-end animated--fade-in">
-                                                <p class="text-center dropdown-header">dropdown header:</p><a class="dropdown-item" href="#"> Action</a><a class="dropdown-item" href="#"> Another action</a>
-                                                <div class="dropdown-divider"></div><a class="dropdown-item" href="#"> Something else here</a>
-                                            </div>
-                                        </div>
-                                    </div>
-                                    <div class="card-body">
-                                        <div class="chart-area"><canvas height="400" width="570" style="display: block; height: 320px; width: 456px;"></canvas></div>
-                                    </div>
-                                </div>
-                            </div>
-                            <div class="col-lg-5 col-xl-4">
-                                <div class="card shadow mb-4">
-                                    <div class="card-header d-flex justify-content-between align-items-center">
-                                        <h6 class="text-primary fw-bold m-0">Revenue Sources</h6>
-                                        <div class="dropdown no-arrow"><button class="btn btn-link btn-sm dropdown-toggle" aria-expanded="false" data-bs-toggle="dropdown" type="button"><i class="fas fa-ellipsis-v text-gray-400"></i></button>
-                                            <div class="dropdown-menu shadow dropdown-menu-end animated--fade-in">
-                                                <p class="text-center dropdown-header">dropdown header:</p><a class="dropdown-item" href="#"> Action</a><a class="dropdown-item" href="#"> Another action</a>
-                                                <div class="dropdown-divider"></div><a class="dropdown-item" href="#"> Something else here</a>
-                                            </div>
-                                        </div>
-                                    </div>
-                                    <div class="card-body">
-                                        <div class="chart-area"><canvas height="400" width="570" style="display: block; height: 320px; width: 456px;"></canvas></div>
-                                        <div class="text-center small mt-4"><span class="me-2"><i class="fas fa-circle text-primary"></i> Direct</span><span class="me-2"><i class="fas fa-circle text-success"></i> Social</span><span class="me-2"><i class="fas fa-circle text-info"></i> Refferal</span></div>
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
-                        <div class="row">
-                            <div class="col-lg-6 mb-4">
-                                <div class="card shadow mb-4">
+
+                        <div class="card shadow mb-4 recruitment-progress" data-bs-toggle="modal" data-bs-target="#allApplicationsModal">
                                     <div class="card-header py-3">
-                                        <h6 class="text-primary fw-bold m-0">Projects</h6>
+                                        <h6 class="text-primary fw-bold m-0">Recruitment Progress</h6>
+
                                     </div>
                                     <div class="card-body">
-                                        <h4 class="small fw-bold">Server migration<span class="float-end">20%</span></h4>
-                                        <div class="progress mb-4">
-                                            <div class="progress-bar bg-danger" aria-valuenow="20" aria-valuemin="0" aria-valuemax="100" style="width: 20%;"><span class="visually-hidden">20%</span></div>
-                                        </div>
-                                        <h4 class="small fw-bold">Sales tracking<span class="float-end">40%</span></h4>
-                                        <div class="progress mb-4">
-                                            <div class="progress-bar bg-warning" aria-valuenow="40" aria-valuemin="0" aria-valuemax="100" style="width: 40%;"><span class="visually-hidden">40%</span></div>
-                                        </div>
-                                        <h4 class="small fw-bold">Customer Database<span class="float-end">60%</span></h4>
-                                        <div class="progress mb-4">
-                                            <div class="progress-bar bg-primary" aria-valuenow="60" aria-valuemin="0" aria-valuemax="100" style="width: 60%;"><span class="visually-hidden">60%</span></div>
-                                        </div>
-                                        <h4 class="small fw-bold">Payout Details<span class="float-end">80%</span></h4>
-                                        <div class="progress mb-4">
-                                            <div class="progress-bar bg-info" aria-valuenow="80" aria-valuemin="0" aria-valuemax="100" style="width: 80%;"><span class="visually-hidden">80%</span></div>
-                                        </div>
-                                        <h4 class="small fw-bold">Account setup<span class="float-end">Complete!</span></h4>
-                                        <div class="progress mb-4">
-                                            <div class="progress-bar bg-success" aria-valuenow="100" aria-valuemin="0" aria-valuemax="100" style="width: 100%;"><span class="visually-hidden">100%</span></div>
-                                        </div>
+                                        {% with applications|dictsortreversed:"status" as filtered_applications %}
+                                            {% for application in filtered_applications|slice:":5" %}  <!-- Show only 5 initially -->
+                                                {% if application.assigned_by == request.user %}
+                                                    <h4 class="small fw-bold">
+                                                        <div>
+                                                            <a href="{% url 'candidate_profile' application.candidate.id %}" class="text-primary font-weight-bold">
+                                                                {{ application.candidate.name }} {{ application.candidate.surname }}
+                                                            </a>
+                                                            <span class="float-end">Pozisyon: {{ application.job.position }}</span>
+                                                            <br>
+                                                            <small class="text-muted">
+                                                                <i class="fas fa-phone-alt"></i> {{ application.candidate.phone }}
+                                                            </small>
+                                                        </div>
+                                                        <span class="float-end">
+                                                            <p class="mb-1">
+                                                                <strong>Status:</strong>
+                                                                <span class="badge {% if application.status == 'Pending' %}bg-warning
+                                                                               {% elif application.status == 'Interviewing' %}bg-info
+                                                                               {% elif application.status == 'HR Assesment' %}bg-primary
+                                                                               {% elif application.status == 'Accepted' %}bg-success
+                                                                               {% elif application.status == 'Rejected' %}bg-danger
+                                                                               {% endif %}">
+                                                                    {{ application.status }}
+                                                                </span>
+                                                            </p>
+                                                        </span>
+                                                    </h4>
+                                                    <div class="progress mb-4">
+                                                        {% if application.status == "Pending" %}
+                                                            <div class="progress-bar bg-danger" aria-valuenow="20" aria-valuemin="0" aria-valuemax="100" style="width: 20%;">
+                                                                <span class="float-end">20%</span>
+                                                            </div>
+                                                        {% elif application.status == "Interviewing" %}
+                                                            <div class="progress-bar bg-warning" aria-valuenow="40" aria-valuemin="0" aria-valuemax="100" style="width: 40%;">
+                                                                <span class="float-end">40%</span>
+                                                            </div>
+                                                        {% elif application.status == "HR Assesment" %}
+                                                            <div class="progress-bar bg-primary" aria-valuenow="60" aria-valuemin="0" aria-valuemax="100" style="width: 60%;">
+                                                                <span class="float-end">60%</span>
+                                                            </div>
+                                                        {% endif %}
+                                                    </div>
+                                                {% endif %}
+                                            {% endfor %}
+                                        {% endwith %}
+                                        <div class="text-center small mt-4"><span class="me-2"><i class="fas fa-arrow-down text-primary"></i> See All</span></div>
+
                                     </div>
                                 </div>
-                                <div class="card shadow mb-4">
-                                    <div class="card-header py-3">
-                                        <h6 class="text-primary fw-bold m-0">Todo List</h6>
-                                    </div>
-                                    <ul class="list-group list-group-flush">
+                        <div class="container container-centered">
+                        <div class="card shadow mb-4">
+                            <div class="card-header py-3">
+                                <h6 class="text-primary fw-bold m-0">Todo List</h6>
+                            </div>
+                            <ul class="list-group list-group-flush">
                                         <li class="list-group-item">
                                             <div class="row align-items-center no-gutters">
                                                 <div class="col me-2">
@@ -213,66 +468,130 @@
                                             </div>
                                         </li>
                                     </ul>
+                        </div>
+                        </div>
+                        <!-- Modal for Full Application List -->
+                        <div class="modal fade" id="allApplicationsModal" tabindex="-1" aria-labelledby="allApplicationsModalLabel" aria-hidden="true">
+                            <div class="modal-dialog modal-lg">
+                                    <div class="modal-content">
+                                        <div class="modal-header">
+                                            <h5 class="modal-title" id="allApplicationsModalLabel">All Applications</h5>
+                                            <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                                        </div>
+                                        <div class="modal-body">
+                                            {% with applications|dictsortreversed:"status" as filtered_applications %}
+                                                {% for application in filtered_applications %}
+                                                    {% if application.assigned_by == request.user %}
+                                                        <h4 class="small fw-bold">
+                                                            <div>
+                                                                <a href="{% url 'candidate_profile' application.candidate.id %}" class="text-primary font-weight-bold">
+                                                                    {{ application.candidate.name }} {{ application.candidate.surname }}
+                                                                </a>
+                                                                <span class="float-end">Pozisyon: {{ application.job.position }}</span>
+                                                                <br>
+                                                                <small class="text-muted">
+                                                                    <i class="fas fa-phone-alt"></i> {{ application.candidate.phone }}
+                                                                </small>
+                                                            </div>
+                                                            <span class="float-end">
+                                                                <p class="mb-1">
+                                                                    <strong>Status:</strong>
+                                                                    <span class="badge {% if application.status == 'Pending' %}bg-warning
+                                                                                   {% elif application.status == 'Interviewing' %}bg-info
+                                                                                   {% elif application.status == 'HR Assesment' %}bg-primary
+                                                                                   {% elif application.status == 'Accepted' %}bg-success
+                                                                                   {% elif application.status == 'Rejected' %}bg-danger
+                                                                                   {% endif %}">
+                                                                        {{ application.status }}
+                                                                    </span>
+                                                                </p>
+                                                            </span>
+                                                        </h4>
+                                                        <div class="progress mb-4">
+                                                            {% if application.status == "Pending" %}
+                                                                <div class="progress-bar bg-danger" aria-valuenow="20" aria-valuemin="0" aria-valuemax="100" style="width: 20%;">
+                                                                    <span class="float-end">20%</span>
+                                                                </div>
+                                                            {% elif application.status == "Interviewing" %}
+                                                                <div class="progress-bar bg-warning" aria-valuenow="40" aria-valuemin="0" aria-valuemax="100" style="width: 40%;">
+                                                                    <span class="float-end">40%</span>
+                                                                </div>
+                                                            {% elif application.status == "HR Assesment" %}
+                                                                <div class="progress-bar bg-primary" aria-valuenow="60" aria-valuemin="0" aria-valuemax="100" style="width: 60%;">
+                                                                    <span class="float-end">60%</span>
+                                                                </div>
+                                                            {% endif %}
+                                                        </div>
+                                                    {% endif %}
+                                                {% endfor %}
+                                            {% endwith %}
+                                        </div>
+                                    </div>
                                 </div>
-                            </div>
-                            <div class="col">
-                                <div class="row">
-                                    <div class="col-lg-6 mb-4">
-                                        <div class="card text-white bg-primary shadow">
-                                            <div class="card-body">
-                                                <p class="m-0">Primary</p>
-                                                <p class="text-white-50 small m-0">#4e73df</p>
-                                            </div>
-                                        </div>
-                                    </div>
-                                    <div class="col-lg-6 mb-4">
-                                        <div class="card text-white bg-success shadow">
-                                            <div class="card-body">
-                                                <p class="m-0">Success</p>
-                                                <p class="text-white-50 small m-0">#1cc88a</p>
-                                            </div>
-                                        </div>
-                                    </div>
-                                    <div class="col-lg-6 mb-4">
-                                        <div class="card text-white bg-info shadow">
-                                            <div class="card-body">
-                                                <p class="m-0">Info</p>
-                                                <p class="text-white-50 small m-0">#36b9cc</p>
-                                            </div>
-                                        </div>
-                                    </div>
-                                    <div class="col-lg-6 mb-4">
-                                        <div class="card text-white bg-warning shadow">
-                                            <div class="card-body">
-                                                <p class="m-0">Warning</p>
-                                                <p class="text-white-50 small m-0">#f6c23e</p>
-                                            </div>
-                                        </div>
-                                    </div>
-                                    <div class="col-lg-6 mb-4">
-                                        <div class="card text-white bg-danger shadow">
-                                            <div class="card-body">
-                                                <p class="m-0">Danger</p>
-                                                <p class="text-white-50 small m-0">#e74a3b</p>
-                                            </div>
-                                        </div>
-                                    </div>
-                                    <div class="col-lg-6 mb-4">
-                                        <div class="card text-white bg-secondary shadow">
-                                            <div class="card-body">
-                                                <p class="m-0">Secondary</p>
-                                                <p class="text-white-50 small m-0">#858796</p>
-                                            </div>
-                                        </div>
-                                    </div>
-                                </div>
-                            </div>
                         </div>
                     </div>
                 </div>
+            </div>
         </div>
-    </div>
+    <!-- JavaScript for Filtering -->
+    <script>
 
+        // Make cards clickable
+        document.querySelectorAll('.upcoming-interviews').forEach(card => {
+            card.addEventListener('click', function(e) {
+                // Don't trigger if clicking on buttons or links
+                if (!e.target.closest('.btn') && !e.target.closest('a')) {
+                    e.stopPropagation();
+                }
+            });
+        });
+
+        document.querySelectorAll('.recruitment-progress').forEach(card => {
+            card.addEventListener('click', function(e) {
+                // Prevent modal trigger if clicking inside links or buttons
+                if (e.target.closest('a') || e.target.closest('.btn')) {
+                    e.stopPropagation();
+                }
+            });
+        });
+        document.querySelectorAll('.mb-4-button-1').forEach(card => {
+            card.addEventListener('click', function(e) {
+                window.location.href = `/candidate/`;
+            });
+        });
+        {#document.querySelectorAll('.mb-4-button-1').forEach(card => {#}
+        {#    card.addEventListener('click', function(e) {#}
+        {#        // Don't trigger if clicking on buttons or links#}
+        {#        if (!e.target.closest('.btn') && !e.target.closest('a')) {#}
+        {#            window.location.href = '/applications/';#}
+        {#        }#}
+        {#    });#}
+        {# });#}
+        document.querySelectorAll('.mb-4-button-2').forEach(card => {
+            card.addEventListener('click', function(e) {
+                // Don't trigger if clicking on buttons or links
+                if (!e.target.closest('.btn') && !e.target.closest('a')) {
+                    window.location.href = #allApplicationsModal;
+                }
+            });
+        });
+        document.querySelectorAll('.mb-4-button-3').forEach(card => {
+            card.addEventListener('click', function(e) {
+                // Don't trigger if clicking on buttons or links
+                if (!e.target.closest('.btn') && !e.target.closest('a')) {
+                    window.location.href = #allApplicationsModal;
+                }
+            });
+        });
+        document.querySelectorAll('.mb-4-button-4').forEach(card => {
+            card.addEventListener('click', function(e) {
+                // Don't trigger if clicking on buttons or links
+                if (!e.target.closest('.btn') && !e.target.closest('a')) {
+                    window.location.href = #allApplicationsModal;
+                }
+            });
+        });
+    </script>
 </body>
 
 {% endblock %}

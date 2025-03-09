@@ -32,8 +32,15 @@ def evaluate_job_request(request, job_request_id):
 def dashboard(request):
     user_type = UserType.objects.filter(user=request.user).first()
     applications = Application.objects.filter(assigned_by=request.user).order_by('-status')
-
-    return render(request, 'hr_dashboard.html',{'user': request.user, "user_type":user_type.user_type, "applications":applications})
+    # Get pending interviews for the logged-in user
+    pending_interviews = Interview.objects.filter(
+        evaluator=request.user,
+        decision='Pending'
+    ).select_related(
+        'candidate',
+        'application__job__position'
+    ).order_by('date')
+    return render(request, 'hr_dashboard.html',{'user': request.user, "user_type":user_type.user_type, "applications":applications, "pending_interviews":pending_interviews})
 
 
 @login_required
@@ -99,6 +106,8 @@ def interview_assessment(request, interview_id):
 
 @login_required
 def my_interviews(request):
+    user_type = UserType.objects.filter(user=request.user).first()
+
     # Get pending interviews for the logged-in user
     pending_interviews = Interview.objects.filter(
         evaluator=request.user,
@@ -120,5 +129,6 @@ def my_interviews(request):
     
     return render(request, 'my_interviews.html', {
         'pending_interviews': pending_interviews,
-        'completed_interviews': completed_interviews
+        'completed_interviews': completed_interviews,
+        'user': request.user, "user_type": user_type.user_type
     })
