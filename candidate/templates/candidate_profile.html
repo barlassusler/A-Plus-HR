@@ -80,7 +80,7 @@
                         <h6>{{ application.job.title }}</h6>
                         <p class="mb-1">
                             <strong>Position:</strong> {{ application.job.position.position }}
-                            at {{ application.job.organization.organization }}
+                            at {{ application.job.organization }}
                         </p>
                         <p class="mb-1">
                             <strong>Status:</strong> 
@@ -135,10 +135,10 @@
                                         {% if interview.decision != 'Note' %}
                                             <p class="mb-1">
                                                 <strong>Decision:</strong> 
-                                                <span class="badge {% if interview.decision == 'Pending' %}badge-warning
-                                                       {% elif interview.decision == 'Passed' %}badge-success
-                                                       {% elif interview.decision == 'Failed' %}badge-danger
-                                                       {% else %}badge-secondary{% endif %}">
+                                                <span class="badge {% if interview.decision == 'Pending' %}bg-warning
+                                                       {% elif interview.decision == 'Passed' %}bg-success
+                                                       {% elif interview.decision == 'Failed' %}bg-danger
+                                                       {% else %}bg-secondary{% endif %}">
                                                     {{ interview.decision }}
                                                 </span>
                                             </p>
@@ -193,9 +193,9 @@
                                 {% endif %}
                                 <p class="mb-1">
                                     <strong>Decision:</strong> 
-                                    <span class="badge {% if interview.decision == 'Passed' %}badge-success
-                                                   {% elif interview.decision == 'Failed' %}badge-danger
-                                                   {% else %}badge-warning{% endif %}">
+                                    <span class="badge {% if interview.decision == 'Passed' %}bg-success
+                                                   {% elif interview.decision == 'Failed' %}bg-danger
+                                                   {% else %}bg-warning{% endif %}">
                                         {{ interview.decision }}
                                     </span>
                                 </p>
@@ -277,79 +277,81 @@
                 </div>
             </div>
 
-            <!-- Evaluations Card -->
+<!-- Evaluations Card -->
             <div class="card shadow mb-4">
                 <div class="card-header py-3">
                     <h6 class="text-primary fw-bold m-0">Evaluations & Incubation</h6>
                 </div>
                 <div class="card-body">
                     {% for application in applications %}
-                        <div class="evaluation-section mb-4 border-bottom">
-                            <h6>{{ application.job.position.position }} at {{ application.job.organization.organization }}</h6>
-                            
-                            <!-- Interview Evaluations -->
-                            {% for evaluation in evaluations %}
-                                {% if evaluation.job == application.job %}
-                                    <div class="mb-3">
-                                        <h6 class="text-muted">Final Interview Evaluation</h6>
-                                        <p><strong>Decision:</strong> {{ evaluation.interview_decision }}</p>
-                                        {% with scores=evaluation.evaluation_scores|json_parse %}
-                                            <p><strong>Average Scores:</strong></p>
-                                            <ul>
-                                                <li>Problem Solving: {{ scores.avg_problem_solving|floatformat:1 }}/10</li>
-                                                <li>Technical Skills: {{ scores.avg_technical_skills|floatformat:1 }}/10</li>
-                                            </ul>
-                                        {% endwith %}
-                                        <p><small>Evaluated by {{ evaluation.evaluator.get_full_name }}</small></p>
-                                    </div>
-                                {% endif %}
-                            {% endfor %}
-                            
-                            <!-- Incubation Evaluations -->
-                            {% for incubation in incubation_evaluations %}
-                                {% if incubation.job == application.job %}
-                                    <div class="mb-3">
-                                        <h6 class="text-muted">Incubation Evaluation</h6>
-                                        <p><strong>Period:</strong> {{ incubation.start_date }} to {{ incubation.end_date }}</p>
-                                        {% if incubation.evaluation_scores %}
-                                            {% with scores=incubation.evaluation_scores|json_parse %}
-                                                <div class="row">
-                                                    <div class="col-md-6">
-                                                        <ul class="list-unstyled">
-                                                            <li>Team Work: {{ scores.team_work }}/10</li>
-                                                            <li>Rule Compliance: {{ scores.rule_compliance }}/10</li>
-                                                            <li>Learning Capacity: {{ scores.learning_capacity }}/10</li>
-                                                            <li>Willingness to Learn: {{ scores.willingness_to_learn }}/10</li>
-                                                            <li>Stress Handling: {{ scores.stress_handling }}/10</li>
-                                                        </ul>
-                                                    </div>
-                                                    <div class="col-md-6">
-                                                        <ul class="list-unstyled">
-                                                            <li>Tool Usage: {{ scores.tool_usage }}/10</li>
-                                                            <li>Task Completion: {{ scores.task_completion }}/10</li>
-                                                            <li>Interpersonal Skills: {{ scores.interpersonal_skills }}/10</li>
-                                                            <li>Leadership: {{ scores.leadership }}/10</li>
-                                                            <li>Planning: {{ scores.planning }}/10</li>
-                                                        </ul>
-                                                    </div>
-                                                </div>
+                        {% if application.status == 'Interviewing' %}
+                            <div class="evaluation-section mb-4 border-bottom">
+                                <h6>{{ application.job.position.position }} at {{ application.job.organization }}</h6>
+
+                                <!-- Interview Evaluations -->
+                                {% for evaluation in evaluations %}
+                                    {% if evaluation.job == application.job %}
+                                        <div class="mb-3">
+                                            <h6 class="text-muted">Final Interview Evaluation</h6>
+                                            <p><strong>Decision:</strong> {{ evaluation.interview_decision }}</p>
+                                            {% with scores=evaluation.evaluation_scores|json_parse %}
+                                                <p><strong>Average Scores:</strong></p>
+                                                <ul>
+                                                    <li>Problem Solving: {{ scores.avg_problem_solving|floatformat:1 }}/10</li>
+                                                    <li>Technical Skills: {{ scores.avg_technical_skills|floatformat:1 }}/10</li>
+                                                </ul>
                                             {% endwith %}
-                                        {% endif %}
-                                        <p><strong>Decision:</strong> {{ incubation.manager_decision }}</p>
-                                        <p><strong>Explanation:</strong> {{ incubation.decision_explanation }}</p>
-                                        <p><small>Evaluated by {{ incubation.evaluator.get_full_name }}</small></p>
-                                    </div>
-                                {% endif %}
-                            {% endfor %}
-                            
-                            {% if application.status == 'Interviewing' %}
+                                            <p><small>Evaluated by {{ evaluation.evaluator.get_full_name }}</small></p>
+                                        </div>
+                                    {% endif %}
+                                {% endfor %}
+
+                                <!-- Incubation Evaluations -->
+                                {% for incubation in incubation_evaluations %}
+                                    {% if incubation.job == application.job %}
+                                        <div class="mb-3">
+                                            <h6 class="text-muted">Incubation Evaluation</h6>
+                                            <p><strong>Period:</strong> {{ incubation.start_date }} to {{ incubation.end_date }}</p>
+                                            {% if incubation.evaluation_scores %}
+                                                {% with scores=incubation.evaluation_scores|json_parse %}
+                                                    <div class="row">
+                                                        <div class="col-md-6">
+                                                            <ul class="list-unstyled">
+                                                                <li>Team Work: {{ scores.team_work }}/10</li>
+                                                                <li>Rule Compliance: {{ scores.rule_compliance }}/10</li>
+                                                                <li>Learning Capacity: {{ scores.learning_capacity }}/10</li>
+                                                                <li>Willingness to Learn: {{ scores.willingness_to_learn }}/10</li>
+                                                                <li>Stress Handling: {{ scores.stress_handling }}/10</li>
+                                                            </ul>
+                                                        </div>
+                                                        <div class="col-md-6">
+                                                            <ul class="list-unstyled">
+                                                                <li>Tool Usage: {{ scores.tool_usage }}/10</li>
+                                                                <li>Task Completion: {{ scores.task_completion }}/10</li>
+                                                                <li>Interpersonal Skills: {{ scores.interpersonal_skills }}/10</li>
+                                                                <li>Leadership: {{ scores.leadership }}/10</li>
+                                                                <li>Planning: {{ scores.planning }}/10</li>
+                                                            </ul>
+                                                        </div>
+                                                    </div>
+                                                {% endwith %}
+                                            {% endif %}
+                                            <p><strong>Decision:</strong> {{ incubation.manager_decision }}</p>
+                                            <p><strong>Explanation:</strong> {{ incubation.decision_explanation }}</p>
+                                            <p><small>Evaluated by {{ incubation.evaluator.get_full_name }}</small></p>
+                                        </div>
+                                    {% endif %}
+                                {% endfor %}
+
                                 <div class="text-right">
                                     <a href="{% url 'candidate_evaluation' application.id %}" class="btn btn-primary btn-sm">
                                         Complete Final Evaluation
                                     </a>
                                 </div>
-                            {% endif %}
-                        </div>
+                            </div>
+                        {% endif %}
+                    {% empty %}
+                        <p>No applications with 'Interviewing' status</p>
                     {% endfor %}
                 </div>
             </div>

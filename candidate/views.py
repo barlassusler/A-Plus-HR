@@ -138,6 +138,7 @@ def candidate_profile(request, candidate_id):
     applications = Application.objects.filter(candidate=candidate)
     evaluations = Evaluation.objects.filter(candidate=candidate)
     interviews = Interview.objects.filter(candidate=candidate)
+    job_requests = JobRequest.objects.all()
 
     context = {
         'candidate': candidate,
@@ -146,6 +147,7 @@ def candidate_profile(request, candidate_id):
         'interviews': interviews,
         'hr_staff': hr_staff,
         'managers': managers,
+        'job_requests': job_requests
     }
     
     return render(request, 'candidate_profile.html', context)
