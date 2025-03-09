@@ -31,12 +31,92 @@
                             <div class="card-body">
                                 <div class="row">
                                     <div class="col-md-6 mb-3">
-                                        <label>Problem Solving Skills (1-10)</label>
-                                        <input type="number" name="problem_solving" class="form-control" min="1" max="10" required>
+                                        <label>Problem Solving Skills</label>
+                                        <select name="problem_solving" class="form-control" required>
+                                            {% for value, label in evaluation_choices %}
+                                                <option value="{{ value }}">{{ label }}</option>
+                                            {% endfor %}
+                                        </select>
                                     </div>
                                     <div class="col-md-6 mb-3">
-                                        <label>Technical Skills (1-10)</label>
-                                        <input type="number" name="technical_skills" class="form-control" min="1" max="10" required>
+                                        <label>Technical Qualification</label>
+                                        <select name="technical_qualification" class="form-control" required>
+                                            {% for value, label in evaluation_choices %}
+                                                <option value="{{ value }}">{{ label }}</option>
+                                            {% endfor %}
+                                        </select>
+                                    </div>
+                                    <div class="col-md-6 mb-3">
+                                        <label>Behaviour</label>
+                                        <select name="Behaviour" class="form-control" required>
+                                            {% for value, label in evaluation_choices %}
+                                                <option value="{{ value }}">{{ label }}</option>
+                                            {% endfor %}
+                                        </select>
+                                    </div>
+                                    <div class="col-md-6 mb-3">
+                                        <label>Appearance</label>
+                                        <select name="Appearance" class="form-control" required>
+                                            {% for value, label in evaluation_choices %}
+                                                <option value="{{ value }}">{{ label }}</option>
+                                            {% endfor %}
+                                        </select>
+                                    </div>
+                                    <div class="col-md-6 mb-3">
+                                        <label>Communication</label>
+                                        <select name="Communucation" class="form-control" required>
+                                            {% for value, label in evaluation_choices %}
+                                                <option value="{{ value }}">{{ label }}</option>
+                                            {% endfor %}
+                                        </select>
+                                    </div>
+                                    <div class="col-md-6 mb-3">
+                                        <label>Dedication to Job</label>
+                                        <select name="Dedication_to_job" class="form-control" required>
+                                            {% for value, label in evaluation_choices %}
+                                                <option value="{{ value }}">{{ label }}</option>
+                                            {% endfor %}
+                                        </select>
+                                    </div>
+                                    <div class="col-md-6 mb-3">
+                                        <label>Team Work</label>
+                                        <select name="Team_work" class="form-control" required>
+                                            {% for value, label in evaluation_choices %}
+                                                <option value="{{ value }}">{{ label }}</option>
+                                            {% endfor %}
+                                        </select>
+                                    </div>
+                                    <div class="col-md-6 mb-3">
+                                        <label>Success</label>
+                                        <select name="Succes" class="form-control" required>
+                                            {% for value, label in evaluation_choices %}
+                                                <option value="{{ value }}">{{ label }}</option>
+                                            {% endfor %}
+                                        </select>
+                                    </div>
+                                    <div class="col-md-6 mb-3">
+                                        <label>Open to Improvement</label>
+                                        <select name="open_to_improvement" class="form-control" required>
+                                            {% for value, label in evaluation_choices %}
+                                                <option value="{{ value }}">{{ label }}</option>
+                                            {% endfor %}
+                                        </select>
+                                    </div>
+                                    <div class="col-md-6 mb-3">
+                                        <label>Advancement</label>
+                                        <select name="advancement" class="form-control" required>
+                                            {% for value, label in evaluation_choices %}
+                                                <option value="{{ value }}">{{ label }}</option>
+                                            {% endfor %}
+                                        </select>
+                                    </div>
+                                    <div class="col-md-6 mb-3">
+                                        <label>Leadership</label>
+                                        <select name="leadership" class="form-control" required>
+                                            {% for value, label in evaluation_choices %}
+                                                <option value="{{ value }}">{{ label }}</option>
+                                            {% endfor %}
+                                        </select>
                                     </div>
                                 </div>
                             </div>
@@ -52,10 +132,17 @@
                                     <label>Overall Assessment</label>
                                     <textarea name="general_assessment" class="form-control" rows="4" required></textarea>
                                 </div>
-                                
                                 <div class="form-group">
                                     <label>Work Hours Assessment</label>
                                     <textarea name="work_hours_assessment" class="form-control" rows="2" required></textarea>
+                                </div>
+                                <div class="form-group">
+                                    <label>HR Evaluation</label>
+                                    <textarea name="HR_evaluation" class="form-control" rows="4" maxlength="1000"></textarea>
+                                </div>
+                                <div class="form-group">
+                                    <label>Manager Evaluation</label>
+                                    <textarea name="manager_evaluation" class="form-control" rows="4" maxlength="1000"></textarea>
                                 </div>
                             </div>
                         </div>
@@ -68,13 +155,19 @@
                             <div class="card-body">
                                 <div class="form-group">
                                     <label>Decision</label>
-                                    <select name="decision" class="form-control" required>
-                                        <option value="Passed">Pass</option>
-                                        <option value="Failed">Fail</option>
-                                        <option value="On Hold">On Hold</option>
+                                    <select name="decision" id="decisionSelect" class="form-control" required>
+                                        {% for value, label in decision_choices %}
+                                            <option value="{{ value }}">{{ label }}</option>
+                                        {% endfor %}
                                     </select>
                                 </div>
                             </div>
+                        </div>
+
+                        <!-- Explanation (moved to bottom and conditional) -->
+                        <div class="form-group" id="explanationSection" style="display: none;">
+                            <label>Explanation</label>
+                            <textarea name="Explanation" class="form-control" rows="4" maxlength="350"></textarea>
                         </div>
 
                         <div class="text-right">
@@ -86,4 +179,25 @@
         </div>
     </div>
 </div>
+
+<script>
+document.addEventListener('DOMContentLoaded', function() {
+    const decisionSelect = document.getElementById('decisionSelect');
+    const explanationSection = document.getElementById('explanationSection');
+    
+    function toggleExplanation() {
+        if (decisionSelect.value === 'Farklı bir kadroda değerlendirilebilir') {
+            explanationSection.style.display = 'block';
+        } else {
+            explanationSection.style.display = 'none';
+        }
+    }
+    
+    // Initial check
+    toggleExplanation();
+    
+    // Check on change
+    decisionSelect.addEventListener('change', toggleExplanation);
+});
+</script>
 {% endblock %}

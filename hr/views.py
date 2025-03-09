@@ -53,12 +53,24 @@ def interview_assessment(request, interview_id):
         return redirect('home')
     
     if request.method == 'POST':
-        # Create InterviewAttributes
+        # Create InterviewAttributes with new fields
         attributes = InterviewAttributes.objects.create(
             candidate=interview.candidate,
             application=interview.application,
             problem_solving=request.POST.get('problem_solving'),
-            technical_skills=request.POST.get('technical_skills')
+            technical_qualification=request.POST.get('technical_qualification'),
+            Behaviour=request.POST.get('Behaviour'),
+            Appearance=request.POST.get('Appearance'),
+            Communucation=request.POST.get('Communucation'),
+            Dedication_to_job=request.POST.get('Dedication_to_job'),
+            Team_work=request.POST.get('Team_work'),
+            Succes=request.POST.get('Succes'),
+            open_to_improvement=request.POST.get('open_to_improvement'),
+            advancement=request.POST.get('advancement'),
+            leadership=request.POST.get('leadership'),
+            Explanation=request.POST.get('Explanation'),
+            HR_evaluation=request.POST.get('HR_evaluation'),
+            manager_evaluation=request.POST.get('manager_evaluation')
         )
         
         # Update Interview
@@ -67,20 +79,31 @@ def interview_assessment(request, interview_id):
         interview.work_hours_assessment = request.POST.get('work_hours_assessment')
         interview.decision = request.POST.get('decision')
         
-        # Calculate and store evaluation scores
+        # Calculate and store evaluation scores (updated to include all evaluation fields)
         scores = {
             'problem_solving': request.POST.get('problem_solving'),
-            'technical_skills': request.POST.get('technical_skills')
+            'technical_qualification': request.POST.get('technical_qualification'),
+            'Behaviour': request.POST.get('Behaviour'),
+            'Appearance': request.POST.get('Appearance'),
+            'Communucation': request.POST.get('Communucation'),
+            'Dedication_to_job': request.POST.get('Dedication_to_job'),
+            'Team_work': request.POST.get('Team_work'),
+            'Succes': request.POST.get('Succes'),
+            'open_to_improvement': request.POST.get('open_to_improvement'),
+            'advancement': request.POST.get('advancement'),
+            'leadership': request.POST.get('leadership'),
         }
         interview.evaluation_scores = json.dumps(scores)
         
         interview.save()
         
-        # Update application status based on decision
-        if interview.decision == 'Passed':
+        # Update application status based on decision (adjust for new Decision_CHOICES)
+        if interview.decision == 'Olumlu':
             interview.application.status = 'HR Assessment'
-        elif interview.decision == 'Failed':
+        elif interview.decision == 'Olumsuz':
             interview.application.status = 'Rejected'
+        elif interview.decision == 'Beklemede':
+            interview.application.status = 'Pending'
         interview.application.save()
         
         # Notify HR manager
@@ -94,7 +117,9 @@ def interview_assessment(request, interview_id):
         return redirect('candidate_profile', candidate_id=interview.candidate.id)
     
     return render(request, 'interview_form.html', {
-        'interview': interview
+        'interview': interview,
+        'evaluation_choices': InterviewAttributes.EVALUATION_CHOICES,  # Pass choices to template
+        'decision_choices': InterviewAttributes.Decision_CHOICES,
     })
 
 @login_required

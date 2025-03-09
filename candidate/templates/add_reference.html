@@ -13,30 +13,62 @@
                 <div class="row">
                     <div class="col-md-6">
                         <div class="form-group">
+                            <label>Desired Position</label>
+                            <input type="text" name="desired_position" class="form-control" required>
+                        </div>
+                        <div class="form-group">
+                            <label>Reference Outcome</label>
+                            <input type="text" name="reference_outcome" class="form-control" required>
+                        </div>
+                        <div class="form-group">
+                            <label>Date</label>
+                            <input type="date" name="date" class="form-control" required>
+                        </div>
+                        <div class="form-group">
+                            <label>Info Retriever Name</label>
+                            <input type="text" name="info_retriever_name" class="form-control" required>
+                        </div>
+                        <div class="form-group">
                             <label>Reference Name</label>
                             <input type="text" name="reference_name" class="form-control" required>
                         </div>
                         <div class="form-group">
-                            <label>Role</label>
-                            <input type="text" name="reference_role" class="form-control" required>
-                        </div>
-                        <div class="form-group">
-                            <label>Company</label>
-                            <input type="text" name="reference_company" class="form-control" required>
-                        </div>
-                        <div class="form-group">
-                            <label>Phone</label>
+                            <label>Reference Phone</label>
                             <input type="tel" name="reference_phone" class="form-control" required>
                         </div>
                         <div class="form-group">
-                            <label>Work Duration</label>
-                            <input type="text" name="work_duration" class="form-control" required>
+                            <label>Reference Company</label>
+                            <input type="text" name="reference_company" class="form-control" required>
+                        </div>
+                        <div class="form-group">
+                            <label>Reference Title</label>
+                            <input type="text" name="reference_title" class="form-control" required>
+                        </div>
+                        <div class="form-group">
+                            <label>Reference Relation to Candidate</label>
+                            <input type="text" name="refereance_relation_to_candidate" class="form-control" required>
                         </div>
                     </div>
                     <div class="col-md-6">
                         <div class="form-group">
+                            <label>Work Duration with Company</label>
+                            <textarea name="work_duration_with_company" class="form-control" rows="2" required></textarea>
+                        </div>
+                        <div class="form-group">
+                            <label>Work Duration with Referee</label>
+                            <textarea name="work_duration_with_referee" class="form-control" rows="2" required></textarea>
+                        </div>
+                        <div class="form-group">
                             <label>Duties</label>
                             <textarea name="duties" class="form-control" rows="2" required></textarea>
+                        </div>
+                        <div class="form-group">
+                            <label>Advancements</label>
+                            <textarea name="advancements" class="form-control" rows="2" required></textarea>
+                        </div>
+                        <div class="form-group">
+                            <label>Discipline</label>
+                            <textarea name="dicipline" class="form-control" rows="2" required></textarea>
                         </div>
                         <div class="form-group">
                             <label>Strengths</label>
@@ -44,18 +76,27 @@
                         </div>
                         <div class="form-group">
                             <label>Areas for Improvement</label>
-                            <textarea name="weaknesses" class="form-control" rows="2" required></textarea>
+                            <textarea name="areas_for_improvement" class="form-control" rows="2" required></textarea>
+                        </div>
+                        <div class="form-group">
+                            <label>Major Error</label>
+                            <textarea name="major_error" class="form-control" rows="2" required></textarea>
+                        </div>
+                        <div class="form-group">
+                            <label>Responsibility</label>
+                            <textarea name="responsibility" class="form-control" rows="2" required></textarea>
                         </div>
                         <div class="form-group">
                             <label>Reason for Leaving</label>
                             <textarea name="reason_for_leaving" class="form-control" rows="2" required></textarea>
                         </div>
                         <div class="form-group">
-                            <label>Would Work with Again?</label>
-                            <select name="would_work_again" class="form-control" required>
-                                <option value="true">Yes</option>
-                                <option value="false">No</option>
-                            </select>
+                            <label>Would Work Again</label>
+                            <textarea name="would_work_again" class="form-control" rows="2" required></textarea>
+                        </div>
+                        <div class="form-group">
+                            <label>Further Explanation</label>
+                            <textarea name="further_explanation" class="form-control" rows="2" required></textarea>
                         </div>
                     </div>
                 </div>
