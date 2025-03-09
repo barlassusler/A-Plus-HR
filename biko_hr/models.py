@@ -114,8 +114,54 @@ class Evaluation(models.Model):
 class InterviewAttributes(models.Model):
     candidate = models.ForeignKey(Candidate, on_delete=models.CASCADE)
     application = models.ForeignKey(Application, on_delete=models.CASCADE)
-    problem_solving = models.IntegerField()
-    technical_skills = models.IntegerField()
+    APPLICATION_SOURCE_TYPE_CHOICES = [
+        ('Acıbadem Kariyer', 'Acıbadem Kariyer'),
+        ('Secret CV	', 'Secret CV'),
+        ('Kariyer Net', 'Kariyer Net'),
+        ('İlave Kadro', 'İlave Kadro'),
+        ('Yenibiriş.com', 'Yenibiriş.com'),
+        (' Referans', ' Referans'),
+    ]
+    
+    EVALUATION_CHOICES = [
+        ('Zayıf', 'Zayıf'),
+        ('Gelişmesi Gerekli', 'Gelişmesi Gerekli'),
+        ('Beklentileri Karşılıyor', 'Beklentileri Karşılıyor'),
+        ('Başarılı', 'Başarılı'),
+        ('Çok Başarılı', 'Çok Başarılı'),
+        
+    ]
+    WORKING_HOUR_CHOICES = [
+        ('Esnek çalışma saatlerine uyum', 'Esnek çalışma saatlerine uyum'),
+        ('Vardiyalı çalışmaya uyum', 'Vardiyalı çalışmaya uyum'),
+        ('Hafta sonu çalışma günlerine uyum', 'Hafta sonu çalışma günlerine uyum'),
+        ('Başarılı', 'Başarılı'),
+        ('Çok Başarılı', 'Çok Başarılı'),
+        
+    ]
+    
+    Decision_CHOICES = [
+        ('Olumlu', 'Olumlu'),
+        ('Olumsuz ', 'Olumsuz'),
+        ('Beklemede', 'Beklemede'),
+        ('Farklı bir kadroda değerlendirilebilir', 'Farklı bir kadroda değerlendirilebilir'),
+        
+        
+    ]
+    Explanation=models.CharField(max_length=350,null=True)
+    HR_evaluation=models.CharField(max_length=1000,blank=True, null=True)
+    manager_evaluation=models.CharField(max_length=1000,blank=True, null=True)
+    Behaviour=models.CharField(max_length=100, choices=EVALUATION_CHOICES,blank=True, null=True)
+    Appearance=models.CharField(max_length=100, choices=EVALUATION_CHOICES,blank=True, null=True)
+    Communucation=models.CharField(max_length=100, choices=EVALUATION_CHOICES,blank=True, null=True)
+    Dedication_to_job=models.CharField(max_length=100, choices=EVALUATION_CHOICES,blank=True, null=True)
+    Team_work=models.CharField(max_length=100, choices=EVALUATION_CHOICES,blank=True, null=True)
+    Succes=models.CharField(max_length=100, choices=EVALUATION_CHOICES,blank=True, null=True)
+    open_to_improvement=models.CharField(max_length=100, choices=EVALUATION_CHOICES,blank=True, null=True)
+    advancement=models.CharField(max_length=100, choices=EVALUATION_CHOICES,blank=True, null=True)
+    leadership=models.CharField(max_length=100, choices=EVALUATION_CHOICES,blank=True, null=True)
+    problem_solving=models.CharField(max_length=100, choices=EVALUATION_CHOICES,blank=True, null=True)
+    technical_qualification=models.CharField(max_length=100, choices=EVALUATION_CHOICES,blank=True, null=True)
     # Add other attributes as needed
 
 class IncubationEvaluation(models.Model):
@@ -145,17 +191,34 @@ class IncubationAttributes(models.Model):
 
 class Reference(models.Model):
     candidate = models.ForeignKey(Candidate, on_delete=models.CASCADE)
-    reference_name = models.CharField(max_length=100)
-    reference_role = models.CharField(max_length=100)
-    reference_company = models.CharField(max_length=100)
-    reference_phone = models.CharField(max_length=15)
-    work_duration = models.TextField()
-    duties = models.TextField()
-    strengths = models.TextField()
-    weaknesses = models.TextField()
-    reason_for_leaving = models.TextField()
-    would_work_again = models.BooleanField()
+    desired_position = models.CharField(max_length=100,default='Not specified')
+    reference_outcome = models.CharField(max_length=100,default='Not specified')
+    date = models.DateField(null=True)
+    info_retriever_name = models.CharField(max_length=100,default='Not specified')
+    referance_name = models.CharField(max_length=100,default='Not specified')  # Note: consider renaming to "reference_name" for consistency
+    reference_phone = models.CharField(max_length=15,default='Not specified')
+    reference_company = models.CharField(max_length=15,default='Not specified')
+    reference_title = models.CharField(max_length=15,default='Not specified')
+    refereance_relation_to_candidate = models.CharField(max_length=30)  # Note: consider "reference_relation_to_candidate"
+    work_duration_with_company = models.TextField(default='Not specified')  # Added default
+    work_duration_with_referee = models.TextField(default='Not specified')  # Added default
+    duties = models.TextField(default='Not specified')  # Added default
+    advancements = models.TextField(default='Not specified')  # Added default to fix the error
+    dicipline = models.TextField(default='Not specified')  # Added default (should be "discipline")
+    strengths = models.TextField(default='Not specified')  # Added default
+    areas_for_improvement = models.TextField(default='Not specified')  # Added default
+    major_error = models.TextField(default='Not specified')  # Added default
+    responsibility = models.TextField(default='Not specified')  # Added default
+    reason_for_leaving = models.TextField(default='Not specified')  # Added default
+    would_work_again = models.TextField(default='Not specified')  # Added default
+    further_explanation = models.TextField(default='Not specified')  # Added default
 
+    class Meta:
+        verbose_name = "Reference"
+        verbose_name_plural = "References"
+
+    def __str__(self):
+        return f"Reference for {self.candidate} by {self.referance_name}"
 
 
 

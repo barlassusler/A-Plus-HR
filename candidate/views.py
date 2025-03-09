@@ -124,24 +124,12 @@ def get_candidate_pool(request):
 def candidate_profile(request, candidate_id):
     candidate = get_object_or_404(Candidate, id=candidate_id)
     
-    # Get HR staff for evaluator selection
-    hr_staff = User.objects.filter(
-        user_type__user_type='hr_staff'
-    ).exclude(
-        user_type__isnull=True
-    )
-
-    # Get managers for manager selection
-    managers = User.objects.filter(
-        user_type__user_type__in=['organization_staff', 'Director']
-    ).exclude(
-        user_type__isnull=True
-    )
-
-    # Get applications and other data
+    hr_staff = User.objects.filter(user_type__user_type='hr_staff').exclude(user_type__isnull=True)
+    managers = User.objects.filter(user_type__user_type__in=['organization_staff', 'Director']).exclude(user_type__isnull=True)
     applications = Application.objects.filter(candidate=candidate)
     evaluations = Evaluation.objects.filter(candidate=candidate)
     interviews = Interview.objects.filter(candidate=candidate)
+    job_requests = JobRequest.objects.all()  # Açık işler için uygun bir filtre ekleyin
 
     context = {
         'candidate': candidate,
@@ -150,6 +138,7 @@ def candidate_profile(request, candidate_id):
         'interviews': interviews,
         'hr_staff': hr_staff,
         'managers': managers,
+        'job_requests': job_requests,
     }
     
     return render(request, 'candidate_profile.html', context)
@@ -427,21 +416,35 @@ def add_reference(request, candidate_id):
     candidate = get_object_or_404(Candidate, id=candidate_id)
     
     if request.method == 'POST':
-        Reference.objects.create(
-            candidate=candidate,
-            reference_name=request.POST.get('reference_name'),
-            reference_role=request.POST.get('reference_role'),
-            reference_company=request.POST.get('reference_company'),
-            reference_phone=request.POST.get('reference_phone'),
-            work_duration=request.POST.get('work_duration'),
-            duties=request.POST.get('duties'),
-            strengths=request.POST.get('strengths'),
-            weaknesses=request.POST.get('weaknesses'),
-            reason_for_leaving=request.POST.get('reason_for_leaving'),
-            would_work_again=request.POST.get('would_work_again') == 'true'
-        )
-        messages.success(request, 'Reference added successfully')
-        return redirect('candidate_profile', candidate_id=candidate_id)
+        try:
+            Reference.objects.create(
+                candidate=candidate,
+                desired_position=request.POST.get('desired_position'),
+                reference_outcome=request.POST.get('reference_outcome'),
+                date=request.POST.get('date'),
+                info_retriever_name=request.POST.get('info_retriever_name'),
+                reference_name=request.POST.get('reference_name'),
+                reference_phone=request.POST.get('reference_phone'),
+                reference_company=request.POST.get('reference_company'),
+                reference_title=request.POST.get('reference_title'),
+                refereance_relation_to_candidate=request.POST.get('refereance_relation_to_candidate'),
+                work_duration_with_company=request.POST.get('work_duration_with_company'),
+                work_duration_with_referee=request.POST.get('work_duration_with_referee'),
+                duties=request.POST.get('duties'),
+                advancements=request.POST.get('advancements'),
+                dicipline=request.POST.get('dicipline'),
+                strengths=request.POST.get('strengths'),
+                areas_for_improvement=request.POST.get('areas_for_improvement'),
+                major_error=request.POST.get('major_error'),
+                responsibility=request.POST.get('responsibility'),
+                reason_for_leaving=request.POST.get('reason_for_leaving'),
+                would_work_again=request.POST.get('would_work_again'),
+                further_explanation=request.POST.get('further_explanation')
+            )
+            messages.success(request, 'Reference added successfully')
+            return redirect('candidate_profile', candidate_id=candidate_id)
+        except Exception as e:
+            messages.error(request, f'Error adding reference: {str(e)}')
     
     return render(request, 'add_reference.html', {
         'candidate': candidate
