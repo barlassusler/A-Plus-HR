@@ -120,24 +120,12 @@ def get_candidate_pool(request):
 def candidate_profile(request, candidate_id):
     candidate = get_object_or_404(Candidate, id=candidate_id)
     
-    # Get HR staff for evaluator selection
-    hr_staff = User.objects.filter(
-        user_type__user_type='hr_staff'
-    ).exclude(
-        user_type__isnull=True
-    )
-
-    # Get managers for manager selection
-    managers = User.objects.filter(
-        user_type__user_type__in=['organization_staff', 'Director']
-    ).exclude(
-        user_type__isnull=True
-    )
-
-    # Get applications and other data
+    hr_staff = User.objects.filter(user_type__user_type='hr_staff').exclude(user_type__isnull=True)
+    managers = User.objects.filter(user_type__user_type__in=['organization_staff', 'Director']).exclude(user_type__isnull=True)
     applications = Application.objects.filter(candidate=candidate)
     evaluations = Evaluation.objects.filter(candidate=candidate)
     interviews = Interview.objects.filter(candidate=candidate)
+    job_requests = JobRequest.objects.all()  # Açık işler için uygun bir filtre ekleyin
 
     context = {
         'candidate': candidate,
@@ -146,6 +134,7 @@ def candidate_profile(request, candidate_id):
         'interviews': interviews,
         'hr_staff': hr_staff,
         'managers': managers,
+        'job_requests': job_requests,
     }
     
     return render(request, 'candidate_profile.html', context)
