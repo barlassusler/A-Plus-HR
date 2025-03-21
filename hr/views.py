@@ -2,6 +2,8 @@ import json
 
 from django.contrib import messages
 from django.contrib.auth.decorators import login_required
+from django.core.paginator import Paginator
+from django.db.models import Q
 from django.contrib.auth.models import User
 from django.shortcuts import render, redirect, get_object_or_404
 
@@ -64,6 +66,7 @@ def interview_assessment(request, interview_id):
         attributes = InterviewAttributes.objects.create(
             candidate=interview.candidate,
             application=interview.application,
+            interview=interview,
             problem_solving=request.POST.get('problem_solving'),
             technical_qualification=request.POST.get('technical_qualification'),
             Behaviour=request.POST.get('Behaviour'),
@@ -127,22 +130,33 @@ def interview_assessment(request, interview_id):
         'interview': interview,
         'evaluation_choices': InterviewAttributes.EVALUATION_CHOICES,  # Pass choices to template
         'decision_choices': InterviewAttributes.Decision_CHOICES,
+        'working_hour_choices': InterviewAttributes.WORKING_HOUR_CHOICES, 
     })
 
 @login_required
 def my_interviews(request):
     user_type = UserType.objects.filter(user=request.user).first()
 
-    # Get pending interviews for the logged-in user
+    # Arama parametresini al
+    search_query = request.GET.get('q', '')
+
+    # Bekleyen görüşmeler
     pending_interviews = Interview.objects.filter(
         evaluator=request.user,
         decision='Pending'
     ).select_related(
         'candidate',
         'application__job__position'
-    ).order_by('date')
-    
-    # Get completed interviews
+    )
+    if search_query:
+        pending_interviews = pending_interviews.filter(
+            Q(candidate__name__icontains=search_query) |
+            Q(candidate__surname__icontains=search_query) |
+            Q(application__job__position__position__icontains=search_query)
+        )
+    pending_interviews = pending_interviews.order_by('date')
+
+    # Tamamlanmış görüşmeler
     completed_interviews = Interview.objects.filter(
         evaluator=request.user
     ).exclude(
@@ -150,10 +164,48 @@ def my_interviews(request):
     ).select_related(
         'candidate',
         'application__job__position'
-    ).order_by('-date')
+    )
+    if search_query:
+        completed_interviews = completed_interviews.filter(
+            Q(candidate__name__icontains=search_query) |
+            Q(candidate__surname__icontains=search_query) |
+            Q(application__job__position__position__icontains=search_query)
+        )
+    completed_interviews = completed_interviews.order_by('-date')
+
+    # Sayfalama: Her sayfada 10 görüşme
+    page_number = request.GET.get('page', 1)  # URL'den sayfa numarasını al (varsayılan 1)
     
+    # Bekleyen görüşmeler için sayfalama
+    pending_paginator = Paginator(pending_interviews, 10)  # 10 görüşme per sayfa
+    pending_page_obj = pending_paginator.get_page(page_number)
+
+    # Tamamlanmış görüşmeler için sayfalama
+    completed_paginator = Paginator(completed_interviews, 10)
+    completed_page_obj = completed_paginator.get_page(page_number)
+
     return render(request, 'my_interviews.html', {
-        'pending_interviews': pending_interviews,
-        'completed_interviews': completed_interviews,
-        'user': request.user, "user_type": user_type.user_type
+        'pending_interviews': pending_page_obj,  # Sayfalanmış nesne
+        'completed_interviews': completed_page_obj,  # Sayfalanmış nesne
+        'user': request.user,
+        'user_type': user_type.user_type if user_type else None,
+        'search_query': search_query  # Arama sorgusunu şablona geç
     })
+
+
+@login_required
+def completed_interview_detail(request, interview_id):
+    # Interview nesnesini al
+    interview = get_object_or_404(Interview, id=interview_id, evaluator=request.user)
+    
+    # İlgili InterviewAttributes nesnesini al (varsa)
+    try:
+        attributes = InterviewAttributes.objects.filter(interview=interview).order_by('-id').first()
+    except InterviewAttributes.DoesNotExist:
+        attributes = None
+
+    context = {
+        'interview': interview,
+        'attributes': attributes,
+    }
+    return render(request, 'completed_interview_detail.html', context)

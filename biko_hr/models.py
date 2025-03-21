@@ -112,6 +112,7 @@ class Evaluation(models.Model):
 
 
 class InterviewAttributes(models.Model):
+    interview = models.ForeignKey(Interview, on_delete=models.CASCADE, null=True, blank=True)
     candidate = models.ForeignKey(Candidate, on_delete=models.CASCADE)
     application = models.ForeignKey(Application, on_delete=models.CASCADE)
     APPLICATION_SOURCE_TYPE_CHOICES = [
@@ -135,8 +136,7 @@ class InterviewAttributes(models.Model):
         ('Esnek çalışma saatlerine uyum', 'Esnek çalışma saatlerine uyum'),
         ('Vardiyalı çalışmaya uyum', 'Vardiyalı çalışmaya uyum'),
         ('Hafta sonu çalışma günlerine uyum', 'Hafta sonu çalışma günlerine uyum'),
-        ('Başarılı', 'Başarılı'),
-        ('Çok Başarılı', 'Çok Başarılı'),
+        
         
     ]
     
@@ -162,6 +162,7 @@ class InterviewAttributes(models.Model):
     leadership=models.CharField(max_length=100, choices=EVALUATION_CHOICES,blank=True, null=True)
     problem_solving=models.CharField(max_length=100, choices=EVALUATION_CHOICES,blank=True, null=True)
     technical_qualification=models.CharField(max_length=100, choices=EVALUATION_CHOICES,blank=True, null=True)
+
     # Add other attributes as needed
 
 class IncubationEvaluation(models.Model):

@@ -1,0 +1,130 @@
+{% extends 'home.html' %}
+{% load bootstrap4 %}
+{% load static %}
+
+{% block content %}
+<div class="container-fluid">
+    <div class="row mb-4">
+        <div class="col-md-12">
+            <div class="card shadow">
+                <div class="card-header py-3">
+                    <h6 class="text-primary fw-bold m-0">Tamamlanmış Görüşme Detayları</h6>
+                </div>
+                <div class="card-body">
+                    <!-- Görüşme Bilgileri -->
+                    <div class="row mb-4">
+                        <div class="col-md-6">
+                            <h5>Aday: {{ interview.candidate.name }} {{ interview.candidate.surname }}</h5>
+                            <p>Pozisyon: {{ interview.application.job.position.position }}</p>
+                            <p>Görüşme Tarihi: {{ interview.date }}</p>
+                            <p>Değerlendirici Rolü: {{ interview.evaluator_role }}</p>
+                            <p>Karar: <span class="badge {% if interview.decision == 'Olumlu' %}bg-success
+                                                        {% elif interview.decision == 'Olumsuz' %}bg-danger
+                                                        {% else %}bg-warning{% endif %}">
+                                {{ interview.decision }}</span></p>
+                        </div>
+                    </div>
+
+                    <!-- Teknik Değerlendirme -->
+                    <div class="card mb-4">
+                        <div class="card-header">
+                            <h6 class="mb-0">Teknik Değerlendirme</h6>
+                        </div>
+                        <div class="card-body">
+                            <div class="row">
+                                <div class="col-md-6 mb-3">
+                                    <label>Problem Çözme Becerileri</label>
+                                    <p class="form-control-static">{{ attributes.problem_solving }}</p>
+                                </div>
+                                <div class="col-md-6 mb-3">
+                                    <label>Teknik Yeterlilik</label>
+                                    <p class="form-control-static">{{ attributes.technical_qualification}}</p>
+                                </div>
+                                <div class="col-md-6 mb-3">
+                                    <label>Davranış</label>
+                                    <p class="form-control-static">{{ attributes.Behaviour }}</p>
+                                </div>
+                                <div class="col-md-6 mb-3">
+                                    <label>Görünüm</label>
+                                    <p class="form-control-static">{{ attributes.Appearance }}</p>
+                                </div>
+                                <div class="col-md-6 mb-3">
+                                    <label>İletişim</label>
+                                    <p class="form-control-static">{{ attributes.Communucation }}</p>
+                                </div>
+                                <div class="col-md-6 mb-3">
+                                    <label>İşe Bağlılık</label>
+                                    <p class="form-control-static">{{ attributes.Dedication_to_job }}</p>
+                                </div>
+                                <div class="col-md-6 mb-3">
+                                    <label>Ekip Çalışması</label>
+                                    <p class="form-control-static">{{ attributes.Team_work}}</p>
+                                </div>
+                                <div class="col-md-6 mb-3">
+                                    <label>Başarı</label>
+                                    <p class="form-control-static">{{ attributes.Succes }}</p>
+                                </div>
+                                <div class="col-md-6 mb-3">
+                                    <label>Gelişime Açıklık</label>
+                                    <p class="form-control-static">{{ attributes.open_to_improvement }}</p>
+                                </div>
+                                <div class="col-md-6 mb-3">
+                                    <label>İlerleme</label>
+                                    <p class="form-control-static">{{ attributes.advancement }}</p>
+                                </div>
+                                <div class="col-md-6 mb-3">
+                                    <label>Liderlik</label>
+                                    <p class="form-control-static">{{ attributes.leadership }}</p>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Genel Değerlendirme -->
+                    <div class="card mb-4">
+                        <div class="card-header">
+                            <h6 class="mb-0">Genel Değerlendirme</h6>
+                        </div>
+                        <div class="card-body">
+                            <div class="form-group">
+                                <label>Genel Değerlendirme</label>
+                                <p class="form-control-static">{{ interview.general_assessment }}</p>
+                            </div>
+                            <div class="form-group">
+                                <label>Çalışma Saatleri Değerlendirmesi</label>
+                                <p class="form-control-static">{{ interview.work_hours_assessment}}</p>
+                            </div>
+                            <div class="form-group">
+                                <label>HR Değerlendirmesi</label>
+                                <p class="form-control-static">{{ attributes.HR_evaluation }}</p>
+                            </div>
+                            <div class="form-group">
+                                <label>Yönetici Değerlendirmesi</label>
+                                <p class="form-control-static">{{ attributes.manager_evaluation }}</p>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Açıklama (Eğer varsa) -->
+                    {% if attributes.Explanation %}
+                    <div class="card mb-4">
+                        <div class="card-header">
+                            <h6 class="mb-0">Açıklama</h6>
+                        </div>
+                        <div class="card-body">
+                            <p class="form-control-static">{{ attributes.Explanation }}</p>
+                        </div>
+                    </div>
+                    {% endif %}
+
+                    <!-- Geri Dön Butonu -->
+                    <div class="text-right">
+                        <a href="{% url 'my_interviews' %}" class="btn btn-secondary">Geri Dön</a>
+                        <a href="{% url 'interview_assessment' interview.id %}" class="btn btn-primary">Görüşmeyi Güncelle</a>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}

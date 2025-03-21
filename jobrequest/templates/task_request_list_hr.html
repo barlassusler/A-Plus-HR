@@ -31,6 +31,7 @@
                     <th>Çalışma Türü</th>
                     <th>Alınacak Kişi Sayısı</th>
                     <th>Oluşturulma Tarihi</th>
+                    <th>Sorumlu İK Personeli</th>
                     <th>Aday Ata</th>
                     <th>Detay</th>
                 </tr>
@@ -54,6 +55,13 @@
                     <td>{{ task.work_type }}</td>
                     <td>{{ task.desired_personnel_count }}</td>
                     <td>{{ task.created_at }}</td>
+                    <td>
+                        {% for profile in profiles %}
+                            {% if profile.Location == task.location%}
+                             {{ profile.user.first_name }} {{ profile.user.last_name }}
+                            {% endif %}
+                        {% endfor %}
+                    </td>
                     <td>
                         <a href="{% url 'assign_candidates' job_request_id=task.pk %}" class="btn btn-warning btn-sm">Aday Ata</a>
                     </td>
