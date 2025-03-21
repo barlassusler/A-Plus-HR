@@ -3,7 +3,19 @@
 
 {% block content %}
 <div class="container-fluid">
-    <!-- Pending Interviews -->
+    <!-- Arama Formu -->
+    <div class="mb-4">
+        <form method="get" class="form-inline">
+            <div class="input-group w-100">
+                <input type="text" name="q" class="form-control" placeholder="Aday adı, soyadı veya pozisyon ara..." value="{{ search_query }}">
+                <div class="input-group-append">
+                    <button class="btn btn-primary" type="submit">Ara</button>
+                </div>
+            </div>
+        </form>
+    </div>
+
+    <!-- Bekleyen İş Görüşmeleri -->
     <div class="card shadow mb-4">
         <div class="card-header py-3">
             <h6 class="text-primary fw-bold m-0">Bekleyen İş Görüşmeleri</h6>
@@ -42,10 +54,36 @@
                     </tbody>
                 </table>
             </div>
+            <!-- Sayfalama Kontrolleri -->
+            {% if pending_interviews.has_other_pages %}
+            <nav aria-label="Page navigation">
+                <ul class="pagination justify-content-center mt-3">
+                    {% if pending_interviews.has_previous %}
+                    <li class="page-item">
+                        <a class="page-link" href="?page={{ pending_interviews.previous_page_number }}{% if search_query %}&q={{ search_query }}{% endif %}" aria-label="Previous">
+                            <span aria-hidden="true">«</span>
+                        </a>
+                    </li>
+                    {% endif %}
+                    {% for num in pending_interviews.paginator.page_range %}
+                    <li class="page-item {% if pending_interviews.number == num %}active{% endif %}">
+                        <a class="page-link" href="?page={{ num }}{% if search_query %}&q={{ search_query }}{% endif %}">{{ num }}</a>
+                    </li>
+                    {% endfor %}
+                    {% if pending_interviews.has_next %}
+                    <li class="page-item">
+                        <a class="page-link" href="?page={{ pending_interviews.next_page_number }}{% if search_query %}&q={{ search_query }}{% endif %}" aria-label="Next">
+                            <span aria-hidden="true">»</span>
+                        </a>
+                    </li>
+                    {% endif %}
+                </ul>
+            </nav>
+            {% endif %}
         </div>
     </div>
 
-    <!-- Completed Interviews -->
+    <!-- Tamamlanan İş Görüşmeleri -->
     <div class="card shadow mb-4">
         <div class="card-header py-3">
             <h6 class="text-primary fw-bold m-0">Tamamlanan İş Görüşmeleri</h6>
@@ -76,7 +114,7 @@
                                 </span>
                             </td>
                             <td>
-                                <a href="{% url 'interview_assessment' interview.id %}" 
+                                <a href="{% url 'completed_interview_detail' interview.id %}" 
                                    class="btn btn-info btn-sm">
                                     Değerlendirmeyi Gör
                                 </a>
@@ -90,7 +128,33 @@
                     </tbody>
                 </table>
             </div>
+            <!-- Sayfalama Kontrolleri -->
+            {% if completed_interviews.has_other_pages %}
+            <nav aria-label="Page navigation">
+                <ul class="pagination justify-content-center mt-3">
+                    {% if completed_interviews.has_previous %}
+                    <li class="page-item">
+                        <a class="page-link" href="?page={{ completed_interviews.previous_page_number }}{% if search_query %}&q={{ search_query }}{% endif %}" aria-label="Previous">
+                            <span aria-hidden="true">«</span>
+                        </a>
+                    </li>
+                    {% endif %}
+                    {% for num in completed_interviews.paginator.page_range %}
+                    <li class="page-item {% if completed_interviews.number == num %}active{% endif %}">
+                        <a class="page-link" href="?page={{ num }}{% if search_query %}&q={{ search_query }}{% endif %}">{{ num }}</a>
+                    </li>
+                    {% endfor %}
+                    {% if completed_interviews.has_next %}
+                    <li class="page-item">
+                        <a class="page-link" href="?page={{ completed_interviews.next_page_number }}{% if search_query %}&q={{ search_query }}{% endif %}" aria-label="Next">
+                            <span aria-hidden="true">»</span>
+                        </a>
+                    </li>
+                    {% endif %}
+                </ul>
+            </nav>
+            {% endif %}
         </div>
     </div>
 </div>
-{% endblock %} 
+{% endblock %}

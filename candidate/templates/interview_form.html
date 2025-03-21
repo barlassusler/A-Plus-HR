@@ -132,9 +132,20 @@
                                     <label>Genel Değerlendirme</label>
                                     <textarea name="general_assessment" class="form-control" rows="4" required></textarea>
                                 </div>
-                                <div class="form-group">
-                                    <label>Çalışma Saati Değerlendirme</label>
-                                    <textarea name="work_hours_assessment" class="form-control" rows="2" required></textarea>
+                            <div class="card mb-4">
+                                    <div class="card-header">
+                                        <h6 class="mb-0">Çalışma Saati Değerlendirme</h6>
+                                    </div>
+                                    <div class="card-body">
+                                        <div class="form-group">
+                                            <label>Karar</label>
+                                            <select name="work_hours_assessment" id="decisionSelect" class="form-control" required>
+                                                {% for value, label in working_hour_choices %}
+                                                    <option value="{{ value }}">{{ label }}</option>
+                                                {% endfor %}
+                                            </select>
+                                        </div>
+                                    </div>
                                 </div>
                                 <div class="form-group">
                                     <label>İK Değerlendirmesi</label>

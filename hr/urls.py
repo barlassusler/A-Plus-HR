@@ -10,5 +10,6 @@ urlpatterns = [
     path('profile', views.get_profile, name="hr_profile"),
     path('my-interviews/', views.my_interviews, name='my_interviews'),
     path('interview/<int:interview_id>/assess/', views.interview_assessment, name='interview_assessment'),
+    path('interview/detail/<int:interview_id>/', views.completed_interview_detail, name='completed_interview_detail'),
 ]
 
