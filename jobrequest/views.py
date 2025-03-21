@@ -18,12 +18,12 @@ def task_request_list(request):
     user = request.user
     job_requests = JobRequest.objects.none()
     filter_type = request.GET.get('filter', 'all')  # Filtre tipi
-
+    hr_profiles = Profile.objects.filter(user__groups__name="HR")
     # Kullanıcı profili ve lokasyon
     profile = getattr(user, 'profile', None)
     user_location = profile.Location if profile and profile.Location else None
     print(f"User: {user}, Profile: {profile}, Location: {user_location}")
-
+    hr_profiles=getattr()
     if user.groups.filter(name='HR').exists():
         job_requests = JobRequest.objects.all()
         print("HR user - showing all job requests")
@@ -49,14 +49,14 @@ def task_request_list(request):
         print(f"Filtering by location: {user_location}, Results: {job_requests.count()}")
 
     print(f"User: {user}, Requests: {job_requests.count()}")
-    return render(request, 'task_request_list.html', {'tasks': job_requests})
+    return render(request, 'task_request_list.html', {'tasks': job_requests,"profiles":hr_profiles})
 
 @login_required
 def task_request_list_hr(request):
     user = request.user
     job_requests = JobRequest.objects.none()
     filter_type = request.GET.get('filter', 'all')  # Filtre tipi
-
+    hr_profiles = Profile.objects.filter(user__groups__name="HR")
     # Kullanıcı profili ve lokasyon
     profile = getattr(user, 'profile', None)
     user_location = profile.Location if profile and profile.Location else None
@@ -80,14 +80,14 @@ def task_request_list_hr(request):
         print(f"Filtering by location: {user_location}, Results: {job_requests.count()}")
 
     print(f"User: {user}, Requests: {job_requests.count()}")
-    return render(request, 'task_request_list_hr.html', {'tasks': job_requests})
+    return render(request, 'task_request_list_hr.html', {'tasks': job_requests,"profiles":hr_profiles})
 
 @login_required
 def task_request_list_org(request):
     user = request.user
     job_requests = JobRequest.objects.none()
     filter_type = request.GET.get('filter', 'all')  # Filtre tipi
-
+    hr_profiles = Profile.objects.filter(user__groups__name="HR")
     # Kullanıcı profili ve lokasyon
     profile = getattr(user, 'profile', None)
     user_location = profile.Location if profile and profile.Location else None
@@ -106,7 +106,7 @@ def task_request_list_org(request):
         print(f"Filtering by location: {user_location}, Results: {job_requests.count()}")
 
     print(f"User: {user}, Requests: {job_requests.count()}")
-    return render(request, 'task_request_list_director.html', {'tasks': job_requests})
+    return render(request, 'task_request_list_director.html', {'tasks': job_requests,"profiles":hr_profiles})
 
 def create_task_request(request):
     if request.method == 'POST':
