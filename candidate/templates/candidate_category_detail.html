@@ -6,7 +6,7 @@
     <div class="row mb-4">
         <div class="col">
             <h2>{{ category.category_name }}</h2>
-            <a href="{% url 'candidate_pool_dashboard' %}" class="btn btn-secondary">Back to Dashboard</a>
+            <a href="{% url 'candidate_pool_dashboard' %}" class="btn btn-secondary">Gösterge Paneline Dön</a>
         </div>
     </div>
 
@@ -16,11 +16,11 @@
                 <table class="table table-hover">
                     <thead>
                         <tr>
-                            <th>Candidate</th>
-                            <th>Position</th>
-                            <th>Application Date</th>
-                            <th>Status</th>
-                            <th>Actions</th>
+                            <th>Aday</th>
+                            <th>Pozisyon</th>
+                            <th>Başvuru Tarihi</th>
+                            <th>Son Durum</th>
+                            <th>Hareketler</th>
                         </tr>
                     </thead>
                     <tbody>
@@ -36,7 +36,7 @@
                                 <td>{{ app.status }}</td>
                                 <td>
                                     <a href="{% url 'candidate_profile' candidate_id=app.candidate.id %}" 
-                                       class="btn btn-sm btn-primary">View Profile</a>
+                                       class="btn btn-sm btn-primary">Profili Görüntüle</a>
                                 </td>
                             </tr>
                         {% endfor %}
@@ -49,25 +49,25 @@
                 <ul class="pagination justify-content-center">
                     {% if page_obj.has_previous %}
                         <li class="page-item">
-                            <a class="page-link" href="?page=1">&laquo; First</a>
+                            <a class="page-link" href="?page=1">&laquo; İlk</a>
                         </li>
                         <li class="page-item">
-                            <a class="page-link" href="?page={{ page_obj.previous_page_number }}">Previous</a>
+                            <a class="page-link" href="?page={{ page_obj.previous_page_number }}">Önceki</a>
                         </li>
                     {% endif %}
 
                     <li class="page-item active">
                         <span class="page-link">
-                            Page {{ page_obj.number }} of {{ page_obj.paginator.num_pages }}
+                            Sayfa {{ page_obj.number }} of {{ page_obj.paginator.num_pages }}
                         </span>
                     </li>
 
                     {% if page_obj.has_next %}
                         <li class="page-item">
-                            <a class="page-link" href="?page={{ page_obj.next_page_number }}">Next</a>
+                            <a class="page-link" href="?page={{ page_obj.next_page_number }}">İleri</a>
                         </li>
                         <li class="page-item">
-                            <a class="page-link" href="?page={{ page_obj.paginator.num_pages }}">Last &raquo;</a>
+                            <a class="page-link" href="?page={{ page_obj.paginator.num_pages }}">Son &raquo;</a>
                         </li>
                     {% endif %}
                 </ul>

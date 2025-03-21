@@ -2,7 +2,7 @@
     <div class="modal-dialog" role="document">
         <div class="modal-content">
             <div class="modal-header">
-                <h5 class="modal-title">Assign to Job</h5>
+                <h5 class="modal-title">İşe Ata</h5>
                 <button type="button" class="close" data-dismiss="modal">
                     <span>&times;</span>
                 </button>
@@ -11,7 +11,7 @@
                 {% csrf_token %}
                 <div class="modal-body">
                     <div class="form-group">
-                        <label>Job Request</label>
+                        <label>İş Talebi</label>
                         <select name="job_request" class="form-control" required>
                             {% for request in job_requests %}
                                 <option value="{{ request.id }}">
@@ -21,13 +21,13 @@
                         </select>
                     </div>
                     <div class="form-group">
-                        <label>Resume</label>
+                        <label>Özgeçmiş</label>
                         <input type="file" name="resume" class="form-control-file">
                     </div>
                 </div>
                 <div class="modal-footer">
-                    <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
-                    <button type="submit" class="btn btn-primary">Assign</button>
+                    <button type="button" class="btn btn-secondary" data-dismiss="modal">Kapat</button>
+                    <button type="submit" class="btn btn-primary">Ata</button>
                 </div>
             </form>
         </div>

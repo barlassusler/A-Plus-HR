@@ -8,15 +8,15 @@
         <div class="col-md-12">
             <div class="card shadow">
                 <div class="card-header py-3">
-                    <h6 class="text-primary fw-bold m-0">Interview Assessment Form</h6>
+                    <h6 class="text-primary fw-bold m-0">Görüşme Değerlendirme Formu</h6>
                 </div>
                 <div class="card-body">
                     <div class="row mb-4">
                         <div class="col-md-6">
-                            <h5>Candidate: {{ interview.candidate.name }} {{ interview.candidate.surname }}</h5>
-                            <p>Position: {{ interview.application.job.position.position }}</p>
-                            <p>Interview Date: {{ interview.date }}</p>
-                            <p>Evaluator Role: {{ interview.evaluator_role }}</p>
+                            <h5>Aday: {{ interview.candidate.name }} {{ interview.candidate.surname }}</h5>
+                            <p>Pozisyon: {{ interview.application.job.position.position }}</p>
+                            <p>Görüşme Tarihi: {{ interview.date }}</p>
+                            <p>Değerlendirenin Görevi: {{ interview.evaluator_role }}</p>
                         </div>
                     </div>
 
@@ -26,12 +26,12 @@
                         <!-- Attributes Assessment -->
                         <div class="card mb-4">
                             <div class="card-header">
-                                <h6 class="mb-0">Technical Assessment</h6>
+                                <h6 class="mb-0">Teknik Değerlendirme</h6>
                             </div>
                             <div class="card-body">
                                 <div class="row">
                                     <div class="col-md-6 mb-3">
-                                        <label>Problem Solving Skills</label>
+                                        <label>Problem Çözme Becerisi</label>
                                         <select name="problem_solving" class="form-control" required>
                                             {% for value, label in evaluation_choices %}
                                                 <option value="{{ value }}">{{ label }}</option>
@@ -39,7 +39,7 @@
                                         </select>
                                     </div>
                                     <div class="col-md-6 mb-3">
-                                        <label>Technical Qualification</label>
+                                        <label>Teknik Yetkinlik</label>
                                         <select name="technical_qualification" class="form-control" required>
                                             {% for value, label in evaluation_choices %}
                                                 <option value="{{ value }}">{{ label }}</option>
@@ -47,7 +47,7 @@
                                         </select>
                                     </div>
                                     <div class="col-md-6 mb-3">
-                                        <label>Behaviour</label>
+                                        <label>Tutum ve davranış</label>
                                         <select name="Behaviour" class="form-control" required>
                                             {% for value, label in evaluation_choices %}
                                                 <option value="{{ value }}">{{ label }}</option>
@@ -55,7 +55,7 @@
                                         </select>
                                     </div>
                                     <div class="col-md-6 mb-3">
-                                        <label>Appearance</label>
+                                        <label>Dış görünüm</label>
                                         <select name="Appearance" class="form-control" required>
                                             {% for value, label in evaluation_choices %}
                                                 <option value="{{ value }}">{{ label }}</option>
@@ -63,7 +63,7 @@
                                         </select>
                                     </div>
                                     <div class="col-md-6 mb-3">
-                                        <label>Communication</label>
+                                        <label>Etkili iletişim</label>
                                         <select name="Communucation" class="form-control" required>
                                             {% for value, label in evaluation_choices %}
                                                 <option value="{{ value }}">{{ label }}</option>
@@ -71,7 +71,7 @@
                                         </select>
                                     </div>
                                     <div class="col-md-6 mb-3">
-                                        <label>Dedication to Job</label>
+                                        <label>İşine bağlılık</label>
                                         <select name="Dedication_to_job" class="form-control" required>
                                             {% for value, label in evaluation_choices %}
                                                 <option value="{{ value }}">{{ label }}</option>
@@ -79,7 +79,7 @@
                                         </select>
                                     </div>
                                     <div class="col-md-6 mb-3">
-                                        <label>Team Work</label>
+                                        <label>Ekip çalışmasına uyum</label>
                                         <select name="Team_work" class="form-control" required>
                                             {% for value, label in evaluation_choices %}
                                                 <option value="{{ value }}">{{ label }}</option>
@@ -87,7 +87,7 @@
                                         </select>
                                     </div>
                                     <div class="col-md-6 mb-3">
-                                        <label>Success</label>
+                                        <label>Başarı odaklılık</label>
                                         <select name="Succes" class="form-control" required>
                                             {% for value, label in evaluation_choices %}
                                                 <option value="{{ value }}">{{ label }}</option>
@@ -95,7 +95,7 @@
                                         </select>
                                     </div>
                                     <div class="col-md-6 mb-3">
-                                        <label>Open to Improvement</label>
+                                        <label>Gelişime açıklık</label>
                                         <select name="open_to_improvement" class="form-control" required>
                                             {% for value, label in evaluation_choices %}
                                                 <option value="{{ value }}">{{ label }}</option>
@@ -103,7 +103,7 @@
                                         </select>
                                     </div>
                                     <div class="col-md-6 mb-3">
-                                        <label>Advancement</label>
+                                        <label>İş geliştirme</label>
                                         <select name="advancement" class="form-control" required>
                                             {% for value, label in evaluation_choices %}
                                                 <option value="{{ value }}">{{ label }}</option>
@@ -111,7 +111,7 @@
                                         </select>
                                     </div>
                                     <div class="col-md-6 mb-3">
-                                        <label>Leadership</label>
+                                        <label>Örnek ve rol model olma</label>
                                         <select name="leadership" class="form-control" required>
                                             {% for value, label in evaluation_choices %}
                                                 <option value="{{ value }}">{{ label }}</option>
@@ -125,23 +125,23 @@
                         <!-- General Assessment -->
                         <div class="card mb-4">
                             <div class="card-header">
-                                <h6 class="mb-0">General Assessment</h6>
+                                <h6 class="mb-0">Değerlendirme</h6>
                             </div>
                             <div class="card-body">
                                 <div class="form-group">
-                                    <label>Overall Assessment</label>
+                                    <label>Genel Değerlendirme</label>
                                     <textarea name="general_assessment" class="form-control" rows="4" required></textarea>
                                 </div>
                                 <div class="form-group">
-                                    <label>Work Hours Assessment</label>
+                                    <label>Çalışma Saati Değerlendirme</label>
                                     <textarea name="work_hours_assessment" class="form-control" rows="2" required></textarea>
                                 </div>
                                 <div class="form-group">
-                                    <label>HR Evaluation</label>
+                                    <label>İK Değerlendirmesi</label>
                                     <textarea name="HR_evaluation" class="form-control" rows="4" maxlength="1000"></textarea>
                                 </div>
                                 <div class="form-group">
-                                    <label>Manager Evaluation</label>
+                                    <label>Yönetici Değerlendirmesi</label>
                                     <textarea name="manager_evaluation" class="form-control" rows="4" maxlength="1000"></textarea>
                                 </div>
                             </div>
@@ -150,11 +150,11 @@
                         <!-- Decision -->
                         <div class="card mb-4">
                             <div class="card-header">
-                                <h6 class="mb-0">Final Decision</h6>
+                                <h6 class="mb-0">Son Karar</h6>
                             </div>
                             <div class="card-body">
                                 <div class="form-group">
-                                    <label>Decision</label>
+                                    <label>Karar</label>
                                     <select name="decision" id="decisionSelect" class="form-control" required>
                                         {% for value, label in decision_choices %}
                                             <option value="{{ value }}">{{ label }}</option>
@@ -171,7 +171,7 @@
                         </div>
 
                         <div class="text-right">
-                            <button type="submit" class="btn btn-primary">Submit Assessment</button>
+                            <button type="submit" class="btn btn-primary">Değerlendirmeyi Kaydet</button>
                         </div>
                     </form>
                 </div>

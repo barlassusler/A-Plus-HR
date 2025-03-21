@@ -2,7 +2,7 @@
     <div class="modal-dialog" role="document">
         <div class="modal-content">
             <div class="modal-header">
-                <h5 class="modal-title">Add HR Note</h5>
+                <h5 class="modal-title">İK Notu Ekle</h5>
                 <button type="button" class="close" data-dismiss="modal">
                     <span>&times;</span>
                 </button>
@@ -11,13 +11,13 @@
                 {% csrf_token %}
                 <div class="modal-body">
                     <div class="form-group">
-                        <label>Note Content</label>
+                        <label>Notun İçeriği</label>
                         <textarea name="content" class="form-control" rows="4" required></textarea>
                     </div>
                 </div>
                 <div class="modal-footer">
-                    <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
-                    <button type="submit" class="btn btn-primary">Add Note</button>
+                    <button type="button" class="btn btn-secondary" data-dismiss="modal">Kapat</button>
+                    <button type="submit" class="btn btn-primary">Not Ekle</button>
                 </div>
             </form>
         </div>

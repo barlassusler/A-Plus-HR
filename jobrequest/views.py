@@ -17,13 +17,18 @@ from django.core.exceptions import PermissionDenied
 def task_request_list(request):
     user = request.user
     job_requests = JobRequest.objects.none()
+    filter_type = request.GET.get('filter', 'all')  # Filtre tipi
+
+    # Kullanıcı profili ve lokasyon
+    profile = getattr(user, 'profile', None)
+    user_location = profile.Location if profile and profile.Location else None
+    print(f"User: {user}, Profile: {profile}, Location: {user_location}")
 
     if user.groups.filter(name='HR').exists():
         job_requests = JobRequest.objects.all()
         print("HR user - showing all job requests")
 
     elif user.groups.filter(name='Manager').exists():
-        profile = getattr(user, 'profile', None)
         if profile:
             job_requests = JobRequest.objects.filter(
                 location=profile.Location,
@@ -32,53 +37,75 @@ def task_request_list(request):
             print("Manager - showing filtered job requests")
 
     elif user.groups.filter(name='Director').exists():
-        profile = getattr(user, 'profile', None)
         if profile:
             job_requests = JobRequest.objects.filter(
                 organization=profile.Organization
             )
             print("Director - showing filtered job requests")
 
-    print(f"User: {user}, Requests: {job_requests}")
+    # Kullanıcı lokasyonuna göre filtreleme
+    if filter_type == 'user_location' and user_location:
+        job_requests = job_requests.filter(location=user_location)
+        print(f"Filtering by location: {user_location}, Results: {job_requests.count()}")
+
+    print(f"User: {user}, Requests: {job_requests.count()}")
     return render(request, 'task_request_list.html', {'tasks': job_requests})
+
 @login_required
 def task_request_list_hr(request):
     user = request.user
     job_requests = JobRequest.objects.none()
+    filter_type = request.GET.get('filter', 'all')  # Filtre tipi
 
+    # Kullanıcı profili ve lokasyon
+    profile = getattr(user, 'profile', None)
+    user_location = profile.Location if profile and profile.Location else None
+    print(f"User: {user}, Profile: {profile}, Location: {user_location}")
 
     if user.groups.filter(name='HR').exists():
-     job_requests = JobRequest.objects.filter(
-        request_status_organization_manager = "Accepted"
-                
-            )
+        job_requests = JobRequest.objects.filter(
+            request_status_organization_manager="Accepted"
+        )
     elif user.groups.filter(name='Director').exists():
-        print("x")
-        profile = getattr(user, 'profile', None)
-        print(profile.Organization)
         if profile:
             job_requests = JobRequest.objects.filter(
                 organization=profile.Organization,
-                request_status_organization_manager = "Accepted"
+                request_status_organization_manager="Accepted"
             )
             print("Director - showing filtered job requests")
 
-    print(f"User: {user}, Requests: {job_requests}")
+    # Kullanıcı lokasyonuna göre filtreleme
+    if filter_type == 'user_location' and user_location:
+        job_requests = job_requests.filter(location=user_location)
+        print(f"Filtering by location: {user_location}, Results: {job_requests.count()}")
+
+    print(f"User: {user}, Requests: {job_requests.count()}")
     return render(request, 'task_request_list_hr.html', {'tasks': job_requests})
+
 @login_required
 def task_request_list_org(request):
     user = request.user
     job_requests = JobRequest.objects.none()
+    filter_type = request.GET.get('filter', 'all')  # Filtre tipi
+
+    # Kullanıcı profili ve lokasyon
+    profile = getattr(user, 'profile', None)
+    user_location = profile.Location if profile and profile.Location else None
+    print(f"User: {user}, Profile: {profile}, Location: {user_location}")
+
     if user.groups.filter(name='Director').exists():
-     profile = getattr(user, 'profile', None)
-     if profile:
-      job_requests = JobRequest.objects.filter(
-        request_status_organization_manager = "Pending",
-        
-        organization=profile.Organization
-                
+        if profile:
+            job_requests = JobRequest.objects.filter(
+                request_status_organization_manager="Pending",
+                organization=profile.Organization
             )
-    print(f"User: {user}, Requests: {job_requests}")
+
+    # Kullanıcı lokasyonuna göre filtreleme
+    if filter_type == 'user_location' and user_location:
+        job_requests = job_requests.filter(location=user_location)
+        print(f"Filtering by location: {user_location}, Results: {job_requests.count()}")
+
+    print(f"User: {user}, Requests: {job_requests.count()}")
     return render(request, 'task_request_list_director.html', {'tasks': job_requests})
 
 def create_task_request(request):

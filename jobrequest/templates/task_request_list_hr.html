@@ -3,56 +3,71 @@
 {% block title %}Personel Talep Listesi{% endblock %}
 
 {% block content %}
+<div class="container mt-4">
+    <h1 class="text-primary">Personel Talep Listesi</h1>
 
-<h1 class="text-primary">Personel Talep Listesi</h1>
-<div class="table-responsive">
-    <table class="table table-bordered">
-        <thead>
-            <tr>
-                <th>Lokasyon</th>
-                <th>Organizasyon</th>
-                <th>Görev Adı</th>
-                <th>Talep Nedeni</th>
-                <th>Kadro Durumu</th>
-                <th>Çalışma Türü</th>
-                <th>Alınacak Kişi Sayısı</th>
-                <th>Oluşturulma Tarihi</th>
-                <th>Aday Ata</th>
-                <th>Detay</th>
-            </tr>
-        </thead>
-        <tbody>
-            {% for task in tasks %}
-            <tr>
-                <td>{{ task.location }}</td>
-                <td>{{ task.organization }}</td>
-                <td>
-                    {% if task.position_name %}
-                        {{ task.position_name.position }}
-                    {% elif task.new_position_name %}
-                        {{ task.new_position_name }}
-                    {% else %}
-                        No position specified
-                    {% endif %}
-                </td>
-                <td>{{ task.request_reason }}</td>
-                <td>{{ task.position_type }}</td>
-                <td>{{ task.work_type }}</td>
-                <td>{{ task.desired_personnel_count }}</td>
-                <td>{{ task.created_at }}</td>
-                <td>
-                    <a href="{% url 'assign_candidates' job_request_id=task.pk %}" class="btn btn-warning btn-sm">Aday Ata</a>
-                </td>
-                <td>
-                    <a href="{% url 'task_request_detail' task.pk %}" class="btn btn-info btn-sm">Detay</a>
-                </td>
-            </tr>
-            {% empty %}
-            <tr>
-                <td colspan="10" class="text-center">Henüz bir talep eklenmemiş.</td>
-            </tr>
-            {% endfor %}
-        </tbody>
-    </table>
+    <!-- Filtreleme Formu -->
+    <form method="get" action="{% url 'task_request_list_hr' %}" class="mb-4">
+        <div class="btn-group" role="group">
+            <button type="submit" name="filter" value="all" class="btn btn-primary">
+                Tümünü Göster
+            </button>
+            <button type="submit" name="filter" value="user_location" class="btn btn-info ml-2">
+                Lokasyona Göre Filtrele
+            </button>
+        </div>
+    </form>
+
+    <!-- Tablo -->
+    <div class="table-responsive">
+        <table class="table table-bordered table-striped">
+            <thead class="thead-dark">
+                <tr>
+                    <th>Lokasyon</th>
+                    <th>Organizasyon</th>
+                    <th>Görev Adı</th>
+                    <th>Talep Nedeni</th>
+                    <th>Kadro Durumu</th>
+                    <th>Çalışma Türü</th>
+                    <th>Alınacak Kişi Sayısı</th>
+                    <th>Oluşturulma Tarihi</th>
+                    <th>Aday Ata</th>
+                    <th>Detay</th>
+                </tr>
+            </thead>
+            <tbody>
+                {% for task in tasks %}
+                <tr>
+                    <td>{{ task.location }}</td>
+                    <td>{{ task.organization }}</td>
+                    <td>
+                        {% if task.position_name %}
+                            {{ task.position_name.position }}
+                        {% elif task.new_position_name %}
+                            {{ task.new_position_name }}
+                        {% else %}
+                            No position specified
+                        {% endif %}
+                    </td>
+                    <td>{{ task.request_reason }}</td>
+                    <td>{{ task.position_type }}</td>
+                    <td>{{ task.work_type }}</td>
+                    <td>{{ task.desired_personnel_count }}</td>
+                    <td>{{ task.created_at }}</td>
+                    <td>
+                        <a href="{% url 'assign_candidates' job_request_id=task.pk %}" class="btn btn-warning btn-sm">Aday Ata</a>
+                    </td>
+                    <td>
+                        <a href="{% url 'task_request_detail' task.pk %}" class="btn btn-info btn-sm">Detay</a>
+                    </td>
+                </tr>
+                {% empty %}
+                <tr>
+                    <td colspan="10" class="text-center">Henüz bir talep eklenmemiş.</td>
+                </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+    </div>
 </div>
 {% endblock %}
