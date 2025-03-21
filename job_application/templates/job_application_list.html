@@ -1,4 +1,4 @@
-{% extends 'base.html' %}
+{% extends 'home.html' %}
 
 {% block title %}Başvuru Listesi{% endblock %}
 
@@ -21,8 +21,12 @@
             <option value="experience_desc" {% if sort_option == "experience_desc" %}selected{% endif %}>Deneyim (Azalan)</option>
         </select>
 
-        <button type="submit" style="padding: 10px; background-color: #4CAF50; color: white; border: none; cursor: pointer;">
+        <button type="submit" name="filter" value="general" style="padding: 10px; background-color: #4CAF50; color: white; border: none; cursor: pointer;">
             Filtrele
+        </button>
+        <!-- Kullanıcı Lokasyonuna Göre Filtre Butonu -->
+        <button type="submit" name="filter" value="user_location" style="padding: 10px; background-color: #2196F3; color: white; border: none; cursor: pointer; margin-left: 10px;">
+            Lokasyona Göre Filtrele
         </button>
     </form>
 

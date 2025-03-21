@@ -7,19 +7,19 @@
     <div class="card shadow mb-4">
 
         <div class="card-header py-3">
-            <h6 class="text-primary fw-bold m-0">Final Evaluation</h6>
+            <h6 class="text-primary fw-bold m-0">Son Değerlendirme</h6>
         </div>
         <div class="card-body">
             <div class="row mb-4">
                 <div class="col-md-6">
-                    <h5>Candidate: {{ application.candidate.name }} {{ application.candidate.surname }}</h5>
-                    <p>Position: {{ application.job.position.position }}</p>
+                    <h5>Aday: {{ application.candidate.name }} {{ application.candidate.surname }}</h5>
+                    <p>Pozisyon: {{ application.job.position.position }}</p>
                 </div>
             </div>
 
             <div class="card mb-4">
                 <div class="card-header">
-                    <h6 class="mb-0">Interview Results</h6>
+                    <h6 class="mb-0">Görüşme Sonuçları</h6>
                 </div>
                 <div class="card-body">
                     {% for interview in interviews %}
@@ -29,8 +29,8 @@
                         {% if interview.evaluation_scores %}
                             {% with scores=interview.evaluation_scores|json_parse %}
                             <ul>
-                                <li>Problem Solving: {{ scores.problem_solving }}/10</li>
-                                <li>Technical Skills: {{ scores.technical_skills }}/10</li>
+                                <li>Problem Çözme: {{ scores.problem_solving }}/10</li>
+                                <li>Teknik Beceriler: {{ scores.technical_skills }}/10</li>
                             </ul>
                             {% endwith %}
                         {% endif %}
@@ -43,20 +43,20 @@
                 {% csrf_token %}
                 <div class="card mb-4">
                     <div class="card-header">
-                        <h6 class="mb-0">Final Decision</h6>
+                        <h6 class="mb-0">Son Karar</h6>
                     </div>
                     <div class="card-body">
                         <div class="form-group">
-                            <label>Decision</label>
+                            <label>Karar</label>
                             <select name="decision" class="form-control" required>
-                                <option value="Approved">Approve for Incubation</option>
-                                <option value="Rejected">Reject</option>
+                                <option value="Approved">Deneme için onay</option>
+                                <option value="Rejected">Ret</option>
                             </select>
                         </div>
                         
                         <div id="incubationDetails" style="display: none;">
                             <div class="form-group">
-                                <label>Incubation Start Date</label>
+                                <label>Deneme Süreci Başlangıç Tarihi</label>
                                 <input type="date" name="start_date" class="form-control">
                             </div>
                         </div>
@@ -64,7 +64,7 @@
                 </div>
 
                 <div class="text-right">
-                    <button type="submit" class="btn btn-primary">Submit Evaluation</button>
+                    <button type="submit" class="btn btn-primary">Değerlendirmeyi Kaydet</button>
                 </div>
             </form>
         </div>

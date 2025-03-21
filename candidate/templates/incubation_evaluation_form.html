@@ -5,14 +5,14 @@
 <div class="container-fluid">
     <div class="card shadow mb-4">
         <div class="card-header py-3">
-            <h6 class="text-primary fw-bold m-0">Incubation Period Evaluation</h6>
+            <h6 class="text-primary fw-bold m-0">Deneme Süreci Periyot Değerlendirmesi</h6>
         </div>
         <div class="card-body">
             <div class="row mb-4">
                 <div class="col-md-6">
-                    <h5>Candidate: {{ incubation.candidate.name }} {{ incubation.candidate.surname }}</h5>
-                    <p>Position: {{ incubation.job.position.position }}</p>
-                    <p>Incubation Period: {{ incubation.start_date }} to {{ incubation.end_date }}</p>
+                    <h5>Aday: {{ incubation.candidate.name }} {{ incubation.candidate.surname }}</h5>
+                    <p>Pozisyon: {{ incubation.job.position.position }}</p>
+                    <p>Deneme Süreci Periyotu: {{ incubation.start_date }} tarihinden {{ incubation.end_date }} tarihine</p>
                 </div>
             </div>
 
@@ -20,55 +20,55 @@
                 {% csrf_token %}
                 <div class="card mb-4">
                     <div class="card-header">
-                        <h6 class="mb-0">Performance Evaluation</h6>
+                        <h6 class="mb-0">Performansı Değerlendir</h6>
                     </div>
                     <div class="card-body">
                         <div class="row">
                             <div class="col-md-6">
                                 <div class="form-group">
-                                    <label>Team Work (1-10)</label>
+                                    <label>Ekip Çalışması (1-10)</label>
                                     <input type="number" name="team_work" class="form-control" min="1" max="10" required>
                                 </div>
                                 <div class="form-group">
-                                    <label>Rule Compliance (1-10)</label>
+                                    <label>Kural Uyumu (1-10)</label>
                                     <input type="number" name="rule_compliance" class="form-control" min="1" max="10" required>
                                 </div>
                                 <div class="form-group">
-                                    <label>Learning Capacity (1-10)</label>
+                                    <label>Öğrenme Kapasitesi (1-10)</label>
                                     <input type="number" name="learning_capacity" class="form-control" min="1" max="10" required>
                                 </div>
                                 <div class="form-group">
-                                    <label>Willingness to Learn (1-10)</label>
+                                    <label>Öğrenme İsteği (1-10)</label>
                                     <input type="number" name="willingness_to_learn" class="form-control" min="1" max="10" required>
                                 </div>
                                 <div class="form-group">
-                                    <label>Stress Handling (1-10)</label>
+                                    <label>Stresle Başa Çıkma (1-10)</label>
                                     <input type="number" name="stress_handling" class="form-control" min="1" max="10" required>
                                 </div>
                             </div>
                             <div class="col-md-6">
                                 <div class="form-group">
-                                    <label>Tool Usage (1-10)</label>
+                                    <label>Araç Kullanımı (1-10)</label>
                                     <input type="number" name="tool_usage" class="form-control" min="1" max="10" required>
                                 </div>
                                 <div class="form-group">
-                                    <label>Task Completion (1-10)</label>
+                                    <label>Görev Tamamlama (1-10)</label>
                                     <input type="number" name="task_completion" class="form-control" min="1" max="10" required>
                                 </div>
                                 <div class="form-group">
-                                    <label>Interpersonal Skills (1-10)</label>
+                                    <label>Kişilerarası Beceriler (1-10)</label>
                                     <input type="number" name="interpersonal_skills" class="form-control" min="1" max="10" required>
                                 </div>
                                 <div class="form-group">
-                                    <label>Leadership (1-10)</label>
+                                    <label>Liderlik (1-10)</label>
                                     <input type="number" name="leadership" class="form-control" min="1" max="10" required>
                                 </div>
                                 <div class="form-group">
-                                    <label>Planning (1-10)</label>
+                                    <label>Planlama (1-10)</label>
                                     <input type="number" name="planning" class="form-control" min="1" max="10" required>
                                 </div>
                                 <div class="form-group">
-                                    <label>Problem Solving (1-10)</label>
+                                    <label>Problem Çözme (1-10)</label>
                                     <input type="number" name="problem_solving" class="form-control" min="1" max="10" required>
                                 </div>
                             </div>
@@ -78,26 +78,26 @@
 
                 <div class="card mb-4">
                     <div class="card-header">
-                        <h6 class="mb-0">Final Decision</h6>
+                        <h6 class="mb-0">Son Karar</h6>
                     </div>
                     <div class="card-body">
                         <div class="form-group">
-                            <label>Decision</label>
+                            <label>Karar</label>
                             <select name="decision" class="form-control" required>
-                                <option value="Approved">Approve for Permanent Position</option>
-                                <option value="Extended">Extend Incubation Period</option>
-                                <option value="Rejected">Reject</option>
+                                <option value="Approved">Mevcut Pozisyonu Onayla</option>
+                                <option value="Extended">Deneme Sürecini Uzat</option>
+                                <option value="Rejected">Ret</option>
                             </select>
                         </div>
                         <div class="form-group">
-                            <label>Decision Explanation</label>
+                            <label>Karar Açıklaması</label>
                             <textarea name="explanation" class="form-control" rows="4" required></textarea>
                         </div>
                     </div>
                 </div>
 
                 <div class="text-right">
-                    <button type="submit" class="btn btn-primary">Submit Evaluation</button>
+                    <button type="submit" class="btn btn-primary">Değerlendirmeyi Kaydet</button>
                 </div>
             </form>
         </div>

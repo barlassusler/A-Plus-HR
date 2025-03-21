@@ -113,10 +113,10 @@
                                             <table class="table my-0">
                                                 <thead>
                                                     <tr>
-                                                        <th>Candidate</th>
-                                                        <th>Position</th>
-                                                        <th>Status</th>
-                                                        <th>Actions</th>
+                                                        <th>Aday</th>
+                                                        <th>Pozisyon</th>
+                                                        <th>Son Durum</th>
+                                                        <th>Hareketler</th>
                                                     </tr>
                                                 </thead>
                                                 <tbody>
@@ -133,13 +133,13 @@
                                                             <td>
                                                                 <a href="{% url 'candidate_profile' candidate_id=app.candidate.id %}"
                                                                    class="btn btn-sm btn-primary">
-                                                                    View Profile
+                                                                    Profili Görüntüle
                                                                 </a>
                                                             </td>
                                                         </tr>
                                                     {% empty %}
                                                         <tr>
-                                                            <td colspan="4" class="text-center">No applications in this category</td>
+                                                            <td colspan="4" class="text-center">Bu kategoride başvuru bulunmamaktadır.</td>
                                                         </tr>
                                                     {% endfor %}
                                                 </tbody>
@@ -148,7 +148,7 @@
                                         <div class="row">
                                             <div class="col-md-6 align-self-center">
                                                 <p id="dataTable_info" class="dataTables_info" role="status" aria-live="polite">
-                                                    Showing 1 to {{ category.applications|slice:":6"|length }} of {{ category.applications|length }}
+                                                    {{ category.applications|length }} başvurudan {{ category.applications|slice:":6"|length }} tanesi gösterilmektedir.
                                                 </p>
                                             </div>
                                         </div>

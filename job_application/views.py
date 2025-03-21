@@ -13,19 +13,29 @@ from django.db.models import F, ExpressionWrapper, IntegerField
 from django.shortcuts import render
 from biko_hr.models import Application
 
+from django.core.paginator import Paginator
+from django.shortcuts import render
+from biko_hr.models import Application, Profile, Location
+from datetime import date
+
 def job_application_list(request):
     # Fetch filters from GET request
     search_query = request.GET.get('q', '').strip()
     city_filter = request.GET.get('city', '').strip()
     district_filter = request.GET.get('district', '').strip()
     sort_option = request.GET.get('sort_option', 'name_asc')
+    filter_type = request.GET.get('filter', 'general')  # Yeni: Filtre tipi
 
     # Fetch applications with related candidate data
     applications = Application.objects.select_related('candidate')
 
+    # Kullanıcı lokasyonu
+    user_profile = Profile.objects.filter(user=request.user).first()
+    user_location = user_profile.Location if user_profile and user_profile.Location else None
+    print(f"User: {request.user}, Profile: {user_profile}, Location: {user_location}")
+
     # Apply filters
     if search_query:
-        # Combine name and surname for filtering (full_name is not a database field)
         applications = applications.filter(
             candidate__name__icontains=search_query
         ) | applications.filter(
@@ -36,13 +46,10 @@ def job_application_list(request):
     if district_filter:
         applications = applications.filter(candidate__residence_district__icontains=district_filter)
 
-    # Annotate age (calculate based on birth_date)
-    applications = applications.annotate(
-        age=ExpressionWrapper(
-            date.today().year - F('candidate__birth_date__year'),
-            output_field=IntegerField()
-        )
-    )
+    # Kullanıcı lokasyonuna göre filtreleme
+    if filter_type == 'user_location' and user_location:
+        applications = applications.filter(candidate__residence_city=user_location.location)
+        print(f"Filtering by location: {user_location.location}, Results: {applications.count()}")
 
     # Apply sorting
     if sort_option == "name_asc":
@@ -50,17 +57,29 @@ def job_application_list(request):
     elif sort_option == "name_desc":
         applications = applications.order_by('-candidate__name', '-candidate__surname')
     elif sort_option == "age_asc":
-        applications = applications.order_by('age')
+        applications = applications.order_by('candidate__birth_date')  # Doğum tarihi artan
     elif sort_option == "age_desc":
-        applications = applications.order_by('-age')
+        applications = applications.order_by('-candidate__birth_date')  # Doğum tarihi azalan
+
+    # Yaş hesaplama (doğru yaş için)
+    for application in applications:
+        today = date.today()
+        birth_date = application.candidate.birth_date
+        application.age = today.year - birth_date.year - ((today.month, today.day) < (birth_date.month, birth_date.day))
+
+    # Sayfalama
+    paginator = Paginator(applications, 10)  # 10 başvuru per sayfa
+    page_number = request.GET.get('page')
+    candidates = paginator.get_page(page_number)
 
     # Render template with context
     return render(request, 'job_application_list.html', {
-        'applications': applications,
+        'applications': candidates,  # Sayfalanmış sonuçlar
         'search_query': search_query,
         'city_filter': city_filter,
         'district_filter': district_filter,
         'sort_option': sort_option,
+        'candidates': candidates,  # Şablon sayfalama için
     })
 
 

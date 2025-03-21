@@ -5,7 +5,7 @@
 <div class="container-fluid">
     <div class="card shadow mb-4">
         <div class="card-header py-3">
-            <h6 class="text-primary fw-bold m-0">Add Reference for {{ candidate.name }} {{ candidate.surname }}</h6>
+            <h6 class="text-primary fw-bold m-0">{{ candidate.name }} {{ candidate.surname }} için Referans Ekle</h6>
         </div>
         <div class="card-body">
             <form method="post">
@@ -13,95 +13,95 @@
                 <div class="row">
                     <div class="col-md-6">
                         <div class="form-group">
-                            <label>Desired Position</label>
+                            <label>Aday Olunan Pozisyon</label>
                             <input type="text" name="desired_position" class="form-control" required>
                         </div>
                         <div class="form-group">
-                            <label>Reference Outcome</label>
+                            <label>Referans Sonucu</label>
                             <input type="text" name="reference_outcome" class="form-control" required>
                         </div>
                         <div class="form-group">
-                            <label>Date</label>
+                            <label>Tarih</label>
                             <input type="date" name="date" class="form-control" required>
                         </div>
                         <div class="form-group">
-                            <label>Info Retriever Name</label>
+                            <label>Bilgi Alanın Adı - Soyadı</label>
                             <input type="text" name="info_retriever_name" class="form-control" required>
                         </div>
                         <div class="form-group">
-                            <label>Reference Name</label>
+                            <label>Referans Adı</label>
                             <input type="text" name="reference_name" class="form-control" required>
                         </div>
                         <div class="form-group">
-                            <label>Reference Phone</label>
+                            <label>Referansın Telefonu</label>
                             <input type="tel" name="reference_phone" class="form-control" required>
                         </div>
                         <div class="form-group">
-                            <label>Reference Company</label>
+                            <label>Referansın Kurumu</label>
                             <input type="text" name="reference_company" class="form-control" required>
                         </div>
                         <div class="form-group">
-                            <label>Reference Title</label>
+                            <label>Referansın Unvanı</label>
                             <input type="text" name="reference_title" class="form-control" required>
                         </div>
                         <div class="form-group">
-                            <label>Reference Relation to Candidate</label>
+                            <label>Referansın Adaya Yakınlık Derecesi</label>
                             <input type="text" name="refereance_relation_to_candidate" class="form-control" required>
                         </div>
                     </div>
                     <div class="col-md-6">
                         <div class="form-group">
-                            <label>Work Duration with Company</label>
+                            <label>Şirketinizde toplam çalışma süresi</label>
                             <textarea name="work_duration_with_company" class="form-control" rows="2" required></textarea>
                         </div>
                         <div class="form-group">
-                            <label>Work Duration with Referee</label>
+                            <label>Sizinle beraber çalışma süresi</label>
                             <textarea name="work_duration_with_referee" class="form-control" rows="2" required></textarea>
                         </div>
                         <div class="form-group">
-                            <label>Duties</label>
+                            <label>Bu süre içerisindeki ünvanı ,temel görev ve sorumlulukları</label>
                             <textarea name="duties" class="form-control" rows="2" required></textarea>
                         </div>
                         <div class="form-group">
-                            <label>Advancements</label>
+                            <label>Çalışma süresi esnasında gösterdiği ilerleme</label>
                             <textarea name="advancements" class="form-control" rows="2" required></textarea>
                         </div>
                         <div class="form-group">
-                            <label>Discipline</label>
+                            <label>İş bilgisi , disiplini , ciddiyeti</label>
                             <textarea name="dicipline" class="form-control" rows="2" required></textarea>
                         </div>
                         <div class="form-group">
-                            <label>Strengths</label>
+                            <label>Kişiliğinin güçlü yönleri</label>
                             <textarea name="strengths" class="form-control" rows="2" required></textarea>
                         </div>
                         <div class="form-group">
-                            <label>Areas for Improvement</label>
+                            <label>Geliştirmesi gerektiğini düşündüğünüz yönleri</label>
                             <textarea name="areas_for_improvement" class="form-control" rows="2" required></textarea>
                         </div>
                         <div class="form-group">
-                            <label>Major Error</label>
+                            <label>MDisiplin suçu oluşturulabilecek herhangi bir şikayet veya iç soruşturma yaşanıp yaşanmadığı</label>
                             <textarea name="major_error" class="form-control" rows="2" required></textarea>
                         </div>
                         <div class="form-group">
-                            <label>Responsibility</label>
+                            <label>Sorumluluk alma ve yerine getirme kabiliyeti</label>
                             <textarea name="responsibility" class="form-control" rows="2" required></textarea>
                         </div>
                         <div class="form-group">
-                            <label>Reason for Leaving</label>
+                            <label>Ayrılma Sebebi</label>
                             <textarea name="reason_for_leaving" class="form-control" rows="2" required></textarea>
                         </div>
                         <div class="form-group">
-                            <label>Would Work Again</label>
+                            <label>Yeniden kendisi ile çalışır mısınız?</label>
                             <textarea name="would_work_again" class="form-control" rows="2" required></textarea>
                         </div>
                         <div class="form-group">
-                            <label>Further Explanation</label>
+                            <label>Eklemek istedikleriniz</label>
                             <textarea name="further_explanation" class="form-control" rows="2" required></textarea>
                         </div>
                     </div>
                 </div>
                 <div class="text-right">
-                    <button type="submit" class="btn btn-primary">Add Reference</button>
+                    <button type="submit" class="btn btn-primary">Referans Ekle</button>
                 </div>
             </form>
         </div>

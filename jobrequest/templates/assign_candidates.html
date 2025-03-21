@@ -52,7 +52,7 @@
     <!-- Currently Assigned Candidates -->
     <div class="card mb-4">
         <div class="card-header">
-            <h5 class="mb-0">Currently Assigned Candidates</h5>
+            <h5 class="mb-0">Mevcut Atanan Adaylar</h5>
         </div>
         <div class="card-body">
             {% if assigned_candidates %}
@@ -68,12 +68,12 @@
                                     <i class="fas fa-phone-alt"></i> {{ candidate.phone }}
                                 </small>
                             </div>
-                            <span class="badge bg-secondary">Assigned</span>
+                            <span class="badge bg-secondary">Atanmış</span>
                         </li>
                     {% endfor %}
                 </ul>
             {% else %}
-                <p class="text-muted">No candidates currently assigned</p>
+                <p class="text-muted">Atanmış aday bulunmamaktadır.</p>
             {% endif %}
         </div>
     </div>
@@ -81,7 +81,7 @@
     <!-- Assign New Candidates -->
     <div class="card">
         <div class="card-header">
-            <h5 class="mb-0">Assign New Candidates</h5>
+            <h5 class="mb-0">Yeni Aday Ata</h5>
         </div>
         <div class="card-body">
             <form method="post" id="candidate-form">
@@ -90,7 +90,7 @@
 
                 <div class="mb-3">
                     <button type="button" class="btn btn-primary" onclick="toggleCandidateList()">
-                        Select Candidates
+                        Aday Seç
                     </button>
                 </div>
 
@@ -109,7 +109,7 @@
                                 </div>
                                 <button type="button" class="btn btn-danger btn-sm" 
                                         onclick="addCandidate({{ candidate.id }}, '{{ candidate.name }} {{ candidate.surname }}')">
-                                    Add
+                                    Ekle
                                 </button>
                             </div>
                         {% endif %}
@@ -117,11 +117,11 @@
                 </div>
 
                 <div id="selected-candidates" class="mt-4">
-                    <h6>Selected Candidates:</h6>
+                    <h6>Seçili Adaylar:</h6>
                     <ul id="selected-candidates-list" class="list-group"></ul>
                 </div>
 
-                <button type="submit" class="btn btn-success mt-3">Save Assignments</button>
+                <button type="submit" class="btn btn-success mt-3">Atamaları Kaydet</button>
             </form>
         </div>
     </div>
