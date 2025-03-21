@@ -17,7 +17,7 @@ from django.core.exceptions import PermissionDenied
 def task_request_list(request):
     user = request.user
     job_requests = JobRequest.objects.none()
-
+    hr_profiles = Profile.objects.filter(user__groups__name="HR")
     if user.groups.filter(name='HR').exists():
         job_requests = JobRequest.objects.all()
         print("HR user - showing all job requests")
@@ -40,12 +40,13 @@ def task_request_list(request):
             print("Director - showing filtered job requests")
 
     print(f"User: {user}, Requests: {job_requests}")
-    return render(request, 'task_request_list.html', {'tasks': job_requests})
+    return render(request, 'task_request_list.html', {'tasks': job_requests,"users":hr_profiles})
 @login_required
 def task_request_list_hr(request):
     user = request.user
     job_requests = JobRequest.objects.none()
-
+    hr_profiles = Profile.objects.filter(user__groups__name="HR")
+    print(hr_profiles[0].user.first_name)
 
     if user.groups.filter(name='HR').exists():
      job_requests = JobRequest.objects.filter(
@@ -64,7 +65,7 @@ def task_request_list_hr(request):
             print("Director - showing filtered job requests")
 
     print(f"User: {user}, Requests: {job_requests}")
-    return render(request, 'task_request_list_hr.html', {'tasks': job_requests})
+    return render(request, 'task_request_list_hr.html', {'tasks': job_requests,"profiles":hr_profiles})
 @login_required
 def task_request_list_org(request):
     user = request.user
